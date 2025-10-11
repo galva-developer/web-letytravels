@@ -4,6 +4,255 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.8.0] - 2024-01-11
+
+### ✨ Nuevas Características
+
+#### 🎨 Mejoras en Travel Package Card
+
+- **Sistema de Badges Visual**:
+  - Badge "OFERTA": Rojo con icono de oferta, para paquetes con descuento
+  - Badge "NUEVO": Azul oscuro con icono "new", para paquetes recientes
+  - Badge "POPULAR": Amarillo con icono de estrella, para los más vendidos
+  - Badge "ÚLTIMAS PLAZAS": Naranja con icono de alerta, para disponibilidad limitada
+  - Badges con sombras y posicionados sobre la imagen del paquete
+
+- **Sistema de Descuentos**:
+  - Precio anterior mostrado tachado cuando hay descuento
+  - Precio actual en rojo para destacar la oferta
+  - Badge circular con porcentaje de descuento (ej: "¡20% OFF!")
+  - Posicionado en esquina superior derecha de la imagen
+
+- **Campos extendidos en PackageTravel**:
+  - `hasDiscount` (bool): Indica si el paquete tiene descuento
+  - `originalPrice` (double?): Precio original antes del descuento
+  - `discountPercentage` (int?): Porcentaje de descuento (ej: 20 para 20%)
+  - `isNew` (bool): Marca paquetes recientes
+  - `isPopular` (bool): Marca paquetes populares
+  - `hasLimitedSeats` (bool): Indica disponibilidad limitada
+  - `availableSeats` (int?): Número de plazas disponibles
+
+- **Iconos de Servicios Mejorados**:
+  - Chips visuales con bordes coloreados
+  - Iconos representativos: ✈️ Vuelos, 🏨 Hotel 5★, 🎯 Tours, 🍽️ Comidas
+  - Colores corporativos (#072A47 azul, #FFDC00 amarillo)
+  - Layout responsive con wrapping automático
+
+- **Botones de Acción Dual**:
+  - Botón "Ver Detalles": Outlined button con icono de información
+  - Botón "Reservar": Elevated button destacado con icono de check
+  - Ambos botones con igual ancho en layout responsivo
+  - Callbacks configurables para cada acción
+
+- **Efectos Hover Avanzados**:
+  - Elevación de card de 4 a 12 cuando hace hover
+  - Traslación vertical de -8px con animación suave
+  - Duración de animación: 300ms con curva ease
+  - MouseRegion para detectar hover en web
+
+- **Mejoras Visuales**:
+  - Bordes redondeados de 16px para diseño moderno
+  - Imagen de altura fija 200px con bordes superiores redondeados
+  - Espaciado consistente y jerarquía visual mejorada
+  - Descripción limitada a 2 líneas con ellipsis
+  - Título limitado a 2 líneas para mantener altura consistente
+
+### 📊 Datos de Ejemplo Actualizados
+
+- **Paris**: 20% descuento ($1200 antes $1500), Popular
+- **Rome**: Nuevo paquete, Últimas 3 plazas
+- **Kyoto**: Popular badge
+- **Bangkok**: 20% descuento ($712 antes $890), Últimas 5 plazas
+- **New York**: Nuevo paquete
+- **Rio**: 20% descuento ($2560 antes $3200)
+- **Kenya Safari**: Popular, Últimas 2 plazas
+- **Venice**: Popular badge
+
+### 🔧 Mejoras Técnicas
+
+- Conversión de StatelessWidget a StatefulWidget para manejar hover state
+- Uso de SingleTickerProviderStateMixin para animaciones
+- AnimatedContainer para transiciones suaves
+- Mejor organización en métodos privados (_buildImageSection, _buildBadge, etc.)
+- Props opcionales con valores por defecto para retrocompatibilidad
+
+---
+
+## [v0.7.0] - 2024-01-11
+
+### ✨ Nuevas Características
+
+#### 📊 Sistema de Ordenamiento de Paquetes
+
+- **Enum de opciones de ordenamiento** (`PackageSortOption`):
+  - `mostPopular`: Ordenar por popularidad (score de 0-100)
+  - `priceLowToHigh`: Ordenar por precio ascendente
+  - `priceHighToLow`: Ordenar por precio descendente
+  - `duration`: Ordenar por duración (días)
+  - `departureDate`: Ordenar por próximas salidas
+  - Cada opción incluye label en español e icono representativo
+
+- **Campos extendidos en PackageTravel**:
+  - `popularityScore` (int): Métrica de popularidad del paquete (0-100)
+  - `departureDate` (DateTime?): Fecha de próxima salida disponible
+  - Valores predeterminados para retrocompatibilidad
+
+- **Dropdown de ordenamiento responsive**:
+  - Vista Desktop: Dropdown integrado en header junto a contador de paquetes
+  - Vista Mobile: Dropdown con icono al inicio de la lista
+  - Estilo consistente con el diseño del sistema de filtros
+  - Iconos descriptivos para cada opción de orden
+
+- **Lógica de ordenamiento**:
+  - Método `_sortPackages()`: Aplica ordenamiento según opción seleccionada
+  - Método `_updateSort()`: Actualiza vista al cambiar criterio de orden
+  - Ordenamiento aplicado después de filtrado
+  - Manejo especial de paquetes sin fecha de salida
+
+- **Datos de ejemplo actualizados**:
+  - 12 paquetes con scores de popularidad: 78-95
+  - Fechas de salida distribuidas entre junio y diciembre 2024
+  - Variedad de popularidad según destino y categoría
+
+### 🔧 Mejoras Técnicas
+
+- Lista de paquetes cambió de `const` a `final` para soportar DateTime
+- Integración perfecta con sistema de filtros existente
+- Performance optimizada: ordenamiento solo cuando cambia criterio o filtros
+
+---
+
+## [v0.6.0] - 2025-10-11
+
+### ✨ Nuevas Características
+
+#### 🔍 Sección Paquetes - Sistema de Filtros Avanzados
+
+- **Integración completa en HomePage**:
+  - Reemplazada `PopularDestinationsSection` con `FilterablePackagesSection`
+  - Filtros visibles y funcionales en la página principal
+  - Accesible desde el menú "Paquetes" en la navegación
+  
+- **Modelo de datos extendido** (`PackageTravel`):
+  - Agregados campos para filtrado: `priceValue`, `continent`, `country`, `durationDays`, `category`, `services`
+  - Compatibilidad con filtros complejos manteniendo la estructura original
+
+- **Modelo de filtros** (`PackageFilters`):
+  - Gestión centralizada de criterios de filtrado
+  - Métodos `copyWith()` y `reset()` para manipulación inmutable
+  - Propiedad `hasActiveFilters` para detectar filtros activos
+
+- **Widget de filtros avanzados** (`PackageFiltersWidget`):
+  - **Filtro por Precio**: 
+    - Slider de rango con valores desde $500 a $5000
+    - 45 divisiones para precisión en la selección
+    - Visualización en tiempo real de los valores seleccionados
+  
+  - **Filtro por Destino**:
+    - Dropdown de continentes (Europa, Asia, América, África, Oceanía)
+    - Dropdown dinámico de países según continente seleccionado
+    - Mapeo de países por continente predefinido
+  
+  - **Filtro por Duración**:
+    - Opciones: 3-5 días, 6-8 días, 9+ días
+    - Dropdown simple y claro
+  
+  - **Filtro por Categoría**:
+    - Checkboxes interactivos: Aventura, Romántico, Familiar, Lujo
+    - Selección múltiple mediante `FilterChip`
+    - Estilo visual distintivo con colores corporativos
+  
+  - **Filtro por Servicios**:
+    - Checkboxes con iconos: Vuelos, Hotel 5★, Tours Guiados, Comidas Incluidas
+    - Iconografía intuitiva para cada servicio
+    - Selección múltiple de servicios requeridos
+
+- **Funcionalidades del sistema de filtros**:
+  - **Botón "Clear All"**: Limpia todos los filtros activos
+  - **Botón "Apply Filters"**: Aplica los filtros seleccionados
+  - **Contador de resultados**: Muestra cantidad de paquetes filtrados
+  - **Botón toggle**: Mostrar/ocultar panel de filtros en desktop
+  
+- **Sección de paquetes filtrable** (`FilterablePackagesSection`):
+  - Integración completa del sistema de filtros
+  - Lógica de filtrado en tiempo real
+  - **Diseño responsivo**:
+    - Desktop: Filtros en sidebar lateral (320px de ancho)
+    - Tablet/Mobile: Filtros como sección expandible superior
+  - **Grid adaptativo**:
+    - Desktop: 3 columnas
+    - Tablet: 2 columnas
+    - Mobile: 1 columna
+  
+- **Mensaje de "no hay resultados"**:
+  - Icono visual de búsqueda vacía
+  - Mensaje amigable al usuario
+  - Botón para resetear filtros rápidamente
+
+- **Base de datos de ejemplo ampliada** (`SamplePackages`):
+  - 12 paquetes de viaje diversos
+  - Cobertura de 5 continentes
+  - 4 categorías diferentes (Aventura, Romántico, Familiar, Lujo)
+  - Rango de precios de $890 a $3500
+  - Duraciones de 4 a 12 días
+  - Métodos helper para filtrado por continente, categoría y precio
+
+### 🔧 Mejoras Técnicas
+- Arquitectura de filtrado modular y reutilizable
+- Estado de filtros manejado de forma inmutable
+- Separación de responsabilidades: modelo, vista, lógica
+- Optimización de renderizado con `GridView.builder`
+- Widgets stateful para manejo eficiente de estado local
+
+### 🎨 Mejoras de UI/UX
+- Diseño de filtros con estilo material moderno
+- Uso de `FilterChip` para selecciones múltiples
+- Iconografía consistente en todos los filtros
+- Feedback visual inmediato al cambiar filtros
+- Diseño responsivo que se adapta a cualquier tamaño de pantalla
+- Colores corporativos (#072A47, #FFDC00) en toda la interfaz
+
+---
+
+## [v0.5.0] - 2025-10-11
+
+### ✨ Nuevas Características
+
+#### 📊 Hero Section - Indicadores y Estadísticas
+- **Widget de estadísticas animadas** (`StatsIndicator`):
+  - **Tres métricas principales**:
+    - 500+ Viajeros Felices (Happy Travelers)
+    - 50+ Destinos Disponibles (Destinations)
+    - 10 Años de Experiencia (Years Experience)
+  
+- **Características del widget**:
+  - **Animación de contador progresivo**: Los números se animan desde 0 hasta su valor objetivo en 2 segundos
+  - **Iconos representativos** para cada estadística:
+    - `Icons.person_outline` para viajeros
+    - `Icons.location_on_outlined` para destinos
+    - `Icons.workspace_premium_outlined` para años de experiencia
+  - **Diseño responsivo**:
+    - Layout horizontal en desktop con divisores verticales
+    - Layout vertical en móvil para mejor legibilidad
+  - **Efectos visuales**:
+    - Iconos con fondo circular y borde amarillo (#FFDC00)
+    - Contenedor con fondo semi-transparente y borde sutil
+    - Sombras para profundidad
+    - Animación fade-in y slide-up al aparecer
+  
+- **Integración en Hero Section**:
+  - Reemplaza el contador individual de paquetes
+  - Posicionado entre el texto animado y los botones CTA
+  - Mantiene la estética coherente con el diseño existente
+
+### 🔧 Mejoras Técnicas
+- Creado componente reutilizable `StatsIndicator` en `/presentation/widgets/components/`
+- Implementación de animaciones personalizadas con `TweenAnimationBuilder`
+- Optimización de código removiendo variables y funciones obsoletas
+- Responsive design con ajustes automáticos según tamaño de pantalla
+
+---
+
 ## [v0.4.0] - 2025-10-11
 
 ### ✨ Nuevas Características

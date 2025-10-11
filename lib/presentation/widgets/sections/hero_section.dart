@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:by_lety_travels/presentation/widgets/components/stats_indicator.dart';
 
 // Widget for the main hero section of the home page with image carousel.
 class HeroSection extends StatefulWidget {
@@ -29,10 +30,6 @@ class _HeroSectionState extends State<HeroSection>
   // Animation controllers
   late AnimationController _buttonAnimationController;
   late Animation<double> _buttonAnimation;
-
-  // Counter animation value
-  int _displayedPackageCount = 0;
-  final int _targetPackageCount = 50; // Target number of packages
 
   // List of background images (background-0.jpg to background-5.jpg)
   final List<String> _backgroundImages = [
@@ -71,39 +68,12 @@ class _HeroSectionState extends State<HeroSection>
 
     // Start button bounce animation
     _buttonAnimationController.repeat(reverse: true);
-
-    // Start counter animation
-    _animateCounter();
   }
 
   @override
   void dispose() {
     _buttonAnimationController.dispose();
     super.dispose();
-  }
-
-  // Animate counter from 0 to target
-  void _animateCounter() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (!mounted) return;
-
-      const totalDuration = Duration(milliseconds: 2000);
-      const steps = 50;
-      final stepDuration = totalDuration.inMilliseconds ~/ steps;
-      final increment = _targetPackageCount ~/ steps;
-
-      for (int i = 0; i < steps; i++) {
-        Future.delayed(Duration(milliseconds: stepDuration * i), () {
-          if (!mounted) return;
-          setState(() {
-            _displayedPackageCount = (i + 1) * increment;
-            if (_displayedPackageCount > _targetPackageCount) {
-              _displayedPackageCount = _targetPackageCount;
-            }
-          });
-        });
-      }
-    });
   }
 
   // Open WhatsApp with predefined message
@@ -278,59 +248,8 @@ class _HeroSectionState extends State<HeroSection>
                   ),
                   const SizedBox(height: 30),
 
-                  // Package counter with animation
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 1500),
-                    builder: (context, value, child) {
-                      return Opacity(
-                        opacity: value,
-                        child: child,
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: const Color(0xFFFFDC00),
-                          width: 2,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.card_travel,
-                            color: Color(0xFFFFDC00),
-                            size: 28,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            '$_displayedPackageCount+',
-                            style: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFFDC00),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Packages Available',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Statistics indicators with animation
+                  const StatsIndicator(),
                   const SizedBox(height: 40),
 
                   // Call-to-action buttons with bounce animation

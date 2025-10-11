@@ -44,36 +44,12 @@
 - [x] Implementar ripple effect al hacer click
 - [x] Agregar iconos animados en los botones
 
-#### 4. Barra de Búsqueda Rápida
-- [ ] Implementar barra de búsqueda en Hero Section
-- [ ] Campos: Destino, Fecha salida, Fecha retorno, Pasajeros
-- [ ] Botón "Buscar Paquetes" destacado
-- [ ] Dropdown con autocompletado de destinos
-- [ ] Date picker integrado
-
-**Estructura:**
-```dart
-Row(
-  - TextField: Destino
-  - DatePicker: Ida
-  - DatePicker: Vuelta  
-  - Counter: Pasajeros
-  - Button: Buscar
-)
-```
-
-#### 5. Indicadores y Estadísticas
-- [ ] Mostrar "500+ Viajeros Felices"
-- [ ] "50+ Destinos Disponibles"
-- [ ] "10 Años de Experiencia"
-- [ ] Animación de contador progresivo
-- [ ] Iconos representativos para cada estadística
-
-#### 6. Scroll Indicator
-- [ ] Agregar flecha animada "Scroll Down"
-- [ ] Animación de bounce vertical
-- [ ] Al hacer click, scroll suave a siguiente sección
-- [ ] Desaparecer al hacer scroll
+#### 4. Indicadores y Estadísticas
+- [x] Mostrar "500+ Viajeros Felices"
+- [x] "50+ Destinos Disponibles"
+- [x] "10 Años de Experiencia"
+- [x] Animación de contador progresivo
+- [x] Iconos representativos para cada estadística
 
 ---
 
@@ -82,13 +58,13 @@ Row(
 ### ✅ Tareas Prioritarias
 
 #### 1. Sistema de Filtros Avanzados
-- [ ] **Filtro por Precio**: Slider de rango ($500 - $5000)
-- [ ] **Filtro por Destino**: Dropdown con continentes y países
-- [ ] **Filtro por Duración**: 3-5 días, 6-8 días, 9+ días
-- [ ] **Filtro por Categoría**: Aventura, Romántico, Familiar, Lujo
-- [ ] **Filtro por Servicios**: Vuelos, Hotel 5★, Tours guiados
-- [ ] Botón "Limpiar Filtros"
-- [ ] Mostrar cantidad de resultados filtrados
+- [x] **Filtro por Precio**: Slider de rango ($500 - $5000)
+- [x] **Filtro por Destino**: Dropdown con continentes y países
+- [x] **Filtro por Duración**: 3-5 días, 6-8 días, 9+ días
+- [x] **Filtro por Categoría**: Aventura, Romántico, Familiar, Lujo
+- [x] **Filtro por Servicios**: Vuelos, Hotel 5★, Tours guiados
+- [x] Botón "Limpiar Filtros"
+- [x] Mostrar cantidad de resultados filtrados
 
 **UI Sugerida:**
 ```
@@ -105,23 +81,23 @@ Row(
 ```
 
 #### 2. Ordenamiento de Paquetes
-- [ ] Ordenar por: Más popular
-- [ ] Ordenar por: Precio (menor a mayor)
-- [ ] Ordenar por: Precio (mayor a menor)
-- [ ] Ordenar por: Duración
-- [ ] Ordenar por: Fecha de salida más cercana
-- [ ] Dropdown visible y accesible
+- [x] Ordenar por: Más popular
+- [x] Ordenar por: Precio (menor a mayor)
+- [x] Ordenar por: Precio (mayor a menor)
+- [x] Ordenar por: Duración
+- [x] Ordenar por: Fecha de salida más cercana
+- [x] Dropdown visible y accesible
 
 #### 3. Mejoras en Travel Package Card
-- [ ] **Badge "Oferta"** para paquetes con descuento
-- [ ] **Badge "Nuevo"** para paquetes recientes
-- [ ] **Badge "Popular"** para los más vendidos
-- [ ] **Badge "Últimas Plazas"** para disponibilidad limitada
-- [ ] Mostrar precio anterior tachado si hay descuento
-- [ ] Porcentaje de descuento visible: "¡20% OFF!"
-- [ ] Iconos de servicios incluidos más visibles
-- [ ] Botón "Ver Detalles" adicional al "Book Now"
-- [ ] Efecto hover con elevación de card
+- [x] **Badge "Oferta"** para paquetes con descuento
+- [x] **Badge "Nuevo"** para paquetes recientes
+- [x] **Badge "Popular"** para los más vendidos
+- [x] **Badge "Últimas Plazas"** para disponibilidad limitada
+- [x] Mostrar precio anterior tachado si hay descuento
+- [x] Porcentaje de descuento visible: "¡20% OFF!"
+- [x] Iconos de servicios incluidos más visibles
+- [x] Botón "Ver Detalles" adicional al "Book Now"
+- [x] Efecto hover con elevación de card
 - [ ] Animación de flip para mostrar más info al hover
 
 #### 4. Modal de Detalles del Paquete

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart'; // Import the model
 import 'package:by_lety_travels/presentation/widgets/sections/hero_section.dart';
-import 'package:by_lety_travels/presentation/widgets/sections/popular_destinations_section.dart';
+import 'package:by_lety_travels/presentation/widgets/sections/filterable_packages_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/our_packages_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/booking_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/contact_footer_section.dart';
+import 'package:by_lety_travels/data/repositories/sample_packages.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -44,40 +45,58 @@ class _HomePageState extends State<HomePage> {
   final List<PackageTravel> popularDestinations = const [
     PackageTravel(
       title: 'Enchanting Paris',
-      price: '\$1500', // Corrected dollar sign
+      price: '\$1500',
+      priceValue: 1500,
       location: 'Paris, France',
+      continent: 'Europe',
+      country: 'France',
       description:
           'Experience the city of lights, iconic landmarks, and romantic ambiance.',
       duration: '5 Days / 4 Nights',
+      durationDays: 5,
       flightsIncluded: true,
       hotelRating: '4 Stars',
       guidedTours: true,
+      category: 'Romantic',
+      services: ['Flights', 'Guided Tours', 'Meals Included'],
       imageUrl:
           'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ),
     PackageTravel(
       title: 'Ancient Rome Adventure',
-      price: '\$1350', // Corrected dollar sign
+      price: '\$1350',
+      priceValue: 1350,
       location: 'Rome, Italy',
+      continent: 'Europe',
+      country: 'Italy',
       description:
           'Explore historical ruins, magnificent art, and delicious Italian cuisine.',
       duration: '6 Days / 5 Nights',
+      durationDays: 6,
       flightsIncluded: true,
       hotelRating: '4 Stars',
       guidedTours: true,
+      category: 'Adventure',
+      services: ['Flights', 'Guided Tours'],
       imageUrl:
           'https://images.unsplash.com/photo-1529260830199-42c24126f198?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ),
     PackageTravel(
       title: 'Mystical Kyoto Journey',
-      price: '\$1800', // Corrected dollar sign
+      price: '\$1800',
+      priceValue: 1800,
       location: 'Kyoto, Japan',
+      continent: 'Asia',
+      country: 'Japan',
       description:
           'Discover serene temples, beautiful gardens, and traditional Japanese culture.',
       duration: '7 Days / 6 Nights',
+      durationDays: 7,
       flightsIncluded: false,
       hotelRating: '5 Stars',
       guidedTours: true,
+      category: 'Luxury',
+      services: ['Hotel 5★', 'Guided Tours', 'Meals Included'],
       imageUrl:
           'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     ),
@@ -342,9 +361,10 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             HeroSection(sectionKey: _heroSectionKey),
-            PopularDestinationsSection(
-              sectionKey: _popularDestinationsSectionKey, // Use the renamed key
-              popularDestinations: popularDestinations,
+            // New Filterable Packages Section with Advanced Filters
+            FilterablePackagesSection(
+              sectionKey: _popularDestinationsSectionKey,
+              allPackages: SamplePackages.allPackages,
             ),
             OurPackagesSection(
               sectionKey: _ourPackagesSectionKey,
