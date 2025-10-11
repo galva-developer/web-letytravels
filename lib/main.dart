@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         fontFamily: 'LetyTravelsFont', // Set the default font family
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF314A63)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF314A63)),  
         appBarTheme: const AppBarTheme(
           // Define default text style for AppBar elements
           titleTextStyle: TextStyle(
