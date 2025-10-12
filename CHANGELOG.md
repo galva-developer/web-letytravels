@@ -4,6 +4,178 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.12.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 📝 Sistema de Reservas - Formulario Completo
+
+Implementación integral del formulario de reserva con todas las secciones requeridas, validaciones y resumen en tiempo real.
+
+- **Modelo de Datos**:
+  - **BookingData** (`lib/data/models/booking_data.dart`) ✅
+    * Información del viajero: nombre, apellidos, email, teléfono, país, fecha nacimiento, pasaporte
+    * Detalles de reserva: paquete, fecha salida, número de viajeros (adultos/niños/infantes), tipo habitación
+    * Servicios adicionales: seguro, traslado, tours, upgrade hotel, asientos
+    * Cálculos automáticos: subtotal, servicios adicionales, impuestos (5%), total
+    * Lógica de precios: adultos 100%, niños 70%, infantes 10%
+    * Enum RoomType: Individual, Doble, Triple
+
+- **Página de Reserva**:
+  - **BookingFormPage** (`lib/presentation/pages/booking_form_page.dart`) ✅
+    * Formulario multi-sección con GlobalKey para validación
+    * Layout responsivo: columna en mobile, row con sidebar en desktop
+    * Controllers para todos los campos de texto
+    * Estado local para dropdowns, fechas, contadores, checkboxes
+    * Navegación desde TravelPackageCard (botón "Book Now")
+
+- **Sección 1: Información del Viajero** ✅
+  - **Campos Implementados**:
+    * Nombre y Apellidos (requeridos) - TextFormField con validación
+    * Email (requerido) - Validación con regex
+    * Teléfono (requerido) - Dropdown código país (+51 🇵🇪, +1 🇺🇸, etc.) + número
+    * País de Residencia (requerido) - Dropdown con banderas
+    * Fecha de Nacimiento (opcional) - DatePicker
+    * Número de Pasaporte (opcional) - Input uppercase, max 12 chars
+  
+  - **Validaciones**:
+    * Campos requeridos verifican no vacío
+    * Email valida formato correcto
+    * Teléfono valida mínimo 6 dígitos
+    * Solo permite caracteres válidos en cada campo
+
+- **Sección 2: Detalles de la Reserva** ✅
+  - **Paquete Pre-llenado**:
+    * Card con info del paquete seleccionado
+    * Muestra: título, duración, ubicación, precio base
+    * Estilo destacado con borde azul
+  
+  - **Fecha de Salida** (requerida):
+    * DatePicker con rango: hoy → +2 años
+    * Formato: "Lunes, 15 Noviembre 2025"
+    * Validación: no permite fechas pasadas
+  
+  - **Número de Viajeros**:
+    * Contadores con +/- buttons para Adultos (min: 1), Niños, Infantes
+    * Descripciones: "Mayores de 12 años", "2-12 años (70%)", "0-2 años (10%)"
+    * Actualización reactiva del resumen
+  
+  - **Tipo de Habitación**:
+    * ChoiceChips: Individual, Doble, Triple
+    * Selección única con highlight visual
+
+- **Sección 3: Servicios Adicionales** ✅
+  - **CheckboxListTile para cada servicio**:
+    * 🛡️ Seguro de Viaje: +$50/persona - Cobertura médica y cancelación
+    * 🚐 Traslado Aeropuerto: +$30/persona - Recogida y traslado
+    * 🎫 Tour Adicional: +$100/persona - Tour especial no incluido
+    * 🏨 Upgrade Hotel 5★: +$200/habitación - Categoría superior
+    * ✈️ Asientos Preferentes: +$40/persona - Más espacio
+  
+  - **Cálculo Inteligente**:
+    * Multiplica por número de personas según aplique
+    * Upgrade hotel es costo único por habitación
+    * Asientos solo para adultos y niños (no infantes)
+
+- **Sección 4: Comentarios Especiales** ✅
+  - **TextArea** multilinea (5 líneas, max 500 chars)
+  - Placeholder con ejemplos: habitación piso bajo, vegetariano, cumpleaños
+  - Contador de caracteres
+
+- **Resumen de Reserva en Tiempo Real** ✅
+  - **Panel Lateral Sticky** (desktop) o debajo (mobile)
+    * Card destacado con sombra y borde
+    * Título: "Resumen de Reserva"
+  
+  - **Información de Reserva**:
+    * Paquete seleccionado con ícono 🧳
+    * Fecha de salida si está seleccionada 📅
+    * Número total de viajeros 👥
+  
+  - **Desglose de Precios Detallado**:
+    * Precio base × adultos
+    * Precio × niños (70% mostrado)
+    * Precio × infantes (10% mostrado)
+    * Separador para "Servicios Adicionales"
+    * Cada servicio × cantidad aplicable
+    * Línea de Subtotal en bold
+    * Impuestos (5%) calculados sobre subtotal + servicios
+    * TOTAL A PAGAR en grande y bold (#072A47)
+  
+  - **Actualización Reactiva**:
+    * Se recalcula con cada cambio en cualquier campo
+    * setState() mantiene UI sincronizada
+    * Formato: $X,XXX.XX con 2 decimales
+
+- **Validaciones del Formulario** ✅
+  - **Validación en Submit**:
+    * _formKey.currentState!.validate() verifica todos los campos
+    * SnackBar roja si hay errores: "Complete todos los campos requeridos"
+    * No permite enviar si faltan campos obligatorios
+  
+  - **Validaciones Específicas**:
+    * Email: formato válido con regex
+    * Teléfono: mínimo 6 dígitos
+    * Fecha salida: debe estar seleccionada
+    * Al menos 1 adulto requerido (contador con min: 1)
+
+- **Proceso de Envío** ✅
+  - **Loading State**:
+    * _isSubmitting = true muestra CircularProgressIndicator
+    * Mensaje: "Procesando tu reserva..."
+    * Simula API call con Future.delayed(2 segundos)
+  
+  - **Dialog de Confirmación**:
+    * Ícono de check verde
+    * Título: "¡Reserva Confirmada!"
+    * Número de reserva único: BLT-[timestamp]
+    * Card con resumen: Paquete, Viajeros, Total
+    * Mensaje: "Email enviado a [email]"
+    * Botones: "Cerrar" y "Descargar Voucher" (mock)
+    * barrierDismissible: false
+
+- **UX y Diseño**:
+  - **Responsive Layout**:
+    * Mobile: Formulario en columna, resumen debajo
+    * Desktop: Formulario 2/3 + Resumen 1/3 lado a lado
+    * Padding adaptativo: 16px mobile, 32px desktop
+  
+  - **Visual Design**:
+    * Cards blancas con sombra suave (0.05 opacity)
+    * Border radius 12px para consistencia
+    * Color primario: #072A47 (azul oscuro)
+    * Color acento: #FFDC00 (amarillo) en botón submit
+    * Icons con color temático
+  
+  - **Botón Submit**:
+    * Full width en mobile, fixed en desktop dentro del resumen
+    * Color: Amarillo #FFDC00 con texto azul oscuro
+    * Ícono check_circle_outline + texto "Confirmar Reserva"
+    * Padding vertical 20px para fácil tap
+
+- **Navegación**:
+  - **Desde TravelPackageCard**:
+    * Botón "Book Now" navega a BookingFormPage
+    * Pasa el objeto PackageTravel completo
+    * MaterialPageRoute con transición nativa
+  
+  - **Actualizado en**:
+    * FilterablePackagesSection (grid principal)
+    * PopularDestinationsSection (hero section)
+
+- **Dependencias Agregadas**:
+  - **intl: ^0.19.0** para formato de fechas
+    * DateFormat con locale español
+    * Formatos: dd/MM/yyyy, EEEE dd MMMM yyyy, dd MMM yyyy
+
+- **Preparación para Futuro**:
+  - Estructura lista para integrar backend real
+  - toJson() method en BookingData para envío a API
+  - Mock de email de confirmación
+  - Placeholder para descarga de voucher PDF
+
+---
+
 ## [v0.11.0] - 2025-01-12
 
 ### ✨ Nueva Funcionalidad

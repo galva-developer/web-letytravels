@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
 import 'package:by_lety_travels/presentation/widgets/travel_package_card.dart';
+import 'package:by_lety_travels/presentation/pages/booking_form_page.dart';
 
 // Widget to display a grid of popular travel destinations.
 class PopularDestinationsSection extends StatelessWidget {
@@ -49,7 +50,13 @@ class PopularDestinationsSection extends StatelessWidget {
                     guidedTours: package.guidedTours,
                     imageUrl: package.imageUrl,
                     onBookNowPressed: () {
-                      print('Book Now pressed for: ${package.title}');
+                      // Navigate to booking form page
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (context) => BookingFormPage(package: package),
+                        ),
+                      );
                     },
                   );
                 }).toList(),

@@ -153,14 +153,6 @@
 - [x] Indicador de carga mientras se obtienen datos
 - [x] Botón "Volver arriba" cuando hay scroll
 
-#### 8. Testimonios de Viajeros
-- [ ] Sección de reseñas de clientes
-- [ ] Estrellas de calificación (⭐⭐⭐⭐⭐)
-- [ ] Foto del cliente (opcional)
-- [ ] Nombre y destino visitado
-- [ ] Carousel de testimonios
-- [ ] "4.8/5 basado en 250+ reseñas"
-
 ---
 
 ## 🎫 Sección RESERVAS
@@ -168,32 +160,32 @@
 ### ✅ Tareas Prioritarias
 
 #### 1. Formulario de Reserva Completo
-- [ ] **Información del Viajero**
-  - [ ] Nombre completo *
-  - [ ] Apellidos *
-  - [ ] Email *
-  - [ ] Teléfono con código de país *
-  - [ ] País de residencia *
-  - [ ] Fecha de nacimiento
-  - [ ] Número de pasaporte
+- [x] **Información del Viajero**
+  - [x] Nombre completo *
+  - [x] Apellidos *
+  - [x] Email *
+  - [x] Teléfono con código de país *
+  - [x] País de residencia *
+  - [x] Fecha de nacimiento
+  - [x] Número de pasaporte
 
-- [ ] **Detalles de la Reserva**
-  - [ ] Paquete seleccionado (pre-llenado)
-  - [ ] Fecha de salida preferida *
-  - [ ] Número de adultos *
-  - [ ] Número de niños (0-12 años)
-  - [ ] Número de infantes (0-2 años)
-  - [ ] Tipo de habitación (Individual, Doble, Triple)
+- [x] **Detalles de la Reserva**
+  - [x] Paquete seleccionado (pre-llenado)
+  - [x] Fecha de salida preferida *
+  - [x] Número de adultos *
+  - [x] Número de niños (0-12 años)
+  - [x] Número de infantes (0-2 años)
+  - [x] Tipo de habitación (Individual, Doble, Triple)
 
-- [ ] **Servicios Adicionales**
-  - [ ] ☐ Seguro de viaje (+$50)
-  - [ ] ☐ Traslado aeropuerto (+$30)
-  - [ ] ☐ Tour adicional (+$100)
-  - [ ] ☐ Upgrade a hotel 5★ (+$200)
-  - [ ] ☐ Asientos preferentes vuelo (+$40)
+- [x] **Servicios Adicionales**
+  - [x] ☑ Seguro de viaje (+$50)
+  - [x] ☑ Traslado aeropuerto (+$30)
+  - [x] ☑ Tour adicional (+$100)
+  - [x] ☑ Upgrade a hotel 5★ (+$200)
+  - [x] ☑ Asientos preferentes vuelo (+$40)
 
-- [ ] **Comentarios o Solicitudes Especiales**
-  - [ ] Textarea para comentarios
+- [x] **Comentarios o Solicitudes Especiales**
+  - [x] Textarea para comentarios
 
 **Validaciones:**
 ```dart
@@ -205,15 +197,15 @@
 ```
 
 #### 2. Resumen de Reserva en Tiempo Real
-- [ ] Panel lateral con resumen
-- [ ] Mostrar paquete seleccionado
-- [ ] Desglose de precios:
+- [x] Panel lateral con resumen
+- [x] Mostrar paquete seleccionado
+- [x] Desglose de precios:
   - Precio base × número de personas
   - Servicios adicionales
   - Impuestos
   - **Total a pagar**
-- [ ] Actualizar en tiempo real al cambiar opciones
-- [ ] Mostrar fechas seleccionadas
+- [x] Actualizar en tiempo real al cambiar opciones
+- [x] Mostrar fechas seleccionadas
 - [ ] Código de descuento aplicable
 
 **UI del Resumen:**

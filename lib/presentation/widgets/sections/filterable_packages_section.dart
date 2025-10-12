@@ -4,6 +4,7 @@ import 'package:by_lety_travels/data/models/package_filters.dart';
 import 'package:by_lety_travels/presentation/widgets/travel_package_card.dart';
 import 'package:by_lety_travels/presentation/widgets/components/package_filters_widget.dart';
 import 'package:by_lety_travels/presentation/widgets/package_details_modal.dart';
+import 'package:by_lety_travels/presentation/pages/booking_form_page.dart';
 
 /// Sort options for packages
 enum PackageSortOption {
@@ -587,8 +588,13 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                     hasLimitedSeats: package.hasLimitedSeats,
                     availableSeats: package.availableSeats,
                     onBookNowPressed: () {
-                      print('Book Now pressed for: ${package.title}');
-                      // TODO: Navigate to booking page
+                      // Navigate to booking form page
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (context) => BookingFormPage(package: package),
+                        ),
+                      );
                     },
                     onViewDetailsPressed: () {
                       // Show package details modal

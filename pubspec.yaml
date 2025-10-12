@@ -49,6 +49,9 @@ dependencies:
   
   # Provider for state management (favorites)
   provider: ^6.1.2
+  
+  # Internationalization for date formatting
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
