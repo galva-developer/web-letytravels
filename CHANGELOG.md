@@ -4,6 +4,76 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.11.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 📄 Sistema de Paginación
+
+Implementación de paginación tradicional con controles de navegación y scroll to top.
+
+- **Arquitectura de Paginación**:
+  - **Estado en FilterablePackagesSection** ✅
+    * Variables de estado: `_currentPage`, `_itemsPerPage = 9`, `_isLoadingPage`
+    * Getters calculados: `_totalPages`, `_paginatedPackages`
+    * ScrollController para gestión de scroll
+    * Listener para mostrar/ocultar botón scroll-to-top (threshold: 300px)
+
+- **Navegación de Páginas**:
+  - **Métodos de Control** ✅
+    * `_goToPage(int page)`: Navegación async con loading de 300ms + scroll
+    * `_nextPage()`: Incrementa página si no está en la última
+    * `_previousPage()`: Decrementa página si no está en la primera
+    * `_scrollToTop()`: Scroll suave al inicio usando ScrollController
+  
+  - **Reset Automático** ✅
+    * Resetea a página 1 al cambiar ordenamiento (`_updateSort()`)
+    * Resetea a página 1 al aplicar filtros
+
+- **Componentes UI**:
+  - **Controles de Paginación** ✅
+    * Ubicación: Debajo del grid de paquetes
+    * Botones: Previous (◀), números de página, Next (▶)
+    * Números visibles: Máximo 7 páginas con ellipsis (...)
+    * Lógica inteligente: Muestra primera, última, actual y cercanas
+    * Estilo: Página actual con fondo azul oscuro (#072A47), otras outlined
+    * Responsive: Tamaño uniforme 40x40px para todos los botones
+  
+  - **Indicador de Resultados** ✅
+    * Texto: "Mostrando X-Y de Z paquetes"
+    * Posición: Arriba del grid
+    * Actualización dinámica con cada cambio de página
+  
+  - **Loading State** ✅
+    * CircularProgressIndicator durante transiciones de página
+    * Oculta grid temporalmente (300ms) para smooth UX
+    * Color: #072A47 (azul oscuro corporativo)
+  
+  - **Scroll to Top Button** ✅
+    * FloatingActionButton con ícono arrow_upward
+    * Aparece cuando scroll > 300px
+    * Posición: Bottom-right (20, 20)
+    * Acción: Scroll suave a posición 0 (500ms)
+    * Tooltip: "Volver arriba"
+    * Colores: Background #072A47, foreground blanco
+
+- **Integración con Grid**:
+  - **Actualización de GridView** ✅
+    * Cambio de `_filteredPackages` a `_paginatedPackages`
+    * itemCount actualizado a `_paginatedPackages.length`
+    * Slice automático del array según página actual
+  
+  - **Wrapper en Column** ✅
+    * Grid envuelto en Column para agregar controles debajo
+    * Conditional rendering basado en `_isLoadingPage`
+
+- **Responsive Design**:
+  - Controles visibles en todos los breakpoints
+  - Botones con tamaño fijo para consistencia
+  - FAB siempre accesible en mobile y desktop
+
+---
+
 ## [v0.10.0] - 2025-01-12
 
 ### ✨ Nueva Funcionalidad

@@ -40,10 +40,52 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   bool _showFilters = true;
   PackageSortOption _currentSort = PackageSortOption.mostPopular;
 
+  // Pagination state
+  int _currentPage = 1;
+  final int _itemsPerPage = 9;
+  bool _isLoadingPage = false;
+
+  // Scroll state
+  final ScrollController _scrollController = ScrollController();
+  bool _showScrollToTop = false;
+
+  int get _totalPages =>
+      (_filteredPackages.length / _itemsPerPage)
+          .ceil()
+          .clamp(1, double.infinity)
+          .toInt();
+
+  List<PackageTravel> get _paginatedPackages {
+    final startIndex = (_currentPage - 1) * _itemsPerPage;
+    final endIndex = (startIndex + _itemsPerPage).clamp(
+      0,
+      _filteredPackages.length,
+    );
+    return _filteredPackages.sublist(startIndex, endIndex);
+  }
+
   @override
   void initState() {
     super.initState();
     _filteredPackages = widget.allPackages;
+
+    // Setup scroll listener for scroll-to-top button
+    _scrollController.addListener(() {
+      if (_scrollController.hasClients) {
+        final shouldShow = _scrollController.offset > 300;
+        if (shouldShow != _showScrollToTop) {
+          setState(() {
+            _showScrollToTop = shouldShow;
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -149,7 +191,50 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
     setState(() {
       _currentSort = newSort;
       _sortPackages();
+      _currentPage = 1; // Reset to first page on sort change
     });
+  }
+
+  /// Pagination methods
+  void _goToPage(int page) async {
+    if (page < 1 || page > _totalPages || page == _currentPage) return;
+
+    setState(() {
+      _isLoadingPage = true;
+    });
+
+    // Simulate loading delay for better UX
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    setState(() {
+      _currentPage = page;
+      _isLoadingPage = false;
+    });
+
+    // Scroll to top of packages section
+    _scrollToTop();
+  }
+
+  void _nextPage() {
+    if (_currentPage < _totalPages) {
+      _goToPage(_currentPage + 1);
+    }
+  }
+
+  void _previousPage() {
+    if (_currentPage > 1) {
+      _goToPage(_currentPage - 1);
+    }
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   /// Check if package matches duration filter
@@ -192,170 +277,200 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
     final isMobile = MediaQuery.of(context).size.width < 768;
     final isTablet = MediaQuery.of(context).size.width < 1024;
 
-    return Container(
-      key: widget.sectionKey,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 16 : 32,
-        vertical: 40,
-      ),
-      color: Colors.grey[50],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          controller: _scrollController,
+          child: Container(
+            key: widget.sectionKey,
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 16 : 32,
+              vertical: 40,
+            ),
+            color: Colors.grey[50],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Section header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Explore Our Packages',
-                      style: TextStyle(
-                        fontSize: isMobile ? 28 : 36,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF072A47),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Explore Our Packages',
+                            style: TextStyle(
+                              fontSize: isMobile ? 28 : 36,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF072A47),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                '${_filteredPackages.length} ${_filteredPackages.length == 1 ? 'package' : 'packages'} available',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              if (!isMobile) ...[
+                                const SizedBox(width: 24),
+                                Icon(
+                                  Icons.sort,
+                                  size: 20,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                _buildSortDropdown(),
+                              ],
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          '${_filteredPackages.length} ${_filteredPackages.length == 1 ? 'package' : 'packages'} available',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
+                    if (!isMobile)
+                      OutlinedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _showFilters = !_showFilters;
+                          });
+                        },
+                        icon: Icon(
+                          _showFilters
+                              ? Icons.filter_list_off
+                              : Icons.filter_list,
+                        ),
+                        label: Text(
+                          _showFilters ? 'Hide Filters' : 'Show Filters',
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF072A47),
+                          side: const BorderSide(color: Color(0xFF072A47)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
                           ),
                         ),
-                        if (!isMobile) ...[
-                          const SizedBox(width: 24),
-                          Icon(Icons.sort, size: 20, color: Colors.grey[600]),
-                          const SizedBox(width: 8),
-                          _buildSortDropdown(),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+
+                // Main content area
+                isMobile || isTablet
+                    ? Column(
+                      children: [
+                        // Mobile: Sort dropdown
+                        if (isMobile) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.sort,
+                                  size: 20,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildSortDropdown()),
+                              ],
+                            ),
+                          ),
                         ],
+                        // Mobile: Filters as expandable section
+                        if (_showFilters) ...[
+                          PackageFiltersWidget(
+                            initialFilters: _currentFilters,
+                            onFiltersChanged: _applyFilters,
+                            onClearFilters: _clearFilters,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                        // Package grid
+                        _buildPackageGrid(isMobile, isTablet),
+                      ],
+                    )
+                    : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Desktop: Filters sidebar
+                        if (_showFilters) ...[
+                          SizedBox(
+                            width: 320,
+                            child: PackageFiltersWidget(
+                              initialFilters: _currentFilters,
+                              onFiltersChanged: _applyFilters,
+                              onClearFilters: _clearFilters,
+                            ),
+                          ),
+                          const SizedBox(width: 32),
+                        ],
+                        // Package grid
+                        Expanded(child: _buildPackageGrid(isMobile, isTablet)),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              if (!isMobile)
-                OutlinedButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _showFilters = !_showFilters;
-                    });
-                  },
-                  icon: Icon(
-                    _showFilters ? Icons.filter_list_off : Icons.filter_list,
-                  ),
-                  label: Text(_showFilters ? 'Hide Filters' : 'Show Filters'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF072A47),
-                    side: const BorderSide(color: Color(0xFF072A47)),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 32),
 
-          // Main content area
-          isMobile || isTablet
-              ? Column(
-                children: [
-                  // Mobile: Sort dropdown
-                  if (isMobile) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Row(
+                // No results message
+                if (_filteredPackages.isEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
                         children: [
-                          Icon(Icons.sort, size: 20, color: Colors.grey[600]),
-                          const SizedBox(width: 8),
-                          Expanded(child: _buildSortDropdown()),
+                          Icon(
+                            Icons.search_off,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No packages found',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Try adjusting your filters to see more results',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton.icon(
+                            onPressed: _clearFilters,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Reset Filters'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFFDC00),
+                              foregroundColor: const Color(0xFF072A47),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 32,
+                                vertical: 16,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                  // Mobile: Filters as expandable section
-                  if (_showFilters) ...[
-                    PackageFiltersWidget(
-                      initialFilters: _currentFilters,
-                      onFiltersChanged: _applyFilters,
-                      onClearFilters: _clearFilters,
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                  // Package grid
-                  _buildPackageGrid(isMobile, isTablet),
-                ],
-              )
-              : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Desktop: Filters sidebar
-                  if (_showFilters) ...[
-                    SizedBox(
-                      width: 320,
-                      child: PackageFiltersWidget(
-                        initialFilters: _currentFilters,
-                        onFiltersChanged: _applyFilters,
-                        onClearFilters: _clearFilters,
-                      ),
-                    ),
-                    const SizedBox(width: 32),
-                  ],
-                  // Package grid
-                  Expanded(child: _buildPackageGrid(isMobile, isTablet)),
-                ],
-              ),
-
-          // No results message
-          if (_filteredPackages.isEmpty)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(40),
-                child: Column(
-                  children: [
-                    Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No packages found',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Try adjusting your filters to see more results',
-                      style: TextStyle(fontSize: 16, color: Colors.grey[500]),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: _clearFilters,
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Reset Filters'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFDC00),
-                        foregroundColor: const Color(0xFF072A47),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+              ],
             ),
-        ],
-      ),
+          ),
+        ),
+
+        // Scroll to top button
+        if (_showScrollToTop)
+          Positioned(right: 20, bottom: 20, child: _buildScrollToTopButton()),
+      ],
     );
   }
 
@@ -399,56 +514,252 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   Widget _buildPackageGrid(bool isMobile, bool isTablet) {
     final crossAxisCount = isMobile ? 1 : (isTablet ? 2 : 3);
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        mainAxisSpacing: 24,
-        crossAxisSpacing: 24,
-        childAspectRatio: isMobile ? 0.85 : 0.75,
-      ),
-      itemCount: _filteredPackages.length,
-      itemBuilder: (context, index) {
-        final package = _filteredPackages[index];
+    return Column(
+      children: [
+        // Packages info and grid
+        if (_isLoadingPage)
+          const SizedBox(
+            height: 400,
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF072A47)),
+              ),
+            ),
+          )
+        else
+          Column(
+            children: [
+              // Package count info
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Mostrando ${(_currentPage - 1) * _itemsPerPage + 1}-${((_currentPage - 1) * _itemsPerPage + _paginatedPackages.length).clamp(0, _filteredPackages.length)} de ${_filteredPackages.length} paquetes',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-        // Calculate discount info
-        String? originalPrice;
-        if (package.hasDiscount && package.originalPrice != null) {
-          originalPrice = '\$${package.originalPrice!.toStringAsFixed(0)}';
+              // Grid
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: 24,
+                  crossAxisSpacing: 24,
+                  childAspectRatio: isMobile ? 0.85 : 0.75,
+                ),
+                itemCount: _paginatedPackages.length,
+                itemBuilder: (context, index) {
+                  final package = _paginatedPackages[index];
+
+                  // Calculate discount info
+                  String? originalPrice;
+                  if (package.hasDiscount && package.originalPrice != null) {
+                    originalPrice =
+                        '\$${package.originalPrice!.toStringAsFixed(0)}';
+                  }
+
+                  return TravelPackageCard(
+                    title: package.title,
+                    price: package.price,
+                    location: package.location,
+                    description: package.description,
+                    duration: package.duration,
+                    flightsIncluded: package.flightsIncluded,
+                    hotelRating: package.hotelRating,
+                    guidedTours: package.guidedTours,
+                    imageUrl: package.imageUrl,
+                    services: package.services,
+                    hasDiscount: package.hasDiscount,
+                    originalPrice: originalPrice,
+                    discountPercentage: package.discountPercentage,
+                    isNew: package.isNew,
+                    isPopular: package.isPopular,
+                    hasLimitedSeats: package.hasLimitedSeats,
+                    availableSeats: package.availableSeats,
+                    onBookNowPressed: () {
+                      print('Book Now pressed for: ${package.title}');
+                      // TODO: Navigate to booking page
+                    },
+                    onViewDetailsPressed: () {
+                      // Show package details modal
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) => PackageDetailsModal(package: package),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+
+        // Pagination controls
+        if (_totalPages > 1 && !_isLoadingPage)
+          Padding(
+            padding: const EdgeInsets.only(top: 40, bottom: 20),
+            child: _buildPaginationControls(),
+          ),
+      ],
+    );
+  }
+
+  /// Build pagination controls
+  Widget _buildPaginationControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Previous button
+        IconButton(
+          onPressed: _currentPage > 1 ? _previousPage : null,
+          icon: const Icon(Icons.chevron_left),
+          tooltip: 'Anterior',
+          style: IconButton.styleFrom(
+            foregroundColor:
+                _currentPage > 1 ? const Color(0xFF072A47) : Colors.grey,
+            backgroundColor:
+                _currentPage > 1 ? Colors.grey[200] : Colors.grey[100],
+          ),
+        ),
+        const SizedBox(width: 8),
+
+        // Page numbers
+        ..._buildPageNumbers(),
+
+        const SizedBox(width: 8),
+        // Next button
+        IconButton(
+          onPressed: _currentPage < _totalPages ? _nextPage : null,
+          icon: const Icon(Icons.chevron_right),
+          tooltip: 'Siguiente',
+          style: IconButton.styleFrom(
+            foregroundColor:
+                _currentPage < _totalPages
+                    ? const Color(0xFF072A47)
+                    : Colors.grey,
+            backgroundColor:
+                _currentPage < _totalPages
+                    ? Colors.grey[200]
+                    : Colors.grey[100],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Build page number buttons
+  List<Widget> _buildPageNumbers() {
+    List<Widget> pageButtons = [];
+    const int maxVisiblePages = 7;
+
+    if (_totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (int i = 1; i <= _totalPages; i++) {
+        pageButtons.add(_buildPageButton(i));
+        if (i < _totalPages) {
+          pageButtons.add(const SizedBox(width: 4));
         }
+      }
+    } else {
+      // Show pages with ellipsis
+      pageButtons.add(_buildPageButton(1));
+      pageButtons.add(const SizedBox(width: 4));
 
-        return TravelPackageCard(
-          title: package.title,
-          price: package.price,
-          location: package.location,
-          description: package.description,
-          duration: package.duration,
-          flightsIncluded: package.flightsIncluded,
-          hotelRating: package.hotelRating,
-          guidedTours: package.guidedTours,
-          imageUrl: package.imageUrl,
-          services: package.services,
-          hasDiscount: package.hasDiscount,
-          originalPrice: originalPrice,
-          discountPercentage: package.discountPercentage,
-          isNew: package.isNew,
-          isPopular: package.isPopular,
-          hasLimitedSeats: package.hasLimitedSeats,
-          availableSeats: package.availableSeats,
-          onBookNowPressed: () {
-            print('Book Now pressed for: ${package.title}');
-            // TODO: Navigate to booking page
-          },
-          onViewDetailsPressed: () {
-            // Show package details modal
-            showDialog(
-              context: context,
-              builder: (context) => PackageDetailsModal(package: package),
-            );
-          },
+      if (_currentPage > 3) {
+        pageButtons.add(_buildEllipsis());
+        pageButtons.add(const SizedBox(width: 4));
+      }
+
+      int start = (_currentPage - 1).clamp(2, _totalPages - 2);
+      int end = (_currentPage + 1).clamp(2, _totalPages - 1);
+
+      for (int i = start; i <= end; i++) {
+        pageButtons.add(_buildPageButton(i));
+        if (i < end) {
+          pageButtons.add(const SizedBox(width: 4));
+        }
+      }
+
+      if (_currentPage < _totalPages - 2) {
+        pageButtons.add(const SizedBox(width: 4));
+        pageButtons.add(_buildEllipsis());
+      }
+
+      pageButtons.add(const SizedBox(width: 4));
+      pageButtons.add(_buildPageButton(_totalPages));
+    }
+
+    return pageButtons;
+  }
+
+  /// Build individual page button
+  Widget _buildPageButton(int pageNumber) {
+    final isCurrentPage = pageNumber == _currentPage;
+
+    return InkWell(
+      onTap: () => _goToPage(pageNumber),
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: isCurrentPage ? const Color(0xFF072A47) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isCurrentPage ? const Color(0xFF072A47) : Colors.grey[300]!,
+            width: isCurrentPage ? 2 : 1,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          pageNumber.toString(),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isCurrentPage ? FontWeight.bold : FontWeight.normal,
+            color: isCurrentPage ? Colors.white : const Color(0xFF072A47),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Build ellipsis indicator
+  Widget _buildEllipsis() {
+    return Container(
+      width: 40,
+      height: 40,
+      alignment: Alignment.center,
+      child: Text(
+        '...',
+        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+      ),
+    );
+  }
+
+  /// Build scroll to top floating button
+  Widget _buildScrollToTopButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
         );
       },
+      backgroundColor: const Color(0xFF072A47),
+      foregroundColor: Colors.white,
+      tooltip: 'Volver arriba',
+      child: const Icon(Icons.arrow_upward),
     );
   }
 }

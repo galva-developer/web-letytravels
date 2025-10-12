@@ -148,10 +148,10 @@
 - [x] Historial de búsquedas recientes
 
 #### 7. Paginación o Infinite Scroll
-- [ ] Mostrar 9 paquetes por página
-- [ ] Botones de paginación (< 1 2 3 ... 10 >)
-- [ ] Indicador de carga mientras se obtienen datos
-- [ ] Botón "Volver arriba" cuando hay scroll
+- [x] Mostrar 9 paquetes por página
+- [x] Botones de paginación (< 1 2 3 ... 10 >)
+- [x] Indicador de carga mientras se obtienen datos
+- [x] Botón "Volver arriba" cuando hay scroll
 
 #### 8. Testimonios de Viajeros
 - [ ] Sección de reseñas de clientes
