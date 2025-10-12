@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart'; // Import the model
 import 'package:by_lety_travels/presentation/widgets/sections/hero_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/filterable_packages_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/our_packages_section.dart';
+import 'package:by_lety_travels/presentation/widgets/sections/my_favorites_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/booking_section.dart';
 import 'package:by_lety_travels/presentation/widgets/sections/contact_footer_section.dart';
 import 'package:by_lety_travels/data/repositories/sample_packages.dart';
+import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -23,6 +26,8 @@ class _HomePageState extends State<HomePage> {
       GlobalKey(); // Renamed from _packagesSectionKey
   final GlobalKey _ourPackagesSectionKey =
       GlobalKey(); // New key for OurPackagesSection
+  final GlobalKey _favoritesSectionKey =
+      GlobalKey(); // Key for MyFavoritesSection
   final GlobalKey _bookingSectionKey = GlobalKey();
   final GlobalKey _contactSectionKey = GlobalKey();
 
@@ -355,6 +360,53 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+        actions: [
+          // Favorites badge
+          Consumer<FavoritesProvider>(
+            builder: (context, favoritesProvider, child) {
+              final count = favoritesProvider.favoritesCount;
+
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.favorite, color: Colors.white),
+                    onPressed: () {
+                      // TODO: Navigate to favorites section
+                      _scrollToSection(_favoritesSectionKey);
+                    },
+                    tooltip: 'My Favorites',
+                  ),
+                  if (count > 0)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 18,
+                          minHeight: 18,
+                        ),
+                        child: Text(
+                          count > 99 ? '99+' : count.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         // Keep SingleChildScrollView for overall page scroll
@@ -369,6 +421,7 @@ class _HomePageState extends State<HomePage> {
             OurPackagesSection(
               sectionKey: _ourPackagesSectionKey,
             ), // Use the new, unique key
+            MyFavoritesSection(sectionKey: _favoritesSectionKey),
             BookingSection(sectionKey: _bookingSectionKey),
             ContactFooterSection(sectionKey: _contactSectionKey),
           ],

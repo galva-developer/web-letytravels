@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
+import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 
 // Enhanced widget to display travel package information in a card format with badges and flip animation.
 class TravelPackageCard extends StatefulWidget {
@@ -209,6 +211,48 @@ class _TravelPackageCardState extends State<TravelPackageCard>
     );
   }
 
+  /// Build favorite button widget
+  Widget _buildFavoriteButton() {
+    return Consumer<FavoritesProvider>(
+      builder: (context, favoritesProvider, child) {
+        final isFavorite = favoritesProvider.isFavorite(widget.title);
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () async {
+              await favoritesProvider.toggleFavorite(widget.title);
+            },
+            customBorder: const CircleBorder(),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.9),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.3),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: isFavorite ? Colors.red : Colors.grey[600],
+                size: 20,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   /// Build the back side of the card (detailed info)
   Widget _buildBackCard(BuildContext context) {
     return GestureDetector(
@@ -217,7 +261,9 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         elevation: _isHovered ? 12.0 : 4.0,
         margin: const EdgeInsets.all(16.0),
         color: const Color(0xFF072A47), // Azul oscuro para el reverso
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
         child: Stack(
           children: [
             Padding(
@@ -252,7 +298,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                   const SizedBox(height: 20),
 
                   // Detailed Information
-                  _buildBackInfoRow(Icons.location_on, widget.location, 'Destino'),
+                  _buildBackInfoRow(
+                    Icons.location_on,
+                    widget.location,
+                    'Destino',
+                  ),
                   const SizedBox(height: 12),
                   _buildBackInfoRow(
                     Icons.calendar_today,
@@ -266,7 +316,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                     'Precio por persona',
                   ),
                   const SizedBox(height: 12),
-                  _buildBackInfoRow(Icons.hotel, widget.hotelRating, 'Alojamiento'),
+                  _buildBackInfoRow(
+                    Icons.hotel,
+                    widget.hotelRating,
+                    'Alojamiento',
+                  ),
                   const SizedBox(height: 20),
 
                   // Features list
@@ -561,30 +615,38 @@ class _TravelPackageCardState extends State<TravelPackageCard>
           ),
         ),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Original price (crossed out if discount)
-            if (widget.hasDiscount && widget.originalPrice != null)
-              Text(
-                widget.originalPrice!,
-                style: const TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.red,
-                  decoration: TextDecoration.lineThrough,
-                  decorationColor: Colors.red,
-                  decorationThickness: 2.0,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // Original price (crossed out if discount)
+                if (widget.hasDiscount && widget.originalPrice != null)
+                  Text(
+                    widget.originalPrice!,
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.red,
+                      decoration: TextDecoration.lineThrough,
+                      decorationColor: Colors.red,
+                      decorationThickness: 2.0,
+                    ),
+                  ),
+                // Current price (always green)
+                Text(
+                  widget.price,
+                  style: const TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
                 ),
-              ),
-            // Current price (always green)
-            Text(
-              widget.price,
-              style: const TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
+              ],
             ),
+            const SizedBox(width: 8),
+            // Favorite button next to price
+            _buildFavoriteButton(),
           ],
         ),
       ],

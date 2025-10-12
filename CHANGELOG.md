@@ -4,6 +4,72 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.10.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### ❤️ Sistema de Favoritos Completo
+
+Implementación integral del sistema de favoritos con persistencia local y UI reactiva.
+
+- **Arquitectura de Favoritos**:
+  - **FavoritesService** (`lib/data/services/favorites_service.dart`) ✅
+    * Gestión de localStorage con SharedPreferences
+    * Métodos: add, remove, toggle, get, isFavorite, clear, getCount
+    * Persistencia en navegador con key 'favorite_packages'
+    * Almacena títulos de paquetes como List<String>
+  
+  - **FavoritesProvider** (`lib/presentation/providers/favorites_provider.dart`) ✅
+    * State management global con ChangeNotifier
+    * Propiedades reactivas: _favoriteTitles, favoritesCount, isLoading
+    * Auto-carga desde storage en inicialización
+    * Métodos: toggleFavorite, getFavoritePackages, clearAll, refresh
+    * notifyListeners() para actualizaciones en tiempo real
+  
+  - **Provider Setup** en `main.dart` ✅
+    * MultiProvider envuelve MaterialApp
+    * ChangeNotifierProvider<FavoritesProvider> disponible globalmente
+
+- **Componentes UI**:
+  - **Botón de Favorito en Cards** ✅
+    * Corazón en esquina superior derecha (top: 12, right: 12)
+    * Icon filled (rojo) si es favorito, outlined (gris) si no
+    * Consumer<FavoritesProvider> para updates reactivos
+    * InkWell con CircleBorder para ripple effect
+    * Fondo blanco circular con sombra
+    * Toggle async con await
+  
+  - **Badge de Contador en Navbar** ✅
+    * Ícono de corazón en AppBar actions
+    * Consumer reactivo muestra count en tiempo real
+    * Badge circular rojo con número
+    * Muestra "99+" si count > 99
+    * onPressed scroll a MyFavoritesSection
+  
+  - **MyFavoritesSection** (`lib/presentation/widgets/sections/my_favorites_section.dart`) ✅
+    * Sección completa con Consumer<FavoritesProvider>
+    * **Header**: Título, contador, botón "Limpiar Todo"
+    * **Info banner**: Explica persistencia local y comparación (hasta 3)
+    * **Empty State**: Mensaje, ícono grande, botón "Explorar Paquetes"
+    * **Grid responsive**: 3 cols (desktop), 2 cols (tablet), 1 col (mobile)
+    * **Confirmación de limpieza**: AlertDialog antes de eliminar todos
+    * **SnackBar feedback**: Notifica acciones completadas
+    * Integrada en HomePage después de OurPackagesSection
+
+- **Dependencias Agregadas**:
+  - `shared_preferences: ^2.3.3` - LocalStorage browser
+  - `provider: ^6.1.2` - State management reactivo
+
+- **Estado de Implementación**:
+  - ✅ Service layer (localStorage CRUD)
+  - ✅ Provider layer (global state)
+  - ✅ Favorite button (cards)
+  - ✅ Navbar badge (counter)
+  - ✅ MyFavoritesSection (display & manage)
+  - ⏳ Comparison feature (pendiente - comparar hasta 3 paquetes)
+
+---
+
 ## [v0.9.1] - 2025-01-12
 
 ### 🔧 Mejoras y Correcciones

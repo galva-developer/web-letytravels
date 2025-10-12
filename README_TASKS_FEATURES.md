@@ -134,10 +134,10 @@
 ```
 
 #### 5. Sistema de Favoritos
-- [ ] Botón de corazón en cada card
-- [ ] Guardar favoritos en LocalStorage
-- [ ] Página/sección "Mis Favoritos"
-- [ ] Contador de favoritos en navbar
+- [x] Botón de corazón en cada card
+- [x] Guardar favoritos en LocalStorage
+- [x] Página/sección "Mis Favoritos"
+- [x] Contador de favoritos en navbar
 - [ ] Comparar hasta 3 paquetes favoritos
 
 #### 6. Búsqueda de Paquetes
