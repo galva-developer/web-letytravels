@@ -55,6 +55,7 @@ class TravelPackageCard extends StatefulWidget {
 class _TravelPackageCardState extends State<TravelPackageCard>
     with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  bool _isFlipped = false; // Track if card is currently flipped
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
 
@@ -78,7 +79,25 @@ class _TravelPackageCardState extends State<TravelPackageCard>
 
   void _handleHover(bool isHovered) {
     setState(() => _isHovered = isHovered);
-    if (isHovered) {
+    // If mouse exits card completely, reset flip
+    if (!isHovered && _isFlipped) {
+      setState(() => _isFlipped = false);
+      _flipController.reverse();
+    }
+  }
+
+  // Handle flip animation - triggered by image hover or click
+  void _handleFlipHover(bool shouldFlip) {
+    if (shouldFlip && !_isFlipped) {
+      setState(() => _isFlipped = true);
+      _flipController.forward();
+    }
+  }
+
+  // Toggle flip state on click
+  void _toggleFlip() {
+    setState(() => _isFlipped = !_isFlipped);
+    if (_isFlipped) {
       _flipController.forward();
     } else {
       _flipController.reverse();
@@ -192,100 +211,124 @@ class _TravelPackageCardState extends State<TravelPackageCard>
 
   /// Build the back side of the card (detailed info)
   Widget _buildBackCard(BuildContext context) {
-    return Card(
-      elevation: _isHovered ? 12.0 : 4.0,
-      margin: const EdgeInsets.all(16.0),
-      color: const Color(0xFF072A47), // Azul oscuro para el reverso
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: _toggleFlip, // Click to flip back to front
+      child: Card(
+        elevation: _isHovered ? 12.0 : 4.0,
+        margin: const EdgeInsets.all(16.0),
+        color: const Color(0xFF072A47), // Azul oscuro para el reverso
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        child: Stack(
           children: [
-            // Title
-            Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFFFDC00),
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFFDC00),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 16),
 
-            // Divider
-            Container(
-              height: 2,
-              width: 60,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFFFDC00), Colors.transparent],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Detailed Information
-            _buildBackInfoRow(Icons.location_on, widget.location, 'Destino'),
-            const SizedBox(height: 12),
-            _buildBackInfoRow(
-              Icons.calendar_today,
-              widget.duration,
-              'Duración',
-            ),
-            const SizedBox(height: 12),
-            _buildBackInfoRow(
-              Icons.attach_money,
-              widget.price,
-              'Precio por persona',
-            ),
-            const SizedBox(height: 12),
-            _buildBackInfoRow(Icons.hotel, widget.hotelRating, 'Alojamiento'),
-            const SizedBox(height: 20),
-
-            // Features list
-            const Text(
-              'Incluye:',
-              style: TextStyle(
-                color: Color(0xFFFFDC00),
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            if (widget.flightsIncluded)
-              _buildFeatureItem('✈️ Vuelos ida y vuelta'),
-            _buildFeatureItem('🏨 Alojamiento ${widget.hotelRating}'),
-            if (widget.guidedTours)
-              _buildFeatureItem('🎯 Tours guiados en español'),
-            if (widget.services.contains('Meals Included'))
-              _buildFeatureItem('🍽️ Comidas incluidas'),
-
-            const Spacer(),
-
-            // Call to Action
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: widget.onBookNowPressed,
-                    icon: const Icon(Icons.check_circle, size: 20),
-                    label: const Text('Reservar Ahora'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFDC00),
-                      foregroundColor: const Color(0xFF072A47),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  // Divider
+                  Container(
+                    height: 2,
+                    width: 60,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFFFDC00), Colors.transparent],
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
+
+                  // Detailed Information
+                  _buildBackInfoRow(Icons.location_on, widget.location, 'Destino'),
+                  const SizedBox(height: 12),
+                  _buildBackInfoRow(
+                    Icons.calendar_today,
+                    widget.duration,
+                    'Duración',
+                  ),
+                  const SizedBox(height: 12),
+                  _buildBackInfoRow(
+                    Icons.attach_money,
+                    widget.price,
+                    'Precio por persona',
+                  ),
+                  const SizedBox(height: 12),
+                  _buildBackInfoRow(Icons.hotel, widget.hotelRating, 'Alojamiento'),
+                  const SizedBox(height: 20),
+
+                  // Features list
+                  const Text(
+                    'Incluye:',
+                    style: TextStyle(
+                      color: Color(0xFFFFDC00),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  if (widget.flightsIncluded)
+                    _buildFeatureItem('✈️ Vuelos ida y vuelta'),
+                  _buildFeatureItem('🏨 Alojamiento ${widget.hotelRating}'),
+                  if (widget.guidedTours)
+                    _buildFeatureItem('🎯 Tours guiados en español'),
+                  if (widget.services.contains('Meals Included'))
+                    _buildFeatureItem('🍽️ Comidas incluidas'),
+
+                  const Spacer(),
+
+                  // Call to Action
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: widget.onBookNowPressed,
+                          icon: const Icon(Icons.check_circle, size: 20),
+                          label: const Text('Reservar Ahora'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFFDC00),
+                            foregroundColor: const Color(0xFF072A47),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Click hint icon in top-right corner
+            Positioned(
+              top: 16,
+              right: 16,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFDC00).withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ],
+                child: const Icon(
+                  Icons.touch_app,
+                  color: Color(0xFFFFDC00),
+                  size: 20,
+                ),
+              ),
             ),
           ],
         ),
@@ -335,111 +378,128 @@ class _TravelPackageCardState extends State<TravelPackageCard>
 
   /// Build image section with badges
   Widget _buildImageSection() {
-    return Stack(
-      children: [
-        // Image
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-          child:
-              widget.imageUrl != null && widget.imageUrl!.isNotEmpty
-                  ? Image.network(
-                    widget.imageUrl!,
-                    height: 200.0,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        height: 200.0,
-                        decoration: BoxDecoration(color: Colors.grey[300]),
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                          value:
-                              loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, exception, stackTrace) {
-                      return Container(
-                        height: 200.0,
-                        decoration: BoxDecoration(color: Colors.grey[300]),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.broken_image,
-                          size: 50,
-                          color: Colors.grey[600],
-                        ),
-                      );
-                    },
-                  )
-                  : Container(
-                    height: 200.0,
-                    decoration: BoxDecoration(color: Colors.grey[300]),
-                    alignment: Alignment.center,
-                    child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
-                  ),
-        ),
-
-        // Badges overlay
-        Positioned(
-          top: 12,
-          left: 12,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.hasDiscount)
-                _buildBadge('OFERTA', Colors.red, Icons.local_offer),
-              if (widget.isNew)
-                _buildBadge('NUEVO', const Color(0xFF072A47), Icons.fiber_new),
-              if (widget.isPopular)
-                _buildBadge(
-                  'POPULAR',
-                  const Color(0xFFFFDC00),
-                  Icons.star,
-                  textColor: const Color(0xFF072A47),
-                ),
-              if (widget.hasLimitedSeats)
-                _buildBadge(
-                  'ÚLTIMAS PLAZAS',
-                  Colors.orange,
-                  Icons.warning_amber,
-                ),
-            ],
+    return MouseRegion(
+      onEnter: (_) => _handleFlipHover(true),
+      onExit: (_) => _handleFlipHover(false),
+      child: Stack(
+        children: [
+          // Image
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(16.0),
+            ),
+            child:
+                widget.imageUrl != null && widget.imageUrl!.isNotEmpty
+                    ? Image.network(
+                      widget.imageUrl!,
+                      height: 200.0,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          height: 200.0,
+                          decoration: BoxDecoration(color: Colors.grey[300]),
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(
+                            value:
+                                loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, exception, stackTrace) {
+                        return Container(
+                          height: 200.0,
+                          decoration: BoxDecoration(color: Colors.grey[300]),
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.broken_image,
+                            size: 50,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      },
+                    )
+                    : Container(
+                      height: 200.0,
+                      decoration: BoxDecoration(color: Colors.grey[300]),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.image,
+                        size: 50,
+                        color: Colors.grey[600],
+                      ),
+                    ),
           ),
-        ),
 
-        // Discount percentage badge (top right)
-        if (widget.hasDiscount && widget.discountPercentage != null)
+          // Badges overlay
           Positioned(
             top: 12,
-            right: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            left: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.hasDiscount)
+                  _buildBadge('OFERTA', Colors.red, Icons.local_offer),
+                if (widget.isNew)
+                  _buildBadge(
+                    'NUEVO',
+                    const Color(0xFF072A47),
+                    Icons.fiber_new,
                   ),
-                ],
-              ),
-              child: Text(
-                '¡${widget.discountPercentage}% OFF!',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                if (widget.isPopular)
+                  _buildBadge(
+                    'POPULAR',
+                    const Color(0xFFFFDC00),
+                    Icons.star,
+                    textColor: const Color(0xFF072A47),
+                  ),
+                if (widget.hasLimitedSeats)
+                  _buildBadge(
+                    'ÚLTIMAS PLAZAS',
+                    Colors.orange,
+                    Icons.warning_amber,
+                  ),
+              ],
+            ),
+          ),
+
+          // Discount percentage badge (top right)
+          if (widget.hasDiscount && widget.discountPercentage != null)
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  '¡${widget.discountPercentage}% OFF!',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 

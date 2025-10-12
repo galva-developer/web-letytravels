@@ -3,6 +3,7 @@ import 'package:by_lety_travels/data/models/package_travel.dart';
 import 'package:by_lety_travels/data/models/package_filters.dart';
 import 'package:by_lety_travels/presentation/widgets/travel_package_card.dart';
 import 'package:by_lety_travels/presentation/widgets/components/package_filters_widget.dart';
+import 'package:by_lety_travels/presentation/widgets/package_details_modal.dart';
 
 /// Sort options for packages
 enum PackageSortOption {
@@ -57,53 +58,56 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   void _applyFilters(PackageFilters filters) {
     setState(() {
       _currentFilters = filters;
-      _filteredPackages = widget.allPackages.where((package) {
-        // Price filter
-        if (package.priceValue < filters.minPrice ||
-            package.priceValue > filters.maxPrice) {
-          return false;
-        }
-
-        // Continent filter
-        if (filters.selectedContinent != null &&
-            filters.selectedContinent != 'All' &&
-            package.continent != filters.selectedContinent) {
-          return false;
-        }
-
-        // Country filter
-        if (filters.selectedCountry != null &&
-            package.country != filters.selectedCountry) {
-          return false;
-        }
-
-        // Duration filter
-        if (filters.selectedDuration != null &&
-            filters.selectedDuration != 'All') {
-          if (!_matchesDuration(
-              package.durationDays, filters.selectedDuration!)) {
-            return false;
-          }
-        }
-
-        // Category filter
-        if (filters.selectedCategories.isNotEmpty &&
-            !filters.selectedCategories.contains(package.category)) {
-          return false;
-        }
-
-        // Services filter
-        if (filters.selectedServices.isNotEmpty) {
-          for (final service in filters.selectedServices) {
-            if (!_packageHasService(package, service)) {
+      _filteredPackages =
+          widget.allPackages.where((package) {
+            // Price filter
+            if (package.priceValue < filters.minPrice ||
+                package.priceValue > filters.maxPrice) {
               return false;
             }
-          }
-        }
 
-        return true;
-      }).toList();
-      
+            // Continent filter
+            if (filters.selectedContinent != null &&
+                filters.selectedContinent != 'All' &&
+                package.continent != filters.selectedContinent) {
+              return false;
+            }
+
+            // Country filter
+            if (filters.selectedCountry != null &&
+                package.country != filters.selectedCountry) {
+              return false;
+            }
+
+            // Duration filter
+            if (filters.selectedDuration != null &&
+                filters.selectedDuration != 'All') {
+              if (!_matchesDuration(
+                package.durationDays,
+                filters.selectedDuration!,
+              )) {
+                return false;
+              }
+            }
+
+            // Category filter
+            if (filters.selectedCategories.isNotEmpty &&
+                !filters.selectedCategories.contains(package.category)) {
+              return false;
+            }
+
+            // Services filter
+            if (filters.selectedServices.isNotEmpty) {
+              for (final service in filters.selectedServices) {
+                if (!_packageHasService(package, service)) {
+                  return false;
+                }
+              }
+            }
+
+            return true;
+          }).toList();
+
       // Apply sorting
       _sortPackages();
     });
@@ -113,7 +117,9 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   void _sortPackages() {
     switch (_currentSort) {
       case PackageSortOption.mostPopular:
-        _filteredPackages.sort((a, b) => b.popularityScore.compareTo(a.popularityScore));
+        _filteredPackages.sort(
+          (a, b) => b.popularityScore.compareTo(a.popularityScore),
+        );
         break;
       case PackageSortOption.priceLowToHigh:
         _filteredPackages.sort((a, b) => a.priceValue.compareTo(b.priceValue));
@@ -122,7 +128,9 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
         _filteredPackages.sort((a, b) => b.priceValue.compareTo(a.priceValue));
         break;
       case PackageSortOption.duration:
-        _filteredPackages.sort((a, b) => a.durationDays.compareTo(b.durationDays));
+        _filteredPackages.sort(
+          (a, b) => a.durationDays.compareTo(b.durationDays),
+        );
         break;
       case PackageSortOption.departureDate:
         _filteredPackages.sort((a, b) {
@@ -239,7 +247,9 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                       _showFilters = !_showFilters;
                     });
                   },
-                  icon: Icon(_showFilters ? Icons.filter_list_off : Icons.filter_list),
+                  icon: Icon(
+                    _showFilters ? Icons.filter_list_off : Icons.filter_list,
+                  ),
                   label: Text(_showFilters ? 'Hide Filters' : 'Show Filters'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFF072A47),
@@ -257,54 +267,52 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
           // Main content area
           isMobile || isTablet
               ? Column(
-                  children: [
-                    // Mobile: Sort dropdown
-                    if (isMobile) ...[
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.sort, size: 20, color: Colors.grey[600]),
-                            const SizedBox(width: 8),
-                            Expanded(child: _buildSortDropdown()),
-                          ],
-                        ),
+                children: [
+                  // Mobile: Sort dropdown
+                  if (isMobile) ...[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        children: [
+                          Icon(Icons.sort, size: 20, color: Colors.grey[600]),
+                          const SizedBox(width: 8),
+                          Expanded(child: _buildSortDropdown()),
+                        ],
                       ),
-                    ],
-                    // Mobile: Filters as expandable section
-                    if (_showFilters) ...[
-                      PackageFiltersWidget(
+                    ),
+                  ],
+                  // Mobile: Filters as expandable section
+                  if (_showFilters) ...[
+                    PackageFiltersWidget(
+                      initialFilters: _currentFilters,
+                      onFiltersChanged: _applyFilters,
+                      onClearFilters: _clearFilters,
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                  // Package grid
+                  _buildPackageGrid(isMobile, isTablet),
+                ],
+              )
+              : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Desktop: Filters sidebar
+                  if (_showFilters) ...[
+                    SizedBox(
+                      width: 320,
+                      child: PackageFiltersWidget(
                         initialFilters: _currentFilters,
                         onFiltersChanged: _applyFilters,
                         onClearFilters: _clearFilters,
                       ),
-                      const SizedBox(height: 24),
-                    ],
-                    // Package grid
-                    _buildPackageGrid(isMobile, isTablet),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Desktop: Filters sidebar
-                    if (_showFilters) ...[
-                      SizedBox(
-                        width: 320,
-                        child: PackageFiltersWidget(
-                          initialFilters: _currentFilters,
-                          onFiltersChanged: _applyFilters,
-                          onClearFilters: _clearFilters,
-                        ),
-                      ),
-                      const SizedBox(width: 32),
-                    ],
-                    // Package grid
-                    Expanded(
-                      child: _buildPackageGrid(isMobile, isTablet),
                     ),
+                    const SizedBox(width: 32),
                   ],
-                ),
+                  // Package grid
+                  Expanded(child: _buildPackageGrid(isMobile, isTablet)),
+                ],
+              ),
 
           // No results message
           if (_filteredPackages.isEmpty)
@@ -313,11 +321,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                 padding: const EdgeInsets.all(40),
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.search_off,
-                      size: 80,
-                      color: Colors.grey[400],
-                    ),
+                    Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
                     const SizedBox(height: 16),
                     Text(
                       'No packages found',
@@ -330,10 +334,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                     const SizedBox(height: 8),
                     Text(
                       'Try adjusting your filters to see more results',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey[500],
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey[500]),
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
@@ -371,22 +372,20 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
         underline: const SizedBox(),
         isDense: true,
         icon: const Icon(Icons.keyboard_arrow_down, size: 20),
-        items: PackageSortOption.values.map((option) {
-          return DropdownMenuItem(
-            value: option,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(option.icon, size: 16, color: const Color(0xFF072A47)),
-                const SizedBox(width: 8),
-                Text(
-                  option.label,
-                  style: const TextStyle(fontSize: 14),
+        items:
+            PackageSortOption.values.map((option) {
+              return DropdownMenuItem(
+                value: option,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(option.icon, size: 16, color: const Color(0xFF072A47)),
+                    const SizedBox(width: 8),
+                    Text(option.label, style: const TextStyle(fontSize: 14)),
+                  ],
                 ),
-              ],
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
         onChanged: (value) {
           if (value != null) {
             _updateSort(value);
@@ -412,13 +411,13 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
       itemCount: _filteredPackages.length,
       itemBuilder: (context, index) {
         final package = _filteredPackages[index];
-        
+
         // Calculate discount info
         String? originalPrice;
         if (package.hasDiscount && package.originalPrice != null) {
           originalPrice = '\$${package.originalPrice!.toStringAsFixed(0)}';
         }
-        
+
         return TravelPackageCard(
           title: package.title,
           price: package.price,
@@ -442,8 +441,11 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
             // TODO: Navigate to booking page
           },
           onViewDetailsPressed: () {
-            print('View Details pressed for: ${package.title}');
-            // TODO: Show package details modal
+            // Show package details modal
+            showDialog(
+              context: context,
+              builder: (context) => PackageDetailsModal(package: package),
+            );
           },
         );
       },

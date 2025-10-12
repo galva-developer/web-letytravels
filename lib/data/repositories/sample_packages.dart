@@ -28,6 +28,116 @@ class SamplePackages {
       isPopular: true,
       imageUrl:
           'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=2073&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=1974&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2020&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1509439581779-6298f75bf6e5?q=80&w=1887&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1431274172761-fca41d930114?q=80&w=2070&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1508050919630-b135583b29ab?q=80&w=2071&auto=format&fit=crop',
+      ],
+      itinerary: [
+        DayItinerary(
+          dayNumber: 1,
+          title: 'Arrival in Paris',
+          activities: [
+            'Airport transfer to hotel',
+            'Check-in at 4-star hotel',
+            'Welcome dinner at traditional French bistro',
+            'Evening stroll along the Seine River',
+          ],
+          meals: 'Dinner',
+        ),
+        DayItinerary(
+          dayNumber: 2,
+          title: 'Iconic Landmarks Tour',
+          activities: [
+            'Visit the Eiffel Tower with skip-the-line access',
+            'Guided tour of the Louvre Museum',
+            'Lunch at Champs-Élysées',
+            'Arc de Triomphe visit',
+            'Seine River cruise at sunset',
+          ],
+          meals: 'Breakfast, Lunch',
+        ),
+        DayItinerary(
+          dayNumber: 3,
+          title: 'Montmartre & Culture',
+          activities: [
+            'Explore the artistic Montmartre district',
+            'Visit Sacré-Cœur Basilica',
+            'Artist square (Place du Tertre)',
+            'French cooking class experience',
+            'Free evening for shopping',
+          ],
+          meals: 'Breakfast',
+        ),
+        DayItinerary(
+          dayNumber: 4,
+          title: 'Versailles Day Trip',
+          activities: [
+            'Full-day excursion to Palace of Versailles',
+            'Guided tour of the palace and gardens',
+            'Marie Antoinette\'s Estate visit',
+            'Return to Paris',
+            'Farewell dinner with Moulin Rouge show',
+          ],
+          meals: 'Breakfast, Dinner',
+        ),
+        DayItinerary(
+          dayNumber: 5,
+          title: 'Departure',
+          activities: [
+            'Breakfast at hotel',
+            'Last-minute shopping or museum visit',
+            'Check-out and airport transfer',
+            'Departure flight',
+          ],
+          meals: 'Breakfast',
+        ),
+      ],
+      inclusions: [
+        'Round-trip flights from major US cities',
+        '4 nights accommodation in 4-star hotel',
+        'Daily breakfast',
+        '3 lunches and 3 dinners as per itinerary',
+        'All transfers and transportation',
+        'English-speaking guide',
+        'Skip-the-line entrance to Eiffel Tower',
+        'Louvre Museum entry with guide',
+        'Seine River cruise',
+        'Versailles Palace entry and tour',
+        'Moulin Rouge show ticket',
+        'French cooking class',
+        'All taxes and service charges',
+      ],
+      exclusions: [
+        'Travel insurance',
+        'Personal expenses and tips',
+        'Additional meals not mentioned',
+        'Optional activities',
+        'Visa fees (if applicable)',
+        'Luggage fees',
+        'Airport taxes (if not included in flight)',
+      ],
+      termsAndConditions: '''
+• Booking requires 30% deposit, full payment due 30 days before departure
+• Cancellation policy: 100% refund if cancelled 60+ days before, 50% if 30-59 days, no refund within 30 days
+• Valid passport required (6 months validity)
+• Travel insurance highly recommended
+• Prices subject to change based on availability
+• Minimum 2 passengers required for departure
+• Single supplement available for solo travelers (+\$400)
+• Children under 12 receive 20% discount
+''',
+      availableDates: [
+        DateTime(2024, 7, 15),
+        DateTime(2024, 8, 5),
+        DateTime(2024, 9, 10),
+        DateTime(2024, 10, 1),
+      ],
+      latitude: 48.8566,
+      longitude: 2.3522,
     ),
 
     // Europe - Adventure (NEW + LIMITED SEATS)
@@ -54,6 +164,113 @@ class SamplePackages {
       availableSeats: 3,
       imageUrl:
           'https://images.unsplash.com/photo-1529260830199-42c24126f198?q=80&w=1974&auto=format&fit=crop',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1529260830199-42c24126f198?q=80&w=1974&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=1996&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1531572753322-ad063cecc140?q=80&w=1976&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1525874684015-58379d421a52?q=80&w=2070&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?q=80&w=2070&auto=format&fit=crop',
+      ],
+      itinerary: [
+        DayItinerary(
+          dayNumber: 1,
+          title: 'Welcome to Rome',
+          activities: [
+            'Airport pickup and hotel check-in',
+            'Orientation walk through Trastevere',
+            'Welcome dinner at local trattoria',
+          ],
+          meals: 'Dinner',
+        ),
+        DayItinerary(
+          dayNumber: 2,
+          title: 'Ancient Rome',
+          activities: [
+            'Colosseum guided tour with underground access',
+            'Roman Forum exploration',
+            'Palatine Hill visit',
+            'Lunch near the monuments',
+          ],
+          meals: 'Breakfast',
+        ),
+        DayItinerary(
+          dayNumber: 3,
+          title: 'Vatican City',
+          activities: [
+            'Vatican Museums priority entrance',
+            'Sistine Chapel visit',
+            'St. Peter\'s Basilica tour',
+            'Climb to the dome (optional)',
+          ],
+          meals: 'Breakfast',
+        ),
+        DayItinerary(
+          dayNumber: 4,
+          title: 'Baroque Rome',
+          activities: [
+            'Trevi Fountain',
+            'Spanish Steps',
+            'Pantheon visit',
+            'Piazza Navona',
+            'Gelato tasting tour',
+          ],
+          meals: 'Breakfast',
+        ),
+        DayItinerary(
+          dayNumber: 5,
+          title: 'Day Trip to Pompeii',
+          activities: [
+            'Early departure to Pompeii',
+            'Guided tour of ancient ruins',
+            'Mt. Vesuvius viewpoint',
+            'Return to Rome',
+          ],
+          meals: 'Breakfast, Lunch',
+        ),
+        DayItinerary(
+          dayNumber: 6,
+          title: 'Departure',
+          activities: [
+            'Leisure morning',
+            'Last shopping at Via del Corso',
+            'Airport transfer',
+          ],
+          meals: 'Breakfast',
+        ),
+      ],
+      inclusions: [
+        'Round-trip flights',
+        '5 nights in 4-star hotel',
+        'Daily breakfast',
+        'Colosseum skip-the-line tickets',
+        'Vatican Museums priority entrance',
+        'Professional English-speaking guide',
+        'Pompeii day trip with transportation',
+        'All entrance fees mentioned',
+        'Airport transfers',
+      ],
+      exclusions: [
+        'Travel insurance',
+        'Lunches and dinners (except mentioned)',
+        'Personal expenses',
+        'Tips for guides',
+        'Optional activities',
+      ],
+      termsAndConditions: '''
+• 30% deposit required to confirm booking
+• Full payment 45 days before departure
+• Cancellation fees apply
+• Valid passport required
+• Travel insurance recommended
+• Comfortable walking shoes essential
+''',
+      availableDates: [
+        DateTime(2024, 6, 20),
+        DateTime(2024, 7, 25),
+        DateTime(2024, 9, 15),
+      ],
+      latitude: 41.9028,
+      longitude: 12.4964,
     ),
 
     // Asia - Luxury (POPULAR)
@@ -285,8 +502,7 @@ class SamplePackages {
       location: 'Zurich, Switzerland',
       continent: 'Europe',
       country: 'Switzerland',
-      description:
-          'Skiing, mountain hiking, and breathtaking Alpine views.',
+      description: 'Skiing, mountain hiking, and breathtaking Alpine views.',
       duration: '7 Days / 6 Nights',
       durationDays: 7,
       flightsIncluded: true,
@@ -310,15 +526,21 @@ class SamplePackages {
 
   /// Get packages filtered by category
   static List<PackageTravel> getPackagesByCategory(String category) {
-    return allPackages.where((package) => package.category == category).toList();
+    return allPackages
+        .where((package) => package.category == category)
+        .toList();
   }
 
   /// Get packages within price range
   static List<PackageTravel> getPackagesByPriceRange(
-      double minPrice, double maxPrice) {
+    double minPrice,
+    double maxPrice,
+  ) {
     return allPackages
-        .where((package) =>
-            package.priceValue >= minPrice && package.priceValue <= maxPrice)
+        .where(
+          (package) =>
+              package.priceValue >= minPrice && package.priceValue <= maxPrice,
+        )
         .toList();
   }
 }

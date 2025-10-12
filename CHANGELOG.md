@@ -4,6 +4,219 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.9.1] - 2025-01-12
+
+### 🔧 Mejoras y Correcciones
+
+#### 🎯 Fix: Flip Animation Button Accessibility & Persistent Flip
+
+- **Problema 1 Resuelto**: La animación flip al hacer hover impedía hacer click en el botón "Ver Detalles"
+- **Problema 2 Resuelto**: Después de leer info en la cara trasera, no había forma de volver al frente
+
+- **Soluciones Implementadas**: 
+  
+  **1. Flip solo en imagen** ✅:
+  - Flip animation ahora solo se activa con hover sobre la **imagen** del paquete
+  - Los botones de acción quedan accesibles en todo momento
+  - MouseRegion separado para la sección de imagen
+  - `_handleFlipHover()` method solo para el área de la imagen
+  - `_handleHover()` method mantiene el efecto de elevación en toda la card
+
+  **2. Flip persistente con toggle** ✅:
+  - La card permanece volteada después del hover en la imagen
+  - **Click en la cara trasera** vuelve al frente (GestureDetector)
+  - Estado `_isFlipped` mantiene el estado actual
+  - Solo se resetea cuando el mouse sale completamente de la card
+  - Icono de "touch" (👆) visible en esquina superior derecha del reverso
+
+- **Flujo de Interacción**:
+  1. Usuario pasa mouse sobre la **imagen** → Card se voltea
+  2. Usuario lee información en la cara trasera
+  3. Usuario hace **click en cualquier parte del reverso** → Vuelve al frente
+  4. O usuario saca el mouse de la card → Vuelve al frente automáticamente
+
+- **Beneficios de UX**:
+  - Usuario puede hacer click en "Ver Detalles" sin problemas ✅
+  - Botón "Reservar" siempre accesible ✅
+  - Flip animation se mantiene como feature interesante ✅
+  - Usuario puede **leer tranquilamente** la información del reverso ✅
+  - **Click intuitivo** para volver (indicado con icono) ✅
+  - Mejor experiencia de usuario y menor frustración ✅
+  - Área de imagen sigue siendo interactiva con efecto flip ✅
+
+- **Cambios Técnicos**:
+  - Método `_handleFlipHover(bool shouldFlip)` para controlar flip inicial
+  - Método `_toggleFlip()` para alternar estado con click
+  - Estado `_isFlipped` para tracking del estado actual
+  - MouseRegion envolviendo solo `_buildImageSection()`
+  - GestureDetector envolviendo `_buildBackCard()` con onTap
+  - Positioned widget con icono touch_app en esquina del reverso
+  - Separación de concerns: hover general vs flip animation
+  - Reset automático cuando mouse sale de la card
+
+### 📱 UX Improvements
+
+- **Zona "Safe"**: Botones siempre accesibles sin interferencia del flip
+- **Hover Intelligence**: Solo la imagen activa la animación flip inicial
+- **Click Reliability**: 100% de confiabilidad en los botones de acción
+- **Persistent Flip**: Card permanece volteada para lectura cómoda
+- **Easy Return**: Click en el reverso o salir de la card para volver
+- **Visual Hint**: Icono touch_app indica que se puede hacer click para volver
+
+---
+
+## [v0.9.0] - 2025-01-12
+
+### ✨ Nuevas Características
+
+#### 🎯 Modal de Detalles del Paquete
+
+- **Modal Dialog Completo**:
+  - Dialog responsivo con tamaño máximo 1200x800px
+  - Header con título, ubicación, y botones de acción
+  - Sistema de tabs para organizar información
+  - Footer con botones de contacto y reserva
+  - Diseño adaptativo móvil/desktop
+
+- **Header Interactivo**:
+  - Título destacado en amarillo sobre fondo azul oscuro
+  - Ubicación con icono de pin
+  - Botón de favoritos (toggle corazón)
+  - Botón de compartir
+  - Botón cerrar (X)
+
+- **Tab 1: Gallery** 📷:
+  - Visualización de 5-10 imágenes del destino
+  - Imagen principal con navegación (flechas anterior/siguiente)
+  - Contador de imagen actual (ej. "3 / 6")
+  - Tira de miniaturas en la parte inferior
+  - Selección de imagen con borde amarillo destacado
+  - Imágenes en modo contain para visualización completa
+
+- **Tab 2: Itinerary** 🗓️:
+  - Itinerario día a día expandible
+  - Cards con ExpansionTile para cada día
+  - Círculo con número de día en azul oscuro
+  - Título del día destacado
+  - Indicador de comidas incluidas (🍽️)
+  - Lista de actividades con checkmarks
+  - Primer día expandido por defecto
+
+- **Tab 3: Included** ✅:
+  - Card de resumen con precio y descuento
+  - Precio tachado en rojo si hay descuento
+  - Precio actual en verde (grande)
+  - Badge de descuento (ej. "20% OFF")
+  - Información básica: duración, hotel, vuelos, tours
+  - Lista de inclusiones con ✅ checkmark verde
+  - Lista de exclusiones con ❌ X roja
+  - Terms & Conditions expandible
+
+- **Tab 4: Map** 🗺️:
+  - Placeholder de mapa con coordenadas
+  - Ubicación del destino mostrada
+  - Latitud y longitud visibles
+  - Botón "Get Directions" para abrir Google Maps
+  - Chips con fechas de salida disponibles
+  - Calendario visual de fechas
+
+- **Footer con Botones de Acción**:
+  - Botón WhatsApp (verde, outlined)
+  - Botón Email (azul, outlined)
+  - Botón "Book Now" (amarillo, elevated)
+  - Layout responsivo: columna en móvil, fila en desktop
+  - Integración con url_launcher para WhatsApp y Email
+
+- **Funcionalidades Adicionales**:
+  - Link directo a WhatsApp con mensaje predefinido
+  - Mailto con asunto y cuerpo prellenado
+  - Abrir Google Maps en navegador externo
+  - Toast notifications para acciones pendientes
+  - Estado de favorito local (toggle)
+
+### 🔧 Mejoras Técnicas
+
+- **Modelo PackageTravel Extendido**:
+  - `galleryImages`: List<String> de URLs de imágenes
+  - `itinerary`: List<DayItinerary> para itinerario día a día
+  - `inclusions`: List<String> de servicios incluidos
+  - `exclusions`: List<String> de servicios no incluidos
+  - `termsAndConditions`: String con T&C completos
+  - `availableDates`: List<DateTime> de fechas disponibles
+  - `latitude` y `longitude`: Double para coordenadas
+
+- **Nueva Clase DayItinerary**:
+  - `dayNumber`: int
+  - `title`: String (ej. "Arrival in Paris")
+  - `activities`: List<String> de actividades del día
+  - `meals`: String (ej. "Breakfast, Lunch, Dinner")
+
+- **Sample Data Actualizada**:
+  - 2 paquetes completos con todos los detalles (París y Roma)
+  - 6 imágenes de galería por paquete
+  - Itinerarios completos de 5-6 días
+  - 10+ inclusiones y 5+ exclusiones
+  - 3-4 fechas de salida disponibles
+  - Coordenadas reales de cada destino
+
+- **Widget PackageDetailsModal**:
+  - StatefulWidget con TabController
+  - SingleTickerProviderStateMixin para animaciones
+  - Gestión de estado local para imagen seleccionada
+  - Responsive design con MediaQuery
+  - Integración con url_launcher
+
+- **Integración con TravelPackageCard**:
+  - onViewDetailsPressed abre el modal con showDialog
+  - Paso del objeto PackageTravel completo
+  - Modal como overlay sobre la aplicación
+
+### 🎨 Diseño UI/UX
+
+- **Color Scheme Consistente**:
+  - Azul oscuro (#072A47) para headers y elementos principales
+  - Amarillo (#FFDC00) para acentos y CTAs
+  - Gris claro (#F5F5F5) para fondos de cards
+  - Verde para inclusiones y precios
+  - Rojo para exclusiones y descuentos
+
+- **Iconografía**:
+  - Icons.photo_library (Gallery)
+  - Icons.map (Itinerary)
+  - Icons.check_circle_outline (Included)
+  - Icons.location_on (Map)
+  - Icons consistentes en toda la interfaz
+
+- **Experiencia de Usuario**:
+  - Navegación por tabs clara e intuitiva
+  - Información organizada y fácil de consumir
+  - Acciones rápidas desde el footer
+  - Feedback visual en interacciones
+  - Cierre del modal con botón o clic fuera
+
+### 📱 Responsive
+
+- **Mobile**:
+  - Padding reducido (16px horizontal, 20px vertical)
+  - Título más pequeño (20px vs 24px)
+  - Footer en columna (botones apilados)
+  - Tabs con iconos y texto reducido
+
+- **Desktop**:
+  - Modal más grande (1200x800px max)
+  - Footer en fila con 3 botones
+  - Galería con controles más grandes
+  - Mejor aprovechamiento del espacio
+
+### 📦 Archivos Modificados
+
+- `lib/data/models/package_travel.dart`: Modelo extendido con 8+ nuevos campos
+- `lib/data/repositories/sample_packages.dart`: 2 paquetes con datos completos
+- `lib/presentation/widgets/package_details_modal.dart`: Nuevo widget (700+ líneas)
+- `lib/presentation/widgets/sections/filterable_packages_section.dart`: Integración del modal
+
+---
+
 ## [v0.8.1] - 2024-01-11
 
 ### ✨ Nuevas Características

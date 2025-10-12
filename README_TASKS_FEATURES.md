@@ -101,17 +101,17 @@
 - [x] Animación de flip para mostrar más info al hover
 
 #### 4. Modal de Detalles del Paquete
-- [ ] Al hacer click en "Ver Detalles", abrir modal/dialog
-- [ ] **Galería de imágenes** del destino (5-10 fotos)
-- [ ] **Itinerario día a día** expandible
-- [ ] **Mapa de ubicación** del destino
-- [ ] **Lista detallada de inclusiones** (comidas, transfers, etc.)
-- [ ] **Lista de exclusiones** (seguros, propinas, etc.)
-- [ ] **Términos y condiciones**
-- [ ] **Fechas disponibles** con calendario
-- [ ] Botón "Reservar Ahora" destacado
-- [ ] Botón "Compartir" (redes sociales)
-- [ ] Botón "Agregar a Favoritos"
+- [x] Al hacer click en "Ver Detalles", abrir modal/dialog
+- [x] **Galería de imágenes** del destino (5-10 fotos)
+- [x] **Itinerario día a día** expandible
+- [x] **Mapa de ubicación** del destino
+- [x] **Lista detallada de inclusiones** (comidas, transfers, etc.)
+- [x] **Lista de exclusiones** (seguros, propinas, etc.)
+- [x] **Términos y condiciones**
+- [x] **Fechas disponibles** con calendario
+- [x] Botón "Reservar Ahora" destacado
+- [x] Botón "Compartir" (redes sociales)
+- [x] Botón "Agregar a Favoritos"
 
 **Estructura del Modal:**
 ```
