@@ -206,7 +206,7 @@
   - **Total a pagar**
 - [x] Actualizar en tiempo real al cambiar opciones
 - [x] Mostrar fechas seleccionadas
-- [ ] Código de descuento aplicable
+- [x] Código de descuento aplicable
 
 **UI del Resumen:**
 ```

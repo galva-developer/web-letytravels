@@ -77,7 +77,42 @@ Implementación integral del formulario de reserva con todas las secciones reque
     * Upgrade hotel es costo único por habitación
     * Asientos solo para adultos y niños (no infantes)
 
-- **Sección 4: Comentarios Especiales** ✅
+- **Sección 4: Códigos de Descuento** ✅
+  - **Modelo Coupon** (`lib/data/models/coupon.dart`):
+    * Tipos: Porcentaje (5%-30%) o Monto fijo ($50-$200)
+    * Validaciones: fecha expiración, compra mínima, usos máximos
+    * Métodos: isValid(), isApplicableFor(), calculateDiscount()
+    * getInvalidReason() para mensajes de error específicos
+  
+  - **CouponService** (`lib/data/services/coupon_service.dart`):
+    * 10 cupones predefinidos para demostración
+    * WELCOME10 (10% off), SUMMER20 (20% off), VIP25 (25% off)
+    * SAVE50 ($50 off), SAVE100 ($100 off), EARLYBIRD ($150 off)
+    * BLACKFRIDAY (30% off), NEWYEAR2026 (15% off)
+    * Métodos: validateCoupon(), getActiveCoupons(), getRecommendedCoupons()
+  
+  - **UI de Cupones**:
+    * Campo de texto uppercase para código (max 20 chars)
+    * Botón "Aplicar" que valida y aplica cupón
+    * Mensajes de error específicos: código inválido, expirado, compra mínima
+    * Card verde de confirmación cuando cupón aplicado exitosamente
+    * Botón "Remover" para limpiar cupón
+    * Chips clickeables con cupones recomendados (4 sugerencias)
+  
+  - **Integración en BookingData**:
+    * Campo appliedCoupon opcional
+    * Getters: subtotalBeforeDiscount, discountAmount, subtotalAfterDiscount
+    * Impuestos calculados DESPUÉS del descuento
+    * copyWith() con parámetro clearCoupon
+  
+  - **Resumen Actualizado**:
+    * Línea de subtotal antes de descuento
+    * Línea de descuento en verde: "Descuento (CÓDIGO): -$XXX"
+    * Subtotal con descuento en bold
+    * Impuestos sobre monto con descuento
+    * Total final refleja descuento aplicado
+
+- **Sección 5: Comentarios Especiales** ✅
   - **TextArea** multilinea (5 líneas, max 500 chars)
   - Placeholder con ejemplos: habitación piso bajo, vegetariano, cumpleaños
   - Contador de caracteres

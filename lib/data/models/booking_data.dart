@@ -1,4 +1,6 @@
 /// Model for booking/reservation data
+import 'package:by_lety_travels/data/models/coupon.dart';
+
 class BookingData {
   // Información del Viajero
   final String firstName;
@@ -27,6 +29,9 @@ class BookingData {
 
   // Comentarios
   final String? specialRequests;
+
+  // Cupón de descuento
+  final Coupon? appliedCoupon;
 
   // Precios calculados
   final double basePrice;
@@ -58,6 +63,7 @@ class BookingData {
     this.hotelUpgrade = false,
     this.preferredSeats = false,
     this.specialRequests,
+    this.appliedCoupon,
     required this.basePrice,
     this.insurancePrice = 50.0,
     this.transferPrice = 30.0,
@@ -92,11 +98,24 @@ class BookingData {
     return total;
   }
 
-  /// Calculate taxes
-  double get taxes => (subtotal + additionalServicesCost) * taxRate;
+  /// Calculate subtotal before discount (subtotal + services)
+  double get subtotalBeforeDiscount => subtotal + additionalServicesCost;
 
-  /// Calculate total amount to pay
-  double get totalAmount => subtotal + additionalServicesCost + taxes;
+  /// Calculate discount amount from coupon
+  double get discountAmount {
+    if (appliedCoupon == null) return 0;
+    return appliedCoupon!.calculateDiscount(subtotalBeforeDiscount);
+  }
+
+  /// Calculate subtotal after discount
+  double get subtotalAfterDiscount =>
+      (subtotalBeforeDiscount - discountAmount).clamp(0, double.infinity);
+
+  /// Calculate taxes (applied after discount)
+  double get taxes => subtotalAfterDiscount * taxRate;
+
+  /// Calculate total amount to pay (with discount applied)
+  double get totalAmount => subtotalAfterDiscount + taxes;
 
   /// Copy with method for state updates
   BookingData copyWith({
@@ -120,6 +139,8 @@ class BookingData {
     bool? hotelUpgrade,
     bool? preferredSeats,
     String? specialRequests,
+    Coupon? appliedCoupon,
+    bool clearCoupon = false,
     double? basePrice,
     double? insurancePrice,
     double? transferPrice,
@@ -149,6 +170,7 @@ class BookingData {
       hotelUpgrade: hotelUpgrade ?? this.hotelUpgrade,
       preferredSeats: preferredSeats ?? this.preferredSeats,
       specialRequests: specialRequests ?? this.specialRequests,
+      appliedCoupon: clearCoupon ? null : (appliedCoupon ?? this.appliedCoupon),
       basePrice: basePrice ?? this.basePrice,
       insurancePrice: insurancePrice ?? this.insurancePrice,
       transferPrice: transferPrice ?? this.transferPrice,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
 import 'package:by_lety_travels/data/models/booking_data.dart';
+import 'package:by_lety_travels/data/models/coupon.dart';
+import 'package:by_lety_travels/data/services/coupon_service.dart';
 import 'package:intl/intl.dart';
 
 /// Comprehensive booking form page
@@ -25,6 +27,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
   final _phoneController = TextEditingController();
   final _passportController = TextEditingController();
   final _specialRequestsController = TextEditingController();
+  final _couponController = TextEditingController();
 
   // Form state
   String _selectedCountryCode = '+51'; // Default Peru
@@ -43,6 +46,11 @@ class _BookingFormPageState extends State<BookingFormPage> {
   bool _hotelUpgrade = false;
   bool _preferredSeats = false;
 
+  // Coupon state
+  Coupon? _appliedCoupon;
+  String? _couponErrorMessage;
+  bool _couponApplied = false;
+
   // UI state
   bool _isSubmitting = false;
 
@@ -54,6 +62,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
     _phoneController.dispose();
     _passportController.dispose();
     _specialRequestsController.dispose();
+    _couponController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -83,12 +92,83 @@ class _BookingFormPageState extends State<BookingFormPage> {
         _specialRequestsController.text.isEmpty
             ? null
             : _specialRequestsController.text,
+    appliedCoupon: _appliedCoupon,
     basePrice:
         double.tryParse(
           widget.package.price.replaceAll(RegExp(r'[^\d.]'), ''),
         ) ??
         0,
   );
+
+  void _applyCoupon() {
+    final code = _couponController.text.trim();
+    if (code.isEmpty) {
+      setState(() {
+        _couponErrorMessage = 'Ingrese un código de cupón';
+      });
+      return;
+    }
+
+    // Get current subtotal for validation
+    final currentSubtotal = _currentBookingData.subtotalBeforeDiscount;
+
+    // Try to validate coupon
+    final coupon = CouponService.getCouponByCode(code);
+
+    if (coupon == null) {
+      setState(() {
+        _appliedCoupon = null;
+        _couponApplied = false;
+        _couponErrorMessage = 'Código de cupón inválido';
+      });
+      return;
+    }
+
+    // Check if coupon is valid and applicable
+    final invalidReason = coupon.getInvalidReason(currentSubtotal);
+    if (invalidReason != null) {
+      setState(() {
+        _appliedCoupon = null;
+        _couponApplied = false;
+        _couponErrorMessage = invalidReason;
+      });
+      return;
+    }
+
+    // Apply coupon successfully
+    setState(() {
+      _appliedCoupon = coupon;
+      _couponApplied = true;
+      _couponErrorMessage = null;
+    });
+
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '¡Cupón aplicado! ${coupon.getDiscountDisplay()} de descuento',
+        ),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _removeCoupon() {
+    setState(() {
+      _appliedCoupon = null;
+      _couponApplied = false;
+      _couponErrorMessage = null;
+      _couponController.clear();
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Cupón removido'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+  }
 
   Future<void> _submitBooking() async {
     if (!_formKey.currentState!.validate()) {
@@ -303,6 +383,9 @@ class _BookingFormPageState extends State<BookingFormPage> {
         const SizedBox(height: 32),
         _buildSectionHeader('➕ Servicios Adicionales'),
         _buildAdditionalServicesSection(),
+        const SizedBox(height: 32),
+        _buildSectionHeader('🎟️ Código de Descuento'),
+        _buildCouponSection(),
         const SizedBox(height: 32),
         _buildSectionHeader('💬 Comentarios o Solicitudes Especiales'),
         _buildSpecialRequestsSection(),
@@ -921,6 +1004,174 @@ class _BookingFormPageState extends State<BookingFormPage> {
     );
   }
 
+  Widget _buildCouponSection() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Coupon input
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _couponController,
+                  decoration: InputDecoration(
+                    labelText: 'Código de Cupón',
+                    hintText: 'Ej: SUMMER20, WELCOME10',
+                    prefixIcon: const Icon(Icons.discount_outlined),
+                    border: const OutlineInputBorder(),
+                    errorText: _couponErrorMessage,
+                    enabled: !_couponApplied,
+                  ),
+                  textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
+                    LengthLimitingTextInputFormatter(20),
+                  ],
+                  onChanged: (_) {
+                    if (_couponErrorMessage != null) {
+                      setState(() => _couponErrorMessage = null);
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              if (!_couponApplied)
+                ElevatedButton(
+                  onPressed: _applyCoupon,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF072A47),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 20,
+                    ),
+                  ),
+                  child: const Text('Aplicar'),
+                )
+              else
+                ElevatedButton.icon(
+                  onPressed: _removeCoupon,
+                  icon: const Icon(Icons.close, size: 18),
+                  label: const Text('Remover'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[600],
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 20,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+
+          // Success message when coupon is applied
+          if (_couponApplied && _appliedCoupon != null) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green[300]!),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.green[700], size: 24),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '¡Cupón Aplicado!',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green[900],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${_appliedCoupon!.code}: ${_appliedCoupon!.description}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.green[800],
+                          ),
+                        ),
+                        Text(
+                          'Descuento: ${_appliedCoupon!.getDiscountDisplay()}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green[700],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          // Recommended coupons
+          if (!_couponApplied) ...[
+            const SizedBox(height: 20),
+            const Text(
+              'Cupones Disponibles:',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children:
+                  CouponService.getRecommendedCoupons(
+                    limit: 4,
+                  ).map((coupon) => _buildCouponChip(coupon)).toList(),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCouponChip(Coupon coupon) {
+    return InkWell(
+      onTap: () {
+        _couponController.text = coupon.code;
+        _applyCoupon();
+      },
+      child: Chip(
+        avatar: const Icon(Icons.local_offer, size: 16),
+        label: Text(
+          '${coupon.code} - ${coupon.getDiscountDisplay()}',
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: const Color(0xFFFFDC00).withOpacity(0.2),
+        side: const BorderSide(color: Color(0xFF072A47), width: 1),
+      ),
+    );
+  }
+
   Widget _buildSpecialRequestsSection() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -1082,9 +1333,23 @@ class _BookingFormPageState extends State<BookingFormPage> {
           const Divider(height: 24),
           _buildPriceRow(
             'Subtotal',
-            bookingData.subtotal + bookingData.additionalServicesCost,
+            bookingData.subtotalBeforeDiscount,
             isBold: true,
           ),
+          // Show discount if coupon is applied
+          if (bookingData.appliedCoupon != null &&
+              bookingData.discountAmount > 0) ...[
+            _buildPriceRow(
+              'Descuento (${bookingData.appliedCoupon!.code})',
+              -bookingData.discountAmount,
+              isDiscount: true,
+            ),
+            _buildPriceRow(
+              'Subtotal con descuento',
+              bookingData.subtotalAfterDiscount,
+              isBold: true,
+            ),
+          ],
           _buildPriceRow(
             'Impuestos (${(bookingData.taxRate * 100).toStringAsFixed(0)}%)',
             bookingData.taxes,
@@ -1107,6 +1372,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
     double amount, {
     bool isBold = false,
     bool isTotal = false,
+    bool isDiscount = false,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -1120,16 +1386,24 @@ class _BookingFormPageState extends State<BookingFormPage> {
                 fontSize: isTotal ? 16 : 14,
                 fontWeight:
                     isTotal || isBold ? FontWeight.bold : FontWeight.normal,
-                color: isTotal ? const Color(0xFF072A47) : Colors.grey[700],
+                color:
+                    isDiscount
+                        ? Colors.green[700]
+                        : (isTotal
+                            ? const Color(0xFF072A47)
+                            : Colors.grey[700]),
               ),
             ),
           ),
           Text(
-            '\$${amount.toStringAsFixed(2)}',
+            '\$${amount.abs().toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: isTotal ? 20 : 14,
               fontWeight: isTotal || isBold ? FontWeight.bold : FontWeight.w600,
-              color: isTotal ? const Color(0xFF072A47) : Colors.black87,
+              color:
+                  isDiscount
+                      ? Colors.green[700]
+                      : (isTotal ? const Color(0xFF072A47) : Colors.black87),
             ),
           ),
         ],
