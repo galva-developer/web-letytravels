@@ -4,6 +4,71 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.8.1] - 2024-01-11
+
+### ✨ Nuevas Características
+
+#### 🔄 Animación Flip en Travel Package Card
+
+- **Efecto Flip 3D con Hover**:
+  - Rotación 3D de 180° en el eje Y al hacer hover
+  - Animación suave de 600ms con curva easeInOut
+  - Transición fluida entre frente y reverso
+  - Perspectiva 3D para efecto realista
+
+- **Cara Frontal (Front Card)**:
+  - Diseño original con imagen, badges y precio
+  - Información resumida del paquete
+  - Botones de acción (Ver Detalles / Reservar)
+  - Fondo gris claro (#F5F5F5)
+
+- **Cara Trasera (Back Card)**:
+  - Fondo azul oscuro (#072A47) para contraste
+  - Información detallada organizada
+  - Título destacado en amarillo (#FFDC00)
+  - Secciones con iconos:
+    * 📍 Destino
+    * 📅 Duración
+    * 💰 Precio
+    * 🏨 Alojamiento
+  - Lista de características incluidas con emojis
+  - Botón "Reservar Ahora" destacado
+  - Diseño centrado y fácil de leer
+
+- **Implementación Técnica**:
+  - `AnimationController` para control de la animación
+  - `AnimatedBuilder` para reconstruir durante la animación
+  - `Transform` con `Matrix4.rotateY()` para rotación 3D
+  - Detección de ángulo para mostrar cara correcta
+  - `MouseRegion` para detectar hover en web
+  - Limpieza correcta de recursos con `dispose()`
+
+- **Mejoras de UX**:
+  - Hover activa flip automáticamente
+  - Salida del hover revierte la animación
+  - Elevación de card combinada con flip
+  - Información completa sin abrir modales
+  - Vista rápida de detalles importantes
+
+### 🔧 Mejoras Técnicas
+
+- Import de `dart:math` para cálculos matemáticos (π, rotación)
+- Uso de `setEntry(3, 2, 0.001)` para perspectiva 3D
+- Condición `angle <= math.pi / 2` para determinar cara visible
+- Transform anidado para corregir orientación de cara trasera
+- Métodos helper: `_buildBackCard()`, `_buildBackInfoRow()`, `_buildFeatureItem()`
+
+### 🎨 Diseño del Reverso
+
+- **Color scheme contrastante**: Azul oscuro con acentos amarillos
+- **Gradiente decorativo**: Línea amarilla degradada bajo el título
+- **Jerarquía visual clara**: Labels grises, valores blancos
+- **Espaciado generoso**: Padding de 24px para mejor legibilidad
+- **Iconografía consistente**: Iconos amarillos de 20px
+- **CTA prominente**: Botón amarillo con ancho completo
+
+---
+
 ## [v0.8.0] - 2024-01-11
 
 ### ✨ Nuevas Características

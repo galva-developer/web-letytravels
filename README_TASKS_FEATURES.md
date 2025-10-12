@@ -98,7 +98,7 @@
 - [x] Iconos de servicios incluidos más visibles
 - [x] Botón "Ver Detalles" adicional al "Book Now"
 - [x] Efecto hover con elevación de card
-- [ ] Animación de flip para mostrar más info al hover
+- [x] Animación de flip para mostrar más info al hover
 
 #### 4. Modal de Detalles del Paquete
 - [ ] Al hacer click en "Ver Detalles", abrir modal/dialog

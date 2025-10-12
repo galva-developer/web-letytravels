@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
-// Enhanced widget to display travel package information in a card format with badges and animations.
+// Enhanced widget to display travel package information in a card format with badges and flip animation.
 class TravelPackageCard extends StatefulWidget {
   final String title;
   final String price;
@@ -54,89 +55,280 @@ class TravelPackageCard extends StatefulWidget {
 class _TravelPackageCardState extends State<TravelPackageCard>
     with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  late AnimationController _flipController;
+  late Animation<double> _flipAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _flipController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _flipAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _flipController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _flipController.dispose();
+    super.dispose();
+  }
+
+  void _handleHover(bool isHovered) {
+    setState(() => _isHovered = isHovered);
+    if (isHovered) {
+      _flipController.forward();
+    } else {
+      _flipController.reverse();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
-        child: Card(
-          elevation: _isHovered ? 12.0 : 4.0,
-          margin: const EdgeInsets.all(16.0),
-          color: const Color(0xFFF5F5F5), // Fondo gris claro
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+      onEnter: (_) => _handleHover(true),
+      onExit: (_) => _handleHover(false),
+      child: AnimatedBuilder(
+        animation: _flipAnimation,
+        builder: (context, child) {
+          final angle = _flipAnimation.value * math.pi;
+          final transform =
+              Matrix4.identity()
+                ..setEntry(3, 2, 0.001) // perspective
+                ..rotateY(angle);
+
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
+            child: Transform(
+              transform: transform,
+              alignment: Alignment.center,
+              child:
+                  angle <= math.pi / 2
+                      ? _buildFrontCard(context)
+                      : Transform(
+                        transform: Matrix4.rotationY(math.pi),
+                        alignment: Alignment.center,
+                        child: _buildBackCard(context),
+                      ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Build the front side of the card (original design)
+  Widget _buildFrontCard(BuildContext context) {
+    return Card(
+      elevation: _isHovered ? 12.0 : 4.0,
+      margin: const EdgeInsets.all(16.0),
+      color: const Color(0xFFF5F5F5), // Fondo gris claro
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Image section with badges overlay
+              _buildImageSection(),
+
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title and Price
+                    _buildTitleAndPrice(),
+                    const SizedBox(height: 8.0),
+
+                    // Location
+                    Text(
+                      widget.location,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+
+                    // Description
+                    Text(
+                      widget.description,
+                      style: const TextStyle(fontSize: 14.0),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Services icons (more visible)
+                    _buildServicesIcons(),
+                    const SizedBox(height: 16.0),
+
+                    // Details section
+                    _buildDetailRow(Icons.calendar_today, widget.duration),
+                    if (widget.flightsIncluded)
+                      _buildDetailRow(Icons.flight, 'Flights included'),
+                    _buildDetailRow(Icons.hotel, '${widget.hotelRating} hotel'),
+                    if (widget.guidedTours)
+                      _buildDetailRow(Icons.directions_walk, 'Guided tours'),
+
+                    const SizedBox(height: 20.0),
+
+                    // Action buttons
+                    _buildActionButtons(),
+                  ],
+                ),
+              ),
+            ],
           ),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // Image section with badges overlay
-                  _buildImageSection(),
+        ],
+      ),
+    );
+  }
 
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title and Price
-                        _buildTitleAndPrice(),
-                        const SizedBox(height: 8.0),
+  /// Build the back side of the card (detailed info)
+  Widget _buildBackCard(BuildContext context) {
+    return Card(
+      elevation: _isHovered ? 12.0 : 4.0,
+      margin: const EdgeInsets.all(16.0),
+      color: const Color(0xFF072A47), // Azul oscuro para el reverso
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            Text(
+              widget.title,
+              style: const TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFFFDC00),
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 16),
 
-                        // Location
-                        Text(
-                          widget.location,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 12.0),
+            // Divider
+            Container(
+              height: 2,
+              width: 60,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFFFDC00), Colors.transparent],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
 
-                        // Description
-                        Text(
-                          widget.description,
-                          style: const TextStyle(fontSize: 14.0),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 16.0),
+            // Detailed Information
+            _buildBackInfoRow(Icons.location_on, widget.location, 'Destino'),
+            const SizedBox(height: 12),
+            _buildBackInfoRow(
+              Icons.calendar_today,
+              widget.duration,
+              'Duración',
+            ),
+            const SizedBox(height: 12),
+            _buildBackInfoRow(
+              Icons.attach_money,
+              widget.price,
+              'Precio por persona',
+            ),
+            const SizedBox(height: 12),
+            _buildBackInfoRow(Icons.hotel, widget.hotelRating, 'Alojamiento'),
+            const SizedBox(height: 20),
 
-                        // Services icons (more visible)
-                        _buildServicesIcons(),
-                        const SizedBox(height: 16.0),
+            // Features list
+            const Text(
+              'Incluye:',
+              style: TextStyle(
+                color: Color(0xFFFFDC00),
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 12),
 
-                        // Details section
-                        _buildDetailRow(Icons.calendar_today, widget.duration),
-                        if (widget.flightsIncluded)
-                          _buildDetailRow(Icons.flight, 'Flights included'),
-                        _buildDetailRow(
-                          Icons.hotel,
-                          '${widget.hotelRating} hotel',
-                        ),
-                        if (widget.guidedTours)
-                          _buildDetailRow(
-                            Icons.directions_walk,
-                            'Guided tours',
-                          ),
+            if (widget.flightsIncluded)
+              _buildFeatureItem('✈️ Vuelos ida y vuelta'),
+            _buildFeatureItem('🏨 Alojamiento ${widget.hotelRating}'),
+            if (widget.guidedTours)
+              _buildFeatureItem('🎯 Tours guiados en español'),
+            if (widget.services.contains('Meals Included'))
+              _buildFeatureItem('🍽️ Comidas incluidas'),
 
-                        const SizedBox(height: 20.0),
+            const Spacer(),
 
-                        // Action buttons
-                        _buildActionButtons(),
-                      ],
+            // Call to Action
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: widget.onBookNowPressed,
+                    icon: const Icon(Icons.check_circle, size: 20),
+                    label: const Text('Reservar Ahora'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFDC00),
+                      foregroundColor: const Color(0xFF072A47),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Build info row for back card
+  Widget _buildBackInfoRow(IconData icon, String value, String label) {
+    return Row(
+      children: [
+        Icon(icon, color: const Color(0xFFFFDC00), size: 20),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(color: Colors.grey[400], fontSize: 12),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  /// Build feature item for back card
+  Widget _buildFeatureItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.white, fontSize: 14),
       ),
     );
   }
