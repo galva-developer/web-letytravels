@@ -141,16 +141,15 @@
 - [x] Comparar hasta 3 paquetes favoritos
 
 #### 6. Búsqueda de Paquetes
-- [ ] Barra de búsqueda con autocomplete
-- [ ] Buscar por nombre, destino, país, continente
-- [ ] Mostrar sugerencias mientras escribe
-- [ ] Highlighting de texto coincidente
-- [ ] Historial de búsquedas recientes
+- [x] Barra de búsqueda con autocomplete
+- [x] Buscar por nombre, destino, país, continente
+- [x] Mostrar sugerencias mientras escribe
+- [x] Highlighting de texto coincidente
+- [x] Historial de búsquedas recientes
 
 #### 7. Paginación o Infinite Scroll
 - [ ] Mostrar 9 paquetes por página
 - [ ] Botones de paginación (< 1 2 3 ... 10 >)
-- [ ] O implementar infinite scroll (cargar más al bajar)
 - [ ] Indicador de carga mientras se obtienen datos
 - [ ] Botón "Volver arriba" cuando hay scroll
 

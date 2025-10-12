@@ -9,6 +9,7 @@ import 'package:by_lety_travels/presentation/widgets/sections/booking_section.da
 import 'package:by_lety_travels/presentation/widgets/sections/contact_footer_section.dart';
 import 'package:by_lety_travels/data/repositories/sample_packages.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
+import 'package:by_lety_travels/presentation/pages/search_results_page.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -361,6 +362,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: [
+          // Search button
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const SearchResultsPage(),
+                ),
+              );
+            },
+            tooltip: 'Search Packages',
+          ),
           // Favorites badge
           Consumer<FavoritesProvider>(
             builder: (context, favoritesProvider, child) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:by_lety_travels/presentation/pages/home_page.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
+import 'package:by_lety_travels/presentation/providers/search_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => FavoritesProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
+      ],
       child: MaterialApp(
         title: 'By Lety Travels',
         theme: ThemeData(

@@ -110,6 +110,69 @@ Funcionalidad completa para comparar hasta 3 paquetes favoritos lado a lado.
   - ✅ Feedback inmediato al seleccionar/deseleccionar
   - ✅ Límite claro de 3 paquetes con deshabilitación automática
 
+#### 🔍 Sistema de Búsqueda de Paquetes
+
+Sistema completo de búsqueda con autocomplete, sugerencias y highlighting.
+
+- **SearchProvider** (`lib/presentation/providers/search_provider.dart`) ✅:
+  - State management para búsqueda con ChangeNotifier
+  - Propiedades: `searchQuery`, `searchResults`, `searchHistory`, `isSearching`
+  - **Algoritmo de búsqueda inteligente**:
+    * Busca en: título, ubicación, descripción de paquetes
+    * Ordenamiento por relevancia (título > ubicación > descripción)
+    * Resultados en tiempo real mientras se escribe
+  - **Historial de búsqueda**:
+    * Guarda últimas 10 búsquedas en SharedPreferences
+    * Muestra búsquedas recientes como sugerencias
+    * Opción para eliminar items del historial
+    * Botón para limpiar todo el historial
+
+- **PackageSearchBar** Widget (`lib/presentation/widgets/package_search_bar.dart`) ✅:
+  - Barra de búsqueda con diseño moderno
+  - TextField con bordes redondeados y sombra
+  - Ícono de búsqueda (prefijo) y botón clear (sufijo)
+  - **Autocomplete con Overlay**:
+    * Dropdown de sugerencias aparece al escribir
+    * Muestra hasta 8 sugerencias relevantes
+    * Sugerencias de historial con ícono `history`
+    * Sugerencias nuevas con ícono `search`
+  - **Text Highlighting**:
+    * Resalta texto coincidente en negrita
+    * Color azul oscuro (#072A47) para matches
+    * RichText para highlighting preciso
+  - **UX Features**:
+    * Loading spinner mientras busca
+    * Click en sugerencia auto-completa búsqueda
+    * Enter key ejecuta búsqueda
+    * Focus/unfocus maneja overlay automáticamente
+
+- **SearchResultsPage** (`lib/presentation/pages/search_results_page.dart`) ✅:
+  - Página completa dedicada a resultados
+  - **Header** con search bar integrado
+  - **Contador de resultados**: "X resultados para 'query'"
+  - **Grid responsive** de paquetes encontrados
+  - **Estados visuales**:
+    * Empty state inicial: "Busca tu destino ideal"
+    * Loading state con CircularProgressIndicator
+    * No results state: "No encontramos resultados"
+    * Results state con grid de cards
+  - **Búsquedas recientes** como chips clickeables
+  - Navegación: botón back en AppBar
+
+- **Integración en HomePage**:
+  - Botón de búsqueda (🔍) en AppBar actions
+  - Abre SearchResultsPage con Navigator.push
+  - SearchProvider disponible globalmente vía MultiProvider
+
+- **Features Avanzadas**:
+  - ✅ Autocomplete en tiempo real
+  - ✅ Sugerencias contextuales
+  - ✅ Highlighting de matches
+  - ✅ Historial persistente
+  - ✅ Búsqueda multi-campo
+  - ✅ Ordenamiento por relevancia
+  - ✅ UI responsive y moderna
+
 ---
 
 ## [v0.9.1] - 2025-01-12
