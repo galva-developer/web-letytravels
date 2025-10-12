@@ -13,7 +13,7 @@ class TravelPackageCard extends StatefulWidget {
   final String? imageUrl;
   final VoidCallback? onBookNowPressed;
   final VoidCallback? onViewDetailsPressed;
-  
+
   // Badge and discount properties
   final bool hasDiscount;
   final String? originalPrice;
@@ -66,6 +66,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         child: Card(
           elevation: _isHovered ? 12.0 : 4.0,
           margin: const EdgeInsets.all(16.0),
+          color: const Color(0xFFF5F5F5), // Fondo gris claro
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -76,7 +77,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                 children: <Widget>[
                   // Image section with badges overlay
                   _buildImageSection(),
-                  
+
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -85,7 +86,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                         // Title and Price
                         _buildTitleAndPrice(),
                         const SizedBox(height: 8.0),
-                        
+
                         // Location
                         Text(
                           widget.location,
@@ -96,7 +97,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                           ),
                         ),
                         const SizedBox(height: 12.0),
-                        
+
                         // Description
                         Text(
                           widget.description,
@@ -105,21 +106,27 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 16.0),
-                        
+
                         // Services icons (more visible)
                         _buildServicesIcons(),
                         const SizedBox(height: 16.0),
-                        
+
                         // Details section
                         _buildDetailRow(Icons.calendar_today, widget.duration),
                         if (widget.flightsIncluded)
                           _buildDetailRow(Icons.flight, 'Flights included'),
-                        _buildDetailRow(Icons.hotel, '${widget.hotelRating} hotel'),
+                        _buildDetailRow(
+                          Icons.hotel,
+                          '${widget.hotelRating} hotel',
+                        ),
                         if (widget.guidedTours)
-                          _buildDetailRow(Icons.directions_walk, 'Guided tours'),
-                        
+                          _buildDetailRow(
+                            Icons.directions_walk,
+                            'Guided tours',
+                          ),
+
                         const SizedBox(height: 20.0),
-                        
+
                         // Action buttons
                         _buildActionButtons(),
                       ],
@@ -141,57 +148,49 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         // Image
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-          child: widget.imageUrl != null && widget.imageUrl!.isNotEmpty
-              ? Image.network(
-                  widget.imageUrl!,
-                  height: 200.0,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Container(
-                      height: 200.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                      ),
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, exception, stackTrace) {
-                    return Container(
-                      height: 200.0,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.broken_image,
-                        size: 50,
-                        color: Colors.grey[600],
-                      ),
-                    );
-                  },
-                )
-              : Container(
-                  height: 200.0,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
+          child:
+              widget.imageUrl != null && widget.imageUrl!.isNotEmpty
+                  ? Image.network(
+                    widget.imageUrl!,
+                    height: 200.0,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 200.0,
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          value:
+                              loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, exception, stackTrace) {
+                      return Container(
+                        height: 200.0,
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.broken_image,
+                          size: 50,
+                          color: Colors.grey[600],
+                        ),
+                      );
+                    },
+                  )
+                  : Container(
+                    height: 200.0,
+                    decoration: BoxDecoration(color: Colors.grey[300]),
+                    alignment: Alignment.center,
+                    child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
                   ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.image,
-                    size: 50,
-                    color: Colors.grey[600],
-                  ),
-                ),
         ),
-        
+
         // Badges overlay
         Positioned(
           top: 12,
@@ -199,14 +198,27 @@ class _TravelPackageCardState extends State<TravelPackageCard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (widget.hasDiscount) _buildBadge('OFERTA', Colors.red, Icons.local_offer),
-              if (widget.isNew) _buildBadge('NUEVO', const Color(0xFF072A47), Icons.fiber_new),
-              if (widget.isPopular) _buildBadge('POPULAR', const Color(0xFFFFDC00), Icons.star, textColor: const Color(0xFF072A47)),
-              if (widget.hasLimitedSeats) _buildBadge('ÚLTIMAS PLAZAS', Colors.orange, Icons.warning_amber),
+              if (widget.hasDiscount)
+                _buildBadge('OFERTA', Colors.red, Icons.local_offer),
+              if (widget.isNew)
+                _buildBadge('NUEVO', const Color(0xFF072A47), Icons.fiber_new),
+              if (widget.isPopular)
+                _buildBadge(
+                  'POPULAR',
+                  const Color(0xFFFFDC00),
+                  Icons.star,
+                  textColor: const Color(0xFF072A47),
+                ),
+              if (widget.hasLimitedSeats)
+                _buildBadge(
+                  'ÚLTIMAS PLAZAS',
+                  Colors.orange,
+                  Icons.warning_amber,
+                ),
             ],
           ),
         ),
-        
+
         // Discount percentage badge (top right)
         if (widget.hasDiscount && widget.discountPercentage != null)
           Positioned(
@@ -240,7 +252,12 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build a badge widget
-  Widget _buildBadge(String label, Color color, IconData icon, {Color textColor = Colors.white}) {
+  Widget _buildBadge(
+    String label,
+    Color color,
+    IconData icon, {
+    Color textColor = Colors.white,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -299,19 +316,21 @@ class _TravelPackageCardState extends State<TravelPackageCard>
             if (widget.hasDiscount && widget.originalPrice != null)
               Text(
                 widget.originalPrice!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14.0,
-                  color: Colors.grey[600],
+                  color: Colors.red,
                   decoration: TextDecoration.lineThrough,
+                  decorationColor: Colors.red,
+                  decorationThickness: 2.0,
                 ),
               ),
-            // Current price
+            // Current price (always green)
             Text(
               widget.price,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.bold,
-                color: widget.hasDiscount ? Colors.red : Colors.green,
+                color: Colors.green,
               ),
             ),
           ],
@@ -329,17 +348,31 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         if (widget.flightsIncluded)
           _buildServiceChip(Icons.flight, 'Vuelos', const Color(0xFF072A47)),
         if (widget.hotelRating.contains('5'))
-          _buildServiceChip(Icons.hotel, 'Hotel 5★', const Color(0xFFFFDC00), textColor: const Color(0xFF072A47)),
+          _buildServiceChip(
+            Icons.hotel,
+            'Hotel 5★',
+            const Color(0xFFFFDC00),
+            textColor: const Color(0xFF072A47),
+          ),
         if (widget.guidedTours)
           _buildServiceChip(Icons.tour, 'Tours', const Color(0xFF072A47)),
         if (widget.services.contains('Meals Included'))
-          _buildServiceChip(Icons.restaurant, 'Comidas', const Color(0xFF072A47)),
+          _buildServiceChip(
+            Icons.restaurant,
+            'Comidas',
+            const Color(0xFF072A47),
+          ),
       ],
     );
   }
 
   /// Build a service chip
-  Widget _buildServiceChip(IconData icon, String label, Color color, {Color textColor = Colors.white}) {
+  Widget _buildServiceChip(
+    IconData icon,
+    String label,
+    Color color, {
+    Color textColor = Colors.white,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -373,12 +406,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         children: <Widget>[
           Icon(icon, size: 18.0, color: const Color(0xFF072A47)),
           const SizedBox(width: 8.0),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14.0),
-            ),
-          ),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14.0))),
         ],
       ),
     );
@@ -391,9 +419,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         // View Details button
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: widget.onViewDetailsPressed ?? () {
-              print('View Details pressed for: ${widget.title}');
-            },
+            onPressed:
+                widget.onViewDetailsPressed ??
+                () {
+                  print('View Details pressed for: ${widget.title}');
+                },
             icon: const Icon(Icons.info_outline, size: 18),
             label: const Text('Ver Detalles'),
             style: OutlinedButton.styleFrom(
@@ -410,9 +440,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         // Book Now button
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: widget.onBookNowPressed ?? () {
-              print('Book Now pressed for: ${widget.title}');
-            },
+            onPressed:
+                widget.onBookNowPressed ??
+                () {
+                  print('Book Now pressed for: ${widget.title}');
+                },
             icon: const Icon(Icons.check_circle_outline, size: 18),
             label: const Text('Reservar'),
             style: ElevatedButton.styleFrom(

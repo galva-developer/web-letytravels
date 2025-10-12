@@ -18,8 +18,9 @@ Registro de cambios y mejoras implementadas en el proyecto.
   - Badges con sombras y posicionados sobre la imagen del paquete
 
 - **Sistema de Descuentos**:
-  - Precio anterior mostrado tachado cuando hay descuento
-  - Precio actual en rojo para destacar la oferta
+  - Precio anterior mostrado tachado en ROJO cuando hay descuento
+  - Precio actual SIEMPRE en verde (con o sin descuento)
+  - Línea de tachado también en rojo con grosor de 2px
   - Badge circular con porcentaje de descuento (ej: "¡20% OFF!")
   - Posicionado en esquina superior derecha de la imagen
 
@@ -51,11 +52,22 @@ Registro de cambios y mejoras implementadas en el proyecto.
   - MouseRegion para detectar hover en web
 
 - **Mejoras Visuales**:
+  - Fondo de card en gris claro (#F5F5F5) para mejor contraste
   - Bordes redondeados de 16px para diseño moderno
   - Imagen de altura fija 200px con bordes superiores redondeados
   - Espaciado consistente y jerarquía visual mejorada
   - Descripción limitada a 2 líneas con ellipsis
   - Título limitado a 2 líneas para mantener altura consistente
+
+### 🎨 Esquema de Colores
+
+- **Precio tachado**: Rojo (`Colors.red`) con línea roja de 2px de grosor
+- **Precio actual**: Verde (`Colors.green`) - SIEMPRE verde, con o sin descuento
+- **Fondo de card**: Gris claro (`#F5F5F5`)
+- **Badge OFERTA**: Rojo
+- **Badge NUEVO**: Azul oscuro (`#072A47`)
+- **Badge POPULAR**: Amarillo (`#FFDC00`)
+- **Badge ÚLTIMAS PLAZAS**: Naranja
 
 ### 📊 Datos de Ejemplo Actualizados
 
