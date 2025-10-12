@@ -9,9 +9,22 @@ class FavoritesProvider with ChangeNotifier {
   List<String> _favoriteTitles = [];
   bool _isLoading = true;
 
+  // Comparison state
+  List<String> _selectedForComparison = [];
+  static const int maxComparisonPackages = 3;
+
   List<String> get favoriteTitles => _favoriteTitles;
   int get favoritesCount => _favoriteTitles.length;
   bool get isLoading => _isLoading;
+
+  // Comparison getters
+  List<String> get selectedForComparison => _selectedForComparison;
+  int get selectedComparisonCount => _selectedForComparison.length;
+  bool get canCompare =>
+      _selectedForComparison.length >= 2 &&
+      _selectedForComparison.length <= maxComparisonPackages;
+  bool get isMaxComparisonReached =>
+      _selectedForComparison.length >= maxComparisonPackages;
 
   FavoritesProvider() {
     _loadFavorites();
@@ -40,6 +53,8 @@ class FavoritesProvider with ChangeNotifier {
     if (isFav) {
       await _favoritesService.removeFavorite(packageTitle);
       _favoriteTitles.remove(packageTitle);
+      // Also remove from comparison if it was selected
+      removeFromComparison(packageTitle);
     } else {
       await _favoritesService.addFavorite(packageTitle);
       _favoriteTitles.add(packageTitle);
@@ -59,11 +74,54 @@ class FavoritesProvider with ChangeNotifier {
   Future<void> clearAllFavorites() async {
     await _favoritesService.clearFavorites();
     _favoriteTitles.clear();
+    // Also clear comparison selections
+    _selectedForComparison.clear();
     notifyListeners();
   }
 
   // Refresh favorites from storage
   Future<void> refreshFavorites() async {
     await _loadFavorites();
+  }
+
+  // ============= COMPARISON METHODS =============
+
+  // Check if a package is selected for comparison
+  bool isSelectedForComparison(String packageTitle) {
+    return _selectedForComparison.contains(packageTitle);
+  }
+
+  // Toggle package selection for comparison
+  void toggleComparisonSelection(String packageTitle) {
+    if (_selectedForComparison.contains(packageTitle)) {
+      _selectedForComparison.remove(packageTitle);
+    } else {
+      // Only add if not at max
+      if (_selectedForComparison.length < maxComparisonPackages) {
+        _selectedForComparison.add(packageTitle);
+      }
+    }
+    notifyListeners();
+  }
+
+  // Clear all comparison selections
+  void clearComparisonSelection() {
+    _selectedForComparison.clear();
+    notifyListeners();
+  }
+
+  // Get selected packages for comparison (full objects)
+  List<PackageTravel> getSelectedPackagesForComparison() {
+    return SamplePackages.allPackages
+        .where((package) => _selectedForComparison.contains(package.title))
+        .toList();
+  }
+
+  // Remove package from comparison (e.g., when removed from favorites)
+  void removeFromComparison(String packageTitle) {
+    if (_selectedForComparison.contains(packageTitle)) {
+      _selectedForComparison.remove(packageTitle);
+      notifyListeners();
+    }
   }
 }

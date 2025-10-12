@@ -63,10 +63,52 @@ Implementación integral del sistema de favoritos con persistencia local y UI re
 - **Estado de Implementación**:
   - ✅ Service layer (localStorage CRUD)
   - ✅ Provider layer (global state)
-  - ✅ Favorite button (cards)
+  - ✅ Favorite button (cards) - Posicionado al lado del precio
   - ✅ Navbar badge (counter)
   - ✅ MyFavoritesSection (display & manage)
-  - ⏳ Comparison feature (pendiente - comparar hasta 3 paquetes)
+  - ✅ Comparison feature (comparar hasta 3 paquetes)
+
+#### 🔀 Sistema de Comparación de Paquetes
+
+Funcionalidad completa para comparar hasta 3 paquetes favoritos lado a lado.
+
+- **Estado de Comparación en Provider**:
+  - Lista `_selectedForComparison` para tracking de selección
+  - Máximo 3 paquetes (`maxComparisonPackages = 3`)
+  - Getters: `selectedForComparison`, `selectedComparisonCount`, `canCompare`, `isMaxComparisonReached`
+  - Métodos: `toggleComparisonSelection()`, `clearComparisonSelection()`, `getSelectedPackagesForComparison()`
+  - Auto-limpieza: Remueve de comparación si se elimina de favoritos
+
+- **UI de Selección**:
+  - **Checkbox en cada card** de MyFavoritesSection
+    * Positioned en top-left con label "Comparar"
+    * Fondo blanco con borde y sombra
+    * Se deshabilita cuando se alcanza máximo (3) y no está seleccionado
+    * Visual feedback: borde azul oscuro cuando seleccionado
+  
+- **Floating Action Button (FAB)**:
+  - Aparece solo cuando 2-3 paquetes están seleccionados (`canCompare`)
+  - Positioned en bottom-right
+  - Color amarillo (#FFDC00) con texto azul oscuro (#072A47)
+  - Ícono `compare_arrows` + label "Comparar (n)"
+  - Elevation 8 para destacar
+
+- **Modal de Comparación**:
+  - Dialog fullscreen con max-width 1200px
+  - **Header**: Título, ícono, botón cerrar (fondo azul oscuro)
+  - **Tabla comparativa** con scroll:
+    * Columnas: Label + 2-3 paquetes seleccionados
+    * Filas: Precio, Precio Original, Descuento, Duración, Destino, Hotel, Vuelos, Tours, Servicios
+    * Colores alternados para mejor legibilidad
+    * Responsive: se adapta a mobile/tablet/desktop
+  - **Footer**: Botón "Limpiar Selección" + "Cerrar"
+  - Diseño alineado con color scheme de ByLetyTravels
+
+- **UX Mejorada**:
+  - ✅ Iconos visuales: ✅ incluido, ❌ no incluido, ⭐ rating
+  - ✅ Colores temáticos: verde (precio), rojo (descuento), ámbar (hotel), azul (servicios)
+  - ✅ Feedback inmediato al seleccionar/deseleccionar
+  - ✅ Límite claro de 3 paquetes con deshabilitación automática
 
 ---
 

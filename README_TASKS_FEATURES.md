@@ -138,7 +138,7 @@
 - [x] Guardar favoritos en LocalStorage
 - [x] Página/sección "Mis Favoritos"
 - [x] Contador de favoritos en navbar
-- [ ] Comparar hasta 3 paquetes favoritos
+- [x] Comparar hasta 3 paquetes favoritos
 
 #### 6. Búsqueda de Paquetes
 - [ ] Barra de búsqueda con autocomplete
