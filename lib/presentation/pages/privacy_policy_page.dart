@@ -120,7 +120,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                 content:
                     'Si tienes preguntas sobre esta política de privacidad, contáctanos:',
                 bulletPoints: [
-                  'Email: privacy@byletytravels.com',
+                  'Email: byletytravels.oficial@gmail.com',
                   'Teléfono: +54 9 3884102859',
                   'Dirección: [Tu dirección física]',
                 ],

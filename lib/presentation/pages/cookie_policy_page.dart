@@ -227,7 +227,7 @@ class CookiePolicyPage extends StatelessWidget {
                 content: 'Para más detalles sobre privacidad:',
                 bulletPoints: [
                   'Consulta nuestra Política de Privacidad',
-                  'Contacta: cookies@byletytravels.com',
+                  'Contacta: byletytravels.oficial@gmail.com',
                   'Teléfono: +54 9 3884102859',
                 ],
               ),

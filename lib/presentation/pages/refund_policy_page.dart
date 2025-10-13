@@ -67,7 +67,7 @@ class RefundPolicyPage extends StatelessWidget {
                 title: '2. Proceso de Cancelación',
                 content: 'Para cancelar tu reserva:',
                 bulletPoints: [
-                  'Envía un correo a cancellations@byletytravels.com',
+                  'Envía un correo a byletytravels.oficial@gmail.com',
                   'Incluye tu número de reserva y nombre completo',
                   'Indica el motivo de la cancelación',
                   'Recibirás confirmación en 24-48 horas hábiles',
@@ -223,7 +223,7 @@ class RefundPolicyPage extends StatelessWidget {
                 title: '11. Contacto para Cancelaciones',
                 content: 'Para procesar una cancelación o modificación:',
                 bulletPoints: [
-                  'Email: cancellations@byletytravels.com',
+                  'Email: byletytravels.oficial@gmail.com',
                   'Teléfono: +54 9 3884102859',
                   'WhatsApp: +54 9 3884102859',
                   'Horario: Lunes a Viernes, 9 AM - 7 PM',

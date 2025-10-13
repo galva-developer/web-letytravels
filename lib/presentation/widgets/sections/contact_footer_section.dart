@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:by_lety_travels/presentation/widgets/call_now_button.dart';
 import 'package:by_lety_travels/presentation/widgets/quick_inquiry_dialog.dart';
 import 'package:by_lety_travels/presentation/widgets/appointment_booking_dialog.dart';
@@ -50,148 +51,152 @@ class ContactFooterSection extends StatelessWidget {
                   builder: (context, constraints) {
                     if (constraints.maxWidth > 900) {
                       // Desktop: 3 columnas
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Card de información de contacto
-                          const Expanded(child: ContactInfoCard()),
-                          const SizedBox(width: 24),
+                      return IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Card de información de contacto
+                            const Expanded(child: ContactInfoCard()),
+                            const SizedBox(width: 24),
 
-                          // Botón de asesoría
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    size: 48,
-                                    color: Colors.green[700],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'Asesoría Personalizada',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
+                            // Botón de asesoría
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 2),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Agenda una cita gratuita con nuestros expertos',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black54,
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today,
+                                      size: 48,
+                                      color: Colors.green[700],
                                     ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  const AppointmentBookingButton(),
-                                ],
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      'Asesoría Personalizada',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Agenda una cita gratuita con nuestros expertos',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    const AppointmentBookingButton(),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 24),
+                            const SizedBox(width: 24),
 
-                          // Botón de consulta rápida
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    Icons.mail_outline,
-                                    size: 48,
-                                    color: Colors.blue[700],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    '¿Tienes una consulta?',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
+                            // Botón de consulta rápida
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 2),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Envíanos un mensaje y te responderemos pronto',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black54,
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.mail_outline,
+                                      size: 48,
+                                      color: Colors.blue[700],
                                     ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  const QuickInquiryButton(),
-                                ],
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      '¿Tienes una consulta?',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Envíanos un mensaje y te responderemos pronto',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black54,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    const QuickInquiryButton(),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       );
                     } else if (constraints.maxWidth > 600) {
                       // Tablet: 2 filas
                       return Column(
                         children: [
                           // Primera fila: Info de contacto + Asesoría
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Expanded(child: ContactInfoCard()),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.all(24),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_today,
-                                        size: 48,
-                                        color: Colors.green[700],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      const Text(
-                                        'Asesoría Personalizada',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Expanded(child: ContactInfoCard()),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 48,
+                                          color: Colors.green[700],
                                         ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      const AppointmentBookingButton(),
-                                    ],
+                                        const SizedBox(height: 16),
+                                        const Text(
+                                          'Asesoría Personalizada',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        const AppointmentBookingButton(),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           // Segunda fila: Consulta rápida
@@ -295,77 +300,153 @@ class ContactFooterSection extends StatelessWidget {
 
           // Footer copyright y políticas
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
             color: Colors.grey[900],
-            child: Column(
-              children: [
-                // Redes sociales
-                const SocialMediaLinksExpanded(vertical: false),
-                const SizedBox(height: 32),
-
-                // Enlaces a políticas
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 24,
-                  runSpacing: 12,
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Column(
                   children: [
-                    _PolicyLink(
-                      text: 'Política de Privacidad',
-                      onTap:
-                          () => Navigator.push(
+                    // Redes sociales
+                    const SocialMediaLinksExpanded(vertical: false),
+                    const SizedBox(height: 40),
+
+                    // Enlaces a políticas
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 32,
+                      runSpacing: 16,
+                      children: [
+                        _PolicyLink(
+                          text: 'Política de Privacidad',
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const PrivacyPolicyPage(),
                             ),
                           ),
-                    ),
-                    _PolicyLink(
-                      text: 'Términos y Condiciones',
-                      onTap:
-                          () => Navigator.push(
+                        ),
+                        _PolicyLink(
+                          text: 'Términos y Condiciones',
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const TermsConditionsPage(),
                             ),
                           ),
-                    ),
-                    _PolicyLink(
-                      text: 'Política de Cookies',
-                      onTap:
-                          () => Navigator.push(
+                        ),
+                        _PolicyLink(
+                          text: 'Política de Cookies',
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const CookiePolicyPage(),
                             ),
                           ),
-                    ),
-                    _PolicyLink(
-                      text: 'Política de Reembolsos',
-                      onTap:
-                          () => Navigator.push(
+                        ),
+                        _PolicyLink(
+                          text: 'Política de Reembolsos',
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const RefundPolicyPage(),
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 32),
+                    
+                    // Separador visual
+                    Container(
+                      height: 1,
+                      color: Colors.white24,
+                      margin: const EdgeInsets.symmetric(vertical: 24),
+                    ),
+                    
+                    // Copyright y contacto
+                    Column(
+                      children: [
+                        const Text(
+                          '© 2025 ByLetyTravels. Todos los derechos reservados.',
+                          style: TextStyle(color: Colors.white70, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Contacto: byletytravels.oficial@gmail.com | Tel: +54 9 3884102859',
+                          style: TextStyle(color: Colors.white60, fontSize: 12),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        // Firma del desarrollador
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Desarrollado por ',
+                              style: TextStyle(
+                                color: Colors.white38,
+                                fontSize: 11,
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                final url = Uri.parse(
+                                  'https://www.linkedin.com/in/alvaro-developer/',
+                                );
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                }
+                              },
+                              onHover: (isHovering) {},
+                              child: const MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Text(
+                                  'Galva Dev',
+                                  style: TextStyle(
+                                    color: Color(0xFF0077B5), // LinkedIn blue
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            // Ícono de email
+                            InkWell(
+                              onTap: () async {
+                                final emailUrl = Uri.parse(
+                                  'mailto:alvaro.gonzales.dev@gmail.com?subject=Contacto%20desde%20ByLetyTravels',
+                                );
+                                if (await canLaunchUrl(emailUrl)) {
+                                  await launchUrl(emailUrl);
+                                }
+                              },
+                              child: const Tooltip(
+                                message: 'Enviar email a alvaro.gonzales.dev@gmail.com',
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Icon(
+                                    Icons.email_outlined,
+                                    size: 14,
+                                    color: Colors.white60,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 24),
-                // Copyright
-                const Text(
-                  '© 2025 ByLetyTravels. Todos los derechos reservados.',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Contacto: info@byletytravels.com | Tel: +54 9 3884102859',
-                  style: TextStyle(color: Colors.white60, fontSize: 12),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+              ),
             ),
           ),
         ],

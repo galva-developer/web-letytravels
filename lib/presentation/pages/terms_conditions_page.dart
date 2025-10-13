@@ -168,7 +168,7 @@ class TermsConditionsPage extends StatelessWidget {
                   'Intentaremos resolver el problema amigablemente',
                   'Se aplicará la ley de [tu jurisdicción]',
                   'Las disputas se resolverán mediante arbitraje',
-                  'Puedes contactarnos en disputes@byletytravels.com',
+                  'Puedes contactarnos en byletytravels.oficial@gmail.com',
                 ],
               ),
 
@@ -176,7 +176,7 @@ class TermsConditionsPage extends StatelessWidget {
                 title: '13. Contacto',
                 content: 'Para preguntas sobre estos términos:',
                 bulletPoints: [
-                  'Email: legal@byletytravels.com',
+                  'Email: byletytravels.oficial@gmail.com',
                   'Teléfono: +54 9 3884102859',
                   'WhatsApp: +54 9 3884102859',
                 ],

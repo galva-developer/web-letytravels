@@ -3,10 +3,10 @@ import 'package:by_lety_travels/data/models/contact_inquiry.dart';
 /// Servicio para gestionar consultas y contactos
 class ContactService {
   // Información de contacto de la agencia
-  static const String phoneNumber = '+51 984 102 859';
-  static const String whatsappNumber = '51984102859'; // Sin espacios ni +
-  static const String email = 'info@byletytravels.com';
-  static const String emergencyPhone = '+51 984 102 859';
+  static const String phoneNumber = '+54 9 3884102859';
+  static const String whatsappNumber = '5493884102859'; // Sin espacios ni +
+  static const String email = 'byletytravels.oficial@gmail.com';
+  static const String emergencyPhone = '+54 9 3884102859';
 
   // Horarios de atención
   static const Map<String, String> businessHours = {
