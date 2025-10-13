@@ -25,41 +25,36 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
 
   // Available options for filters
   final List<String> _continents = [
-    'All',
-    'Europe',
+    'Todos',
+    'Europa',
     'Asia',
-    'America',
-    'Africa',
-    'Oceania'
+    'América',
+    'África',
+    'Oceanía',
   ];
 
   final Map<String, List<String>> _countriesByContinent = {
-    'Europe': ['France', 'Italy', 'Spain', 'Germany', 'United Kingdom'],
-    'Asia': ['Japan', 'Thailand', 'China', 'India', 'Indonesia'],
-    'America': ['USA', 'Brazil', 'Argentina', 'Mexico', 'Canada'],
-    'Africa': ['Egypt', 'South Africa', 'Morocco', 'Kenya', 'Tanzania'],
-    'Oceania': ['Australia', 'New Zealand', 'Fiji', 'French Polynesia'],
+    'Europa': ['Francia', 'Italia', 'España', 'Alemania', 'Reino Unido'],
+    'Asia': ['Japón', 'Tailandia', 'China', 'India', 'Indonesia'],
+    'América': ['EE.UU.', 'Brasil', 'Argentina', 'México', 'Canadá'],
+    'África': ['Egipto', 'Sudáfrica', 'Marruecos', 'Kenia', 'Tanzania'],
+    'Oceanía': ['Australia', 'Nueva Zelanda', 'Fiji', 'Polinesia Francesa'],
   };
 
-  final List<String> _durations = [
-    'All',
-    '3-5 days',
-    '6-8 days',
-    '9+ days',
-  ];
+  final List<String> _durations = ['Todos', '3-5 días', '6-8 días', '9+ días'];
 
   final List<String> _categories = [
-    'Adventure',
-    'Romantic',
-    'Family',
-    'Luxury',
+    'Aventura',
+    'Romántico',
+    'Familiar',
+    'Lujo',
   ];
 
   final List<String> _services = [
-    'Flights',
+    'Vuelos',
     'Hotel 5★',
-    'Guided Tours',
-    'Meals Included',
+    'Tours Guiados',
+    'Comidas Incluidas',
   ];
 
   @override
@@ -98,7 +93,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Filters',
+                'Filtros',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -115,10 +110,8 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
                     widget.onClearFilters();
                   },
                   icon: const Icon(Icons.clear_all),
-                  label: const Text('Clear All'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.red,
-                  ),
+                  label: const Text('Limpiar Todo'),
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
                 ),
             ],
           ),
@@ -152,7 +145,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
                 widget.onFiltersChanged(_currentFilters);
               },
               icon: const Icon(Icons.filter_list),
-              label: const Text('Apply Filters'),
+              label: const Text('Aplicar Filtros'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF072A47),
                 foregroundColor: Colors.white,
@@ -182,7 +175,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             const Icon(Icons.attach_money, color: Color(0xFF072A47), size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Price Range',
+              'Rango de Precio',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -249,7 +242,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             const Icon(Icons.location_on, color: Color(0xFF072A47), size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Destination',
+              'Destino',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -261,26 +254,25 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
         const SizedBox(height: 12),
         // Continent dropdown
         DropdownButtonFormField<String>(
-          value: _currentFilters.selectedContinent ?? 'All',
+          value: _currentFilters.selectedContinent ?? 'Todos',
           decoration: InputDecoration(
-            labelText: 'Continent',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            labelText: 'Continente',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 16,
             ),
           ),
-          items: _continents.map((continent) {
-            return DropdownMenuItem(
-              value: continent,
-              child: Text(continent),
-            );
-          }).toList(),
+          items:
+              _continents.map((continent) {
+                return DropdownMenuItem(
+                  value: continent,
+                  child: Text(continent),
+                );
+              }).toList(),
           onChanged: (value) {
             setState(() {
-              if (value == 'All') {
+              if (value == 'Todos') {
                 _currentFilters = _currentFilters.copyWith(
                   clearContinent: true,
                   clearCountry: true,
@@ -301,7 +293,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
           DropdownButtonFormField<String>(
             value: _currentFilters.selectedCountry,
             decoration: InputDecoration(
-              labelText: 'Country',
+              labelText: 'País',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -313,16 +305,16 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             items: [
               const DropdownMenuItem(
                 value: null,
-                child: Text('All Countries'),
+                child: Text('Todos los Países'),
               ),
               ...(_countriesByContinent[_currentFilters.selectedContinent!] ??
                       [])
                   .map((country) {
-                return DropdownMenuItem(
-                  value: country,
-                  child: Text(country),
-                );
-              }),
+                    return DropdownMenuItem(
+                      value: country,
+                      child: Text(country),
+                    );
+                  }),
             ],
             onChanged: (value) {
               setState(() {
@@ -347,7 +339,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             const Icon(Icons.schedule, color: Color(0xFF072A47), size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Duration',
+              'Duración',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -358,26 +350,22 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<String>(
-          value: _currentFilters.selectedDuration ?? 'All',
+          value: _currentFilters.selectedDuration ?? 'Todos',
           decoration: InputDecoration(
-            labelText: 'Trip Duration',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            labelText: 'Duración del Viaje',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 16,
             ),
           ),
-          items: _durations.map((duration) {
-            return DropdownMenuItem(
-              value: duration,
-              child: Text(duration),
-            );
-          }).toList(),
+          items:
+              _durations.map((duration) {
+                return DropdownMenuItem(value: duration, child: Text(duration));
+              }).toList(),
           onChanged: (value) {
             setState(() {
-              if (value == 'All') {
+              if (value == 'Todos') {
                 _currentFilters = _currentFilters.copyWith(clearDuration: true);
               } else {
                 _currentFilters = _currentFilters.copyWith(
@@ -401,7 +389,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             const Icon(Icons.category, color: Color(0xFF072A47), size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Category',
+              'Categoría',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -414,35 +402,40 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: _categories.map((category) {
-            final isSelected =
-                _currentFilters.selectedCategories.contains(category);
-            return FilterChip(
-              label: Text(category),
-              selected: isSelected,
-              onSelected: (selected) {
-                setState(() {
-                  final newCategories =
-                      Set<String>.from(_currentFilters.selectedCategories);
-                  if (selected) {
-                    newCategories.add(category);
-                  } else {
-                    newCategories.remove(category);
-                  }
-                  _currentFilters = _currentFilters.copyWith(
-                    selectedCategories: newCategories,
-                  );
-                });
-              },
-              selectedColor: const Color(0xFFFFDC00),
-              checkmarkColor: const Color(0xFF072A47),
-              backgroundColor: Colors.grey[200],
-              labelStyle: TextStyle(
-                color: isSelected ? const Color(0xFF072A47) : Colors.black87,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            );
-          }).toList(),
+          children:
+              _categories.map((category) {
+                final isSelected = _currentFilters.selectedCategories.contains(
+                  category,
+                );
+                return FilterChip(
+                  label: Text(category),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    setState(() {
+                      final newCategories = Set<String>.from(
+                        _currentFilters.selectedCategories,
+                      );
+                      if (selected) {
+                        newCategories.add(category);
+                      } else {
+                        newCategories.remove(category);
+                      }
+                      _currentFilters = _currentFilters.copyWith(
+                        selectedCategories: newCategories,
+                      );
+                    });
+                  },
+                  selectedColor: const Color(0xFFFFDC00),
+                  checkmarkColor: const Color(0xFF072A47),
+                  backgroundColor: Colors.grey[200],
+                  labelStyle: TextStyle(
+                    color:
+                        isSelected ? const Color(0xFF072A47) : Colors.black87,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );
@@ -458,7 +451,7 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
             const Icon(Icons.room_service, color: Color(0xFF072A47), size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Services Included',
+              'Servicios Incluidos',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -471,47 +464,54 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
         Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: _services.map((service) {
-            final isSelected =
-                _currentFilters.selectedServices.contains(service);
-            return FilterChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _getServiceIcon(service),
-                    size: 16,
-                    color:
-                        isSelected ? const Color(0xFF072A47) : Colors.black54,
+          children:
+              _services.map((service) {
+                final isSelected = _currentFilters.selectedServices.contains(
+                  service,
+                );
+                return FilterChip(
+                  label: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _getServiceIcon(service),
+                        size: 16,
+                        color:
+                            isSelected
+                                ? const Color(0xFF072A47)
+                                : Colors.black54,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(service),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Text(service),
-                ],
-              ),
-              selected: isSelected,
-              onSelected: (selected) {
-                setState(() {
-                  final newServices =
-                      Set<String>.from(_currentFilters.selectedServices);
-                  if (selected) {
-                    newServices.add(service);
-                  } else {
-                    newServices.remove(service);
-                  }
-                  _currentFilters = _currentFilters.copyWith(
-                    selectedServices: newServices,
-                  );
-                });
-              },
-              selectedColor: const Color(0xFFFFDC00),
-              checkmarkColor: const Color(0xFF072A47),
-              backgroundColor: Colors.grey[200],
-              labelStyle: TextStyle(
-                color: isSelected ? const Color(0xFF072A47) : Colors.black87,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-            );
-          }).toList(),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    setState(() {
+                      final newServices = Set<String>.from(
+                        _currentFilters.selectedServices,
+                      );
+                      if (selected) {
+                        newServices.add(service);
+                      } else {
+                        newServices.remove(service);
+                      }
+                      _currentFilters = _currentFilters.copyWith(
+                        selectedServices: newServices,
+                      );
+                    });
+                  },
+                  selectedColor: const Color(0xFFFFDC00),
+                  checkmarkColor: const Color(0xFF072A47),
+                  backgroundColor: Colors.grey[200],
+                  labelStyle: TextStyle(
+                    color:
+                        isSelected ? const Color(0xFF072A47) : Colors.black87,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );
@@ -520,13 +520,13 @@ class _PackageFiltersWidgetState extends State<PackageFiltersWidget> {
   /// Get icon for service type
   IconData _getServiceIcon(String service) {
     switch (service) {
-      case 'Flights':
+      case 'Vuelos':
         return Icons.flight;
       case 'Hotel 5★':
         return Icons.hotel;
-      case 'Guided Tours':
+      case 'Tours Guiados':
         return Icons.tour;
-      case 'Meals Included':
+      case 'Comidas Incluidas':
         return Icons.restaurant;
       default:
         return Icons.check_circle;

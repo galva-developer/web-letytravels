@@ -42,11 +42,11 @@ class _HeroSectionState extends State<HeroSection>
 
   // Rotating destinations for animated text
   final List<String> _destinations = [
-    'Discover Paris',
-    'Explore Rome',
-    'Experience Kyoto',
-    'Visit New York',
-    'Enjoy Bali',
+    'Descubre París',
+    'Explora Roma',
+    'Experimenta Kioto',
+    'Visita Nueva York',
+    'Disfruta Bali',
   ];
 
   @override
@@ -79,9 +79,10 @@ class _HeroSectionState extends State<HeroSection>
   // Open WhatsApp with predefined message
   Future<void> _openWhatsApp() async {
     const phoneNumber = '5493884102859'; // WhatsApp Business number
-    const message = 'Hello! I would like information about travel packages.';
+    const message = '¡Hola! Me gustaría información sobre paquetes de viaje.';
     final url = Uri.parse(
-        'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}');
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
 
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -90,7 +91,7 @@ class _HeroSectionState extends State<HeroSection>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Could not open WhatsApp'),
+            content: Text('No se pudo abrir WhatsApp'),
             backgroundColor: Colors.red,
           ),
         );
@@ -119,8 +120,12 @@ class _HeroSectionState extends State<HeroSection>
               height: MediaQuery.of(context).size.height,
               viewportFraction: 1.0, // Full width
               autoPlay: _isAutoPlaying, // Auto-play enabled
-              autoPlayInterval: const Duration(seconds: 5), // Change every 5 seconds
-              autoPlayAnimationDuration: const Duration(milliseconds: 1000), // Smooth transition
+              autoPlayInterval: const Duration(
+                seconds: 5,
+              ), // Change every 5 seconds
+              autoPlayAnimationDuration: const Duration(
+                milliseconds: 1000,
+              ), // Smooth transition
               autoPlayCurve: Curves.easeInOut, // Smooth curve
               pauseAutoPlayOnTouch: true, // Pause on user interaction
               enlargeCenterPage: false,
@@ -130,25 +135,31 @@ class _HeroSectionState extends State<HeroSection>
                 });
               },
             ),
-            items: _backgroundImages.map((imagePath) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(imagePath),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          const Color.fromARGB(110, 0, 0, 0).withOpacity(0.4),
-                          BlendMode.darken,
+            items:
+                _backgroundImages.map((imagePath) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(imagePath),
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                              const Color.fromARGB(
+                                110,
+                                0,
+                                0,
+                                0,
+                              ).withOpacity(0.4),
+                              BlendMode.darken,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
-                },
-              );
-            }).toList(),
+                }).toList(),
           ),
 
           // Content overlay (text and buttons)
@@ -172,7 +183,7 @@ class _HeroSectionState extends State<HeroSection>
                       );
                     },
                     child: const Text(
-                      'Discover Your Next Adventure',
+                      'Descubre Tu Próxima Aventura',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 48,
@@ -207,12 +218,15 @@ class _HeroSectionState extends State<HeroSection>
                         ],
                       ),
                       child: AnimatedTextKit(
-                        animatedTexts: _destinations
-                            .map((destination) => TypewriterAnimatedText(
-                                  destination,
-                                  speed: const Duration(milliseconds: 100),
-                                ))
-                            .toList(),
+                        animatedTexts:
+                            _destinations
+                                .map(
+                                  (destination) => TypewriterAnimatedText(
+                                    destination,
+                                    speed: const Duration(milliseconds: 100),
+                                  ),
+                                )
+                                .toList(),
                         repeatForever: true,
                         pause: const Duration(milliseconds: 1500),
                       ),
@@ -225,13 +239,10 @@ class _HeroSectionState extends State<HeroSection>
                     tween: Tween(begin: 0.0, end: 1.0),
                     duration: const Duration(milliseconds: 1200),
                     builder: (context, value, child) {
-                      return Opacity(
-                        opacity: value,
-                        child: child,
-                      );
+                      return Opacity(opacity: value, child: child);
                     },
                     child: Text(
-                      'Amazing destinations at unbeatable prices.',
+                      'Destinos increíbles a precios inmejorables.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 22,
@@ -284,32 +295,34 @@ class _HeroSectionState extends State<HeroSection>
             right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: _backgroundImages.asMap().entries.map((entry) {
-                return GestureDetector(
-                  onTap: () => _carouselController.animateToPage(entry.key),
-                  child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _currentIndex == entry.key
-                          ? const Color(0xFFFFDC00)
-                          : Colors.white.withOpacity(0.4),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+              children:
+                  _backgroundImages.asMap().entries.map((entry) {
+                    return GestureDetector(
+                      onTap: () => _carouselController.animateToPage(entry.key),
+                      child: Container(
+                        width: 12.0,
+                        height: 12.0,
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 4.0,
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              _currentIndex == entry.key
+                                  ? const Color(0xFFFFDC00)
+                                  : Colors.white.withOpacity(0.4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
             ),
           ),
 
@@ -326,7 +339,8 @@ class _HeroSectionState extends State<HeroSection>
                   onTap: () {
                     _carouselController.previousPage();
                     setState(() {
-                      _isAutoPlaying = false; // Stop auto-play on manual navigation
+                      _isAutoPlaying =
+                          false; // Stop auto-play on manual navigation
                     });
                   },
                   child: Container(
@@ -358,7 +372,8 @@ class _HeroSectionState extends State<HeroSection>
                   onTap: () {
                     _carouselController.nextPage();
                     setState(() {
-                      _isAutoPlaying = false; // Stop auto-play on manual navigation
+                      _isAutoPlaying =
+                          false; // Stop auto-play on manual navigation
                     });
                   },
                   child: Container(
@@ -389,14 +404,11 @@ class _HeroSectionState extends State<HeroSection>
       child: ElevatedButton.icon(
         onPressed: _scrollToPackages,
         icon: const Icon(Icons.explore, size: 24),
-        label: const Text('Explore Destinations'),
+        label: const Text('Explorar Destinos'),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFFDC00),
           foregroundColor: const Color(0xFF072A47),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 24,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
           textStyle: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -408,28 +420,28 @@ class _HeroSectionState extends State<HeroSection>
           elevation: 8,
           shadowColor: Colors.black.withOpacity(0.3),
         ).copyWith(
-          overlayColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return const Color(0xFF072A47).withOpacity(0.1);
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return const Color(0xFF072A47).withOpacity(0.2);
-              }
-              return null;
-            },
-          ),
-          elevation: WidgetStateProperty.resolveWith<double>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return 12;
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return 4;
-              }
-              return 8;
-            },
-          ),
+          overlayColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return const Color(0xFF072A47).withOpacity(0.1);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return const Color(0xFF072A47).withOpacity(0.2);
+            }
+            return null;
+          }),
+          elevation: WidgetStateProperty.resolveWith<double>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return 12;
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return 4;
+            }
+            return 8;
+          }),
         ),
       ),
     );
@@ -442,73 +454,61 @@ class _HeroSectionState extends State<HeroSection>
       child: OutlinedButton.icon(
         onPressed: _openWhatsApp,
         icon: const Icon(Icons.chat, size: 24),
-        label: const Text('Talk to Advisor'),
+        label: const Text('Hablar con Asesor'),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.white,
           backgroundColor: Colors.white.withOpacity(0.15),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-            vertical: 24,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
           textStyle: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.5,
           ),
-          side: const BorderSide(
-            color: Colors.white,
-            width: 2,
-          ),
+          side: const BorderSide(color: Colors.white, width: 2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
           elevation: 8,
           shadowColor: Colors.black.withOpacity(0.3),
         ).copyWith(
-          overlayColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return Colors.white.withOpacity(0.2);
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return Colors.white.withOpacity(0.3);
-              }
-              return null;
-            },
-          ),
-          backgroundColor: WidgetStateProperty.resolveWith<Color>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return Colors.white.withOpacity(0.25);
-              }
-              return Colors.white.withOpacity(0.15);
-            },
-          ),
-          elevation: WidgetStateProperty.resolveWith<double>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return 12;
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return 4;
-              }
-              return 8;
-            },
-          ),
-          side: WidgetStateProperty.resolveWith<BorderSide>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.hovered)) {
-                return const BorderSide(
-                  color: Color(0xFFFFDC00),
-                  width: 2.5,
-                );
-              }
-              return const BorderSide(
-                color: Colors.white,
-                width: 2,
-              );
-            },
-          ),
+          overlayColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return Colors.white.withOpacity(0.2);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return Colors.white.withOpacity(0.3);
+            }
+            return null;
+          }),
+          backgroundColor: WidgetStateProperty.resolveWith<Color>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return Colors.white.withOpacity(0.25);
+            }
+            return Colors.white.withOpacity(0.15);
+          }),
+          elevation: WidgetStateProperty.resolveWith<double>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return 12;
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return 4;
+            }
+            return 8;
+          }),
+          side: WidgetStateProperty.resolveWith<BorderSide>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.hovered)) {
+              return const BorderSide(color: Color(0xFFFFDC00), width: 2.5);
+            }
+            return const BorderSide(color: Colors.white, width: 2);
+          }),
         ),
       ),
     );

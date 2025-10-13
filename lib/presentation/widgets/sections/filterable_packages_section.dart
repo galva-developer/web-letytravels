@@ -241,11 +241,11 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   /// Check if package matches duration filter
   bool _matchesDuration(int days, String durationFilter) {
     switch (durationFilter) {
-      case '3-5 days':
+      case '3-5 días':
         return days >= 3 && days <= 5;
-      case '6-8 days':
+      case '6-8 días':
         return days >= 6 && days <= 8;
-      case '9+ days':
+      case '9+ días':
         return days >= 9;
       default:
         return true;
@@ -255,14 +255,14 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
   /// Check if package has a specific service
   bool _packageHasService(PackageTravel package, String service) {
     switch (service) {
-      case 'Flights':
+      case 'Vuelos':
         return package.flightsIncluded;
       case 'Hotel 5★':
         return package.hotelRating.contains('5');
-      case 'Guided Tours':
+      case 'Tours Guiados':
         return package.guidedTours;
-      case 'Meals Included':
-        return package.services.contains('Meals Included');
+      case 'Comidas Incluidas':
+        return package.services.contains('Comidas Incluidas');
       default:
         return package.services.contains(service);
     }
@@ -301,7 +301,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Explore Our Packages',
+                            'Explora Nuestros Paquetes',
                             style: TextStyle(
                               fontSize: isMobile ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -312,7 +312,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                           Row(
                             children: [
                               Text(
-                                '${_filteredPackages.length} ${_filteredPackages.length == 1 ? 'package' : 'packages'} available',
+                                '${_filteredPackages.length} ${_filteredPackages.length == 1 ? 'paquete' : 'paquetes'} disponibles',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey[600],
@@ -347,7 +347,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                               : Icons.filter_list,
                         ),
                         label: Text(
-                          _showFilters ? 'Hide Filters' : 'Show Filters',
+                          _showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros',
                         ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF072A47),

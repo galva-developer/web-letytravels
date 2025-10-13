@@ -99,53 +99,54 @@ class _StatsIndicatorState extends State<StatsIndicator> {
             ),
           ],
         ),
-        child: isMobile
-            ? Column(
-                children: [
-                  _buildStatItem(
-                    icon: Icons.person_outline,
-                    value: _displayedTravelers,
-                    label: 'Happy Travelers',
-                    isMobile: true,
-                  ),
-                  const SizedBox(height: 20),
-                  _buildStatItem(
-                    icon: Icons.location_on_outlined,
-                    value: _displayedDestinations,
-                    label: 'Destinations',
-                    isMobile: true,
-                  ),
-                  const SizedBox(height: 20),
-                  _buildStatItem(
-                    icon: Icons.workspace_premium_outlined,
-                    value: _displayedYears,
-                    label: 'Years Experience',
-                    isMobile: true,
-                  ),
-                ],
-              )
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildStatItem(
-                    icon: Icons.person_outline,
-                    value: _displayedTravelers,
-                    label: 'Happy Travelers',
-                  ),
-                  _buildDivider(),
-                  _buildStatItem(
-                    icon: Icons.location_on_outlined,
-                    value: _displayedDestinations,
-                    label: 'Destinations',
-                  ),
-                  _buildDivider(),
-                  _buildStatItem(
-                    icon: Icons.workspace_premium_outlined,
-                    value: _displayedYears,
-                    label: 'Years Experience',
-                  ),
-                ],
-              ),
+        child:
+            isMobile
+                ? Column(
+                  children: [
+                    _buildStatItem(
+                      icon: Icons.person_outline,
+                      value: _displayedTravelers,
+                      label: 'Viajeros Felices',
+                      isMobile: true,
+                    ),
+                    const SizedBox(height: 20),
+                    _buildStatItem(
+                      icon: Icons.location_on_outlined,
+                      value: _displayedDestinations,
+                      label: 'Destinos',
+                      isMobile: true,
+                    ),
+                    const SizedBox(height: 20),
+                    _buildStatItem(
+                      icon: Icons.workspace_premium_outlined,
+                      value: _displayedYears,
+                      label: 'Años de Experiencia',
+                      isMobile: true,
+                    ),
+                  ],
+                )
+                : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildStatItem(
+                      icon: Icons.person_outline,
+                      value: _displayedTravelers,
+                      label: 'Viajeros Felices',
+                    ),
+                    _buildDivider(),
+                    _buildStatItem(
+                      icon: Icons.location_on_outlined,
+                      value: _displayedDestinations,
+                      label: 'Destinos',
+                    ),
+                    _buildDivider(),
+                    _buildStatItem(
+                      icon: Icons.workspace_premium_outlined,
+                      value: _displayedYears,
+                      label: 'Años de Experiencia',
+                    ),
+                  ],
+                ),
       ),
     );
   }
@@ -168,10 +169,7 @@ class _StatsIndicatorState extends State<StatsIndicator> {
             decoration: BoxDecoration(
               color: const Color(0xFFFFDC00).withOpacity(0.2),
               shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFFFFDC00),
-                width: 2,
-              ),
+              border: Border.all(color: const Color(0xFFFFDC00), width: 2),
             ),
             child: Icon(
               icon,
