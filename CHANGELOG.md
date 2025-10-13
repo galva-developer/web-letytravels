@@ -52,6 +52,53 @@ Integración completa de enlaces a redes sociales con diseño atractivo y animac
   - Spacing: 20px entre íconos, 24px del copyright
   - Visible en todas las resoluciones
 
+#### 📸 Feed de Instagram Embebido
+
+Galería visual de las últimas publicaciones de Instagram integrada en la página principal.
+
+- **InstagramFeed Widget** (`lib/presentation/widgets/instagram_feed.dart`) ✅
+  - Widget para mostrar feed de Instagram con 6 publicaciones
+  - **Características**:
+    * Grid responsivo de publicaciones
+    * Imágenes optimizadas con lazy loading
+    * Hover effects con overlay gradient
+    * Link directo a perfil de Instagram
+    * Indicador de carga mientras se obtienen imágenes
+    * Error handling con placeholder
+  - **Layout Responsivo**:
+    * Desktop (>900px): 6 columnas (todas en una fila)
+    * Tablet (600-900px): 3 columnas (2 filas)
+    * Móvil (<600px): 2 columnas (3 filas)
+  - **Interactividad**:
+    * Hover: Overlay oscuro con ícono de Instagram
+    * Click: Abre perfil de Instagram en nueva pestaña
+    * Animación suave al hacer hover
+    * Elevación de card en hover
+  - **Sección Completa**:
+    * Título: "Síguenos en Instagram"
+    * Ícono de Instagram con gradiente
+    * Username clickeable: @byletytravels.ok
+    * Subtítulo descriptivo
+    * Grid de 6 publicaciones
+    * Botón "Ver más en Instagram" al final
+  - **Props Configurables**:
+    * `instagramUsername`: Nombre de usuario (default: 'byletytravels.ok')
+    * `instagramUrl`: URL del perfil (default: Instagram oficial)
+    * `numberOfPosts`: Cantidad de publicaciones a mostrar (default: 6)
+  - **Variantes**:
+    * `InstagramFeed`: Versión completa (6 posts)
+    * `InstagramFeedCompact`: Versión compacta (4 posts)
+  - **Nota de Implementación**:
+    * Actualmente usa imágenes placeholder de Unsplash
+    * En producción: Integrar con Instagram Basic Display API
+    * Imágenes temáticas de viajes: París, Maldivas, Santorini, etc.
+
+- **Integración en HomePage** ✅
+  - Posicionada entre BookingSection y ContactFooterSection
+  - Separador visual natural entre contenido y footer
+  - Anima a seguir en redes sociales antes del contacto
+  - Background blanco para contraste con footer oscuro
+
 ### 🔧 Mejoras
 
 - Animaciones suaves en hover (200ms)
@@ -59,6 +106,9 @@ Integración completa de enlaces a redes sociales con diseño atractivo y animac
 - Apertura de enlaces en modo externo (nueva pestaña/app)
 - Tooltips informativos en todos los íconos
 - Diseño consistente con la identidad de marca
+- Grid responsivo que se adapta a cualquier pantalla
+- Loading states durante carga de imágenes
+- Error handling con placeholders elegantes
 
 ### 🎨 UI/UX
 
@@ -67,12 +117,18 @@ Integración completa de enlaces a redes sociales con diseño atractivo y animac
 - Bordes redondeados en variante con labels
 - Estados hover diferenciados por red social
 - Integración armoniosa en navbar y footer
+- Overlay gradient en hover de publicaciones
+- Transiciones suaves entre estados
+- Cards elevadas en interacción
 
 ### 📚 Documentación
 
 - Documentado widget SocialMediaLinks
 - URLs oficiales de redes sociales
 - Guía de uso de variantes
+- Documentado InstagramFeed con props configurables
+- Nota sobre integración futura con API de Instagram
+- Ejemplos de uso compacto y expandido
 
 ---
 

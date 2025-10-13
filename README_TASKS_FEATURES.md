@@ -324,15 +324,16 @@ Próximos pasos:
   - Iconos animados con hover effects
   - Integrados en navbar y footer
 
-- [ ] **Feed de Instagram embebido**
+- [x] **Feed de Instagram embebido**
   - Mostrar últimas 6 publicaciones
   - Link a perfil completo
+  - Grid responsivo (6 cols desktop, 3 tablet, 2 móvil)
+  - Hover effects con overlay gradient
+  - Loading states y error handling
 
 - [ ] **Contador de seguidores**
   - "10K+ seguidores en Instagram"
   - "5K+ viajeros felices en Facebook"
-
-
 
 #### 7. FAQ (Preguntas Frecuentes)
 - [ ] Sección de FAQ expandible/colapsable

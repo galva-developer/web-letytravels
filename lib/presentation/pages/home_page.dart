@@ -12,6 +12,7 @@ import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 import 'package:by_lety_travels/presentation/pages/search_results_page.dart';
 import 'package:by_lety_travels/presentation/widgets/floating_whatsapp_button.dart';
 import 'package:by_lety_travels/presentation/widgets/social_media_links.dart';
+import 'package:by_lety_travels/presentation/widgets/instagram_feed.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -454,6 +455,10 @@ class _HomePageState extends State<HomePage> {
                 ), // Use the new, unique key
                 MyFavoritesSection(sectionKey: _favoritesSectionKey),
                 BookingSection(sectionKey: _bookingSectionKey),
+
+                // Instagram Feed Section
+                const InstagramFeed(),
+
                 ContactFooterSection(sectionKey: _contactSectionKey),
               ],
             ),
