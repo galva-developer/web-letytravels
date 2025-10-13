@@ -7,9 +7,14 @@ import 'package:by_lety_travels/presentation/widgets/components/stats_indicator.
 // Widget for the main hero section of the home page with image carousel.
 class HeroSection extends StatefulWidget {
   final GlobalKey sectionKey;
+  final VoidCallback? onExploreDestinations;
 
   // Constructor requiring a GlobalKey to enable scrolling to this section.
-  const HeroSection({super.key, required this.sectionKey});
+  const HeroSection({
+    super.key,
+    required this.sectionKey,
+    this.onExploreDestinations,
+  });
 
   @override
   State<HeroSection> createState() => _HeroSectionState();
@@ -101,8 +106,9 @@ class _HeroSectionState extends State<HeroSection>
 
   // Scroll to packages section
   void _scrollToPackages() {
-    // This will be implemented when we have the packages section reference
-    print('Scroll to packages section');
+    if (widget.onExploreDestinations != null) {
+      widget.onExploreDestinations!();
+    }
   }
 
   @override

@@ -12,28 +12,18 @@ class MyFavoritesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<FavoritesProvider>(
       builder: (context, favoritesProvider, child) {
-        return Stack(
-          children: [
-            Container(
-              key: sectionKey,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    const Color(0xFF072A47).withOpacity(0.02),
-                    Colors.white,
-                  ],
-                ),
-              ),
-              child: _buildContent(context, favoritesProvider),
+        return Container(
+          key: sectionKey,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [const Color(0xFF072A47).withOpacity(0.02), Colors.white],
             ),
-            // Floating Action Button for comparison
-            if (favoritesProvider.canCompare)
-              _buildComparisonFAB(context, favoritesProvider),
-          ],
+          ),
+          child: _buildContent(context, favoritesProvider),
         );
       },
     );
@@ -64,6 +54,12 @@ class MyFavoritesSection extends StatelessWidget {
         _buildHeader(context, favoritePackages.length),
         const SizedBox(height: 40),
 
+        // Comparison Button (centered, visible when can compare)
+        if (favoritesProvider.canCompare)
+          _buildComparisonButton(context, favoritesProvider),
+
+        if (favoritesProvider.canCompare) const SizedBox(height: 24),
+
         // Content: Empty State or Favorites Grid
         if (favoritePackages.isEmpty)
           _buildEmptyState(context)
@@ -73,24 +69,32 @@ class MyFavoritesSection extends StatelessWidget {
     );
   }
 
-  Widget _buildComparisonFAB(
+  Widget _buildComparisonButton(
     BuildContext context,
     FavoritesProvider favoritesProvider,
   ) {
     final count = favoritesProvider.selectedComparisonCount;
 
-    return Positioned(
-      right: 40,
-      bottom: 40,
-      child: FloatingActionButton.extended(
-        onPressed: () => _showComparisonModal(context, favoritesProvider),
-        backgroundColor: const Color(0xFFFFDC00),
-        foregroundColor: const Color(0xFF072A47),
-        elevation: 8,
-        icon: const Icon(Icons.compare_arrows, size: 28),
-        label: Text(
-          'Comparar ($count)',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: ElevatedButton.icon(
+          onPressed: () => _showComparisonModal(context, favoritesProvider),
+          icon: const Icon(Icons.compare_arrows, size: 24),
+          label: Text(
+            'Comparar $count ${count == 2 ? 'Paquetes' : 'Paquetes'}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFFFDC00),
+            foregroundColor: const Color(0xFF072A47),
+            elevation: 4,
+            shadowColor: const Color(0xFFFFDC00).withOpacity(0.4),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
         ),
       ),
     );
@@ -295,69 +299,72 @@ class MyFavoritesSection extends StatelessWidget {
                     // Modal will be opened by the card itself
                   },
                 ),
-                // Comparison checkbox overlay
+                // Comparison checkbox overlay - centered at top
                 Positioned(
                   top: 8,
-                  left: 8,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap:
-                          canSelect
-                              ? () => favoritesProvider
-                                  .toggleComparisonSelection(package.title)
-                              : null,
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.95),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color:
-                                isSelected
-                                    ? const Color(0xFF072A47)
-                                    : Colors.grey.withOpacity(0.3),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap:
+                            canSelect
+                                ? () => favoritesProvider
+                                    .toggleComparisonSelection(package.title)
+                                : null,
+                        borderRadius: BorderRadius.circular(4),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.95),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color:
+                                  isSelected
+                                      ? const Color(0xFF072A47)
+                                      : Colors.grey.withOpacity(0.3),
+                              width: 2,
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Checkbox(
-                              value: isSelected,
-                              onChanged:
-                                  canSelect
-                                      ? (value) => favoritesProvider
-                                          .toggleComparisonSelection(
-                                            package.title,
-                                          )
-                                      : null,
-                              activeColor: const Color(0xFF072A47),
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: VisualDensity.compact,
-                            ),
-                            Text(
-                              'Comparar',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color:
-                                    canSelect
-                                        ? const Color(0xFF072A47)
-                                        : Colors.grey,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
                               ),
-                            ),
-                            const SizedBox(width: 4),
-                          ],
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Checkbox(
+                                value: isSelected,
+                                onChanged:
+                                    canSelect
+                                        ? (value) => favoritesProvider
+                                            .toggleComparisonSelection(
+                                              package.title,
+                                            )
+                                        : null,
+                                activeColor: const Color(0xFF072A47),
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: VisualDensity.compact,
+                              ),
+                              Text(
+                                'Comparar',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color:
+                                      canSelect
+                                          ? const Color(0xFF072A47)
+                                          : Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                            ],
+                          ),
                         ),
                       ),
                     ),

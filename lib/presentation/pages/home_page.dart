@@ -358,7 +358,11 @@ class _HomePageState extends State<HomePage> {
             // Keep SingleChildScrollView for overall page scroll
             child: Column(
               children: <Widget>[
-                HeroSection(sectionKey: _heroSectionKey),
+                HeroSection(
+                  sectionKey: _heroSectionKey,
+                  onExploreDestinations:
+                      () => _scrollToSection(_popularDestinationsSectionKey),
+                ),
                 // New Filterable Packages Section with Advanced Filters
                 FilterablePackagesSection(
                   sectionKey: _popularDestinationsSectionKey,

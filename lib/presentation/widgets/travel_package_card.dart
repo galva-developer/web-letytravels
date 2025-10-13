@@ -267,7 +267,12 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.fromLTRB(
+                24.0,
+                56.0,
+                24.0,
+                24.0,
+              ), // Extra top padding to avoid checkbox overlap
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
