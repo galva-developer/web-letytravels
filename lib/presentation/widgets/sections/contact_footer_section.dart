@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:by_lety_travels/presentation/widgets/call_now_button.dart';
 import 'package:by_lety_travels/presentation/widgets/quick_inquiry_dialog.dart';
 import 'package:by_lety_travels/presentation/widgets/appointment_booking_dialog.dart';
+import 'package:by_lety_travels/presentation/widgets/social_media_links.dart';
 
 // Widget for the footer section, typically containing contact information or copyright.
 class ContactFooterSection extends StatelessWidget {
@@ -292,12 +293,18 @@ class ContactFooterSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20.0),
             color: Colors.grey[900],
-            child: const Center(
-              child: Text(
-                '© 2025 ByLetyTravels. Todos los derechos reservados. | Contacto: info@byletytravels.com',
-                style: TextStyle(color: Colors.white70, fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
+            child: Column(
+              children: [
+                // Redes sociales
+                const SocialMediaLinksExpanded(vertical: false),
+                const SizedBox(height: 24),
+                // Copyright
+                const Text(
+                  '© 2025 ByLetyTravels. Todos los derechos reservados. | Contacto: info@byletytravels.com',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
         ],

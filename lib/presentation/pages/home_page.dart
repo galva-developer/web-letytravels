@@ -11,6 +11,7 @@ import 'package:by_lety_travels/data/repositories/sample_packages.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 import 'package:by_lety_travels/presentation/pages/search_results_page.dart';
 import 'package:by_lety_travels/presentation/widgets/floating_whatsapp_button.dart';
+import 'package:by_lety_travels/presentation/widgets/social_media_links.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -301,63 +302,77 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            // Right side: "Reservar Ahora" Button
+            // Right side: Social Media + "Reservar Ahora" Button
             Padding(
               padding: const EdgeInsets.only(
                 right: 16.0,
               ), // Add some right padding
-              child: ElevatedButton(
-                onPressed: () => _scrollToSection(_bookingSectionKey),
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      EdgeInsets
-                          .zero, // Padding is handled by the inner Container
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      30,
-                    ), // Pill-shaped button
-                  ),
-                  elevation: 0, // No elevation, gradient is the focus
-                  backgroundColor:
-                      Colors.transparent, // Button itself is transparent
-                  shadowColor: Colors.transparent,
-                ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 255, 196, 0), // Left color: yellow
-                        Color(0xFFD97806), // Right color: orange
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+              child: Row(
+                children: [
+                  // Social media icons
+                  const SocialMediaLinksCompact(),
+                  const SizedBox(width: 24),
+                  // Reservar button
+                  ElevatedButton(
+                    onPressed: () => _scrollToSection(_bookingSectionKey),
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets
+                              .zero, // Padding is handled by the inner Container
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          30,
+                        ), // Pill-shaped button
+                      ),
+                      elevation: 0, // No elevation, gradient is the focus
+                      backgroundColor:
+                          Colors.transparent, // Button itself is transparent
+                      shadowColor: Colors.transparent,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      10,
-                    ), // Match button shape
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 7,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '¡Reservar Ahora!',
-                      style: TextStyle(
-                        fontFamily: 'LetyTravelsFont',
-                        fontSize:
-                            defaultFontSize - 3, // Slightly smaller for button
-                        color: const Color.fromARGB(
-                          255,
-                          247,
-                          247,
-                          247,
-                        ), // Dark text for contrast
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromARGB(
+                              255,
+                              255,
+                              196,
+                              0,
+                            ), // Left color: yellow
+                            Color(0xFFD97806), // Right color: orange
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          10,
+                        ), // Match button shape
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 7,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '¡Reservar Ahora!',
+                          style: TextStyle(
+                            fontFamily: 'LetyTravelsFont',
+                            fontSize:
+                                defaultFontSize -
+                                3, // Slightly smaller for button
+                            color: const Color.fromARGB(
+                              255,
+                              247,
+                              247,
+                              247,
+                            ), // Dark text for contrast
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

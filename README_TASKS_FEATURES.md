@@ -257,9 +257,6 @@
 - [x] Validación de horarios de negocio
 - [x] Sistema completo de 4 pasos
 - [x] Integración en sección de contacto
-- [ ] Agregar a Google Calendar (futuro)
-
-**Estado: ✅ COMPLETADO (v0.14.0)**
 
 **Implementación:**
 - ✅ Modelo Appointment con 3 tipos y 5 estados
@@ -319,95 +316,13 @@ Próximos pasos:
 
 ---
 
-## 📞 Sección CONTACTO
-
-### ✅ Tareas Prioritarias
-
-#### 1. Información de Contacto Completa
-- [ ] **Dirección física de la agencia**
-  - Dirección completa
-  - Mapa interactivo de Google Maps embebido
-  - Botón "Cómo llegar"
-
-- [ ] **Teléfonos de contacto**
-  ```
-  +54 9 3884102859
-  ```
-  - Teléfono principal con click-to-call
-  - WhatsApp Business con link directo
-  - Teléfono de emergencias (24/7)
-
-- [ ] **Emails de contacto**
-  - Email general: byletytravels.oficial@gmail.com
-  - Email de ventas: byletytravels.oficial@gmail.com
-  - Email de soporte: alvaro.gonzales.dev@gmail.com
-
-- [ ] **Horario de atención**
-  - Lunes a Viernes: 9:00 AM - 7:00 PM
-  - Sábados: 9:00 AM - 2:00 PM
-  - Domingos: Cerrado
-  - Indicador visual si está abierto ahora
-
-#### 2. Formulario de Contacto Mejorado
-- [ ] Nombre completo *
-- [ ] Email *
-- [ ] Teléfono *
-- [ ] Asunto (Dropdown):
-  - Consulta sobre paquetes
-  - Modificar reserva
-  - Cancelación
-  - Quejas y sugerencias
-  - Otros
-- [ ] Mensaje *
-- [ ] Checkbox "Acepto recibir promociones"
-- [ ] Captcha / reCAPTCHA para evitar spam
-- [ ] Botón "Enviar Mensaje"
-- [ ] Mensaje de confirmación al enviar
-- [ ] Email de respuesta automática
-
-#### 3. Mapa Interactivo
-- [ ] Google Maps embebido con ubicación de la agencia
-- [ ] Marcador personalizado con logo
-- [ ] Información al hacer click en marcador
-- [ ] Opción de pantalla completa
-- [ ] Botón "Obtener Direcciones"
-
-#### 4. WhatsApp Integration
-- [ ] **Botón flotante de WhatsApp**
-  - Fijo en esquina inferior derecha
-  - Color verde oficial de WhatsApp
-  - Animación de pulso
-  - Badge "Escríbenos"
-  
-- [ ] **Link directo con mensaje predefinido**
-  ```
-  https://wa.me/549388102859?text=Hola,%20me%20interesa%20información%20sobre%20los%20paquetes%20de%20viaje
-  ```
-
-- [ ] **Múltiples asesores**
-  - WhatsApp de ventas
-  - WhatsApp de soporte
-  - WhatsApp de emergencias
-  - Mostrar disponibilidad de cada uno
-
-**Widget de WhatsApp:**
-```dart
-FloatingActionButton.extended(
-  onPressed: () => launch('https://wa.me/...'),
-  icon: Icon(FontAwesomeIcons.whatsapp),
-  label: Text('Chatea con nosotros'),
-  backgroundColor: Color(0xFF25D366),
-)
-```
-
 #### 5. Redes Sociales
-- [ ] **Enlaces a redes sociales**
-  - Facebook
-  - Instagram
-  - Twitter/X
-  - YouTube (videos de destinos)
-  - TikTok (contenido viral)
-  - LinkedIn
+- [x] **Enlaces a redes sociales**
+  - Facebook (https://www.facebook.com/profile.php?id=61575652439979)
+  - Instagram (https://www.instagram.com/byletytravels.ok/)
+  - TikTok (https://www.tiktok.com/@byletytravels.ok)
+  - Iconos animados con hover effects
+  - Integrados en navbar y footer
 
 - [ ] **Feed de Instagram embebido**
   - Mostrar últimas 6 publicaciones
@@ -417,21 +332,7 @@ FloatingActionButton.extended(
   - "10K+ seguidores en Instagram"
   - "5K+ viajeros felices en Facebook"
 
-#### 6. Newsletter y Promociones
-- [ ] **Suscripción al Newsletter**
-  - Campo de email
-  - Botón "Suscribirme"
-  - Checkbox de términos y condiciones
-  - Mensaje de confirmación
 
-- [ ] **Incentivo para suscribirse**
-  - "Suscríbete y obtén 10% OFF en tu primera reserva"
-  - Pop-up al entrar al sitio (no invasivo)
-  - Exit-intent popup
-
-- [ ] **Gestión de suscripción**
-  - Link para darse de baja
-  - Política de privacidad visible
 
 #### 7. FAQ (Preguntas Frecuentes)
 - [ ] Sección de FAQ expandible/colapsable
@@ -801,6 +702,22 @@ dependencies:
 - [ ] A/B testing
 - [ ] Multi-idioma
 - [ ] App móvil nativa
+
+### Newsletter y Promociones
+- [ ] **Suscripción al Newsletter**
+  - Campo de email
+  - Botón "Suscribirme"
+  - Checkbox de términos y condiciones
+  - Mensaje de confirmación
+
+- [ ] **Incentivo para suscribirse**
+  - "Suscríbete y obtén 10% OFF en tu primera reserva"
+  - Pop-up al entrar al sitio (no invasivo)
+  - Exit-intent popup
+
+- [ ] **Gestión de suscripción**
+  - Link para darse de baja
+  - Política de privacidad visible
 
 ---
 

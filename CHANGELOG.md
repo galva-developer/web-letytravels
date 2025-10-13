@@ -4,6 +4,78 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.15.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 🌐 Enlaces a Redes Sociales
+
+Integración completa de enlaces a redes sociales con diseño atractivo y animaciones.
+
+- **SocialMediaLinks Widget** (`lib/presentation/widgets/social_media_links.dart`) ✅
+  - Widget reutilizable para mostrar íconos de redes sociales
+  - **Redes Sociales**:
+    * Facebook: https://www.facebook.com/profile.php?id=61575652439979
+    * Instagram: https://www.instagram.com/byletytravels.ok/
+    * TikTok: https://www.tiktok.com/@byletytravels.ok
+  - **Características**:
+    * Iconos personalizados con colores de marca
+    * Instagram: Gradiente característico (rojo-morado-azul)
+    * Facebook: Azul oficial (#1877F2)
+    * TikTok: Negro con ícono de nota musical
+    * Animaciones hover: Escala 1.1x y background con opacidad
+    * Tooltips descriptivos
+    * Apertura en nueva pestaña/app externa
+  - **Variantes**:
+    * `SocialMediaLinks`: Base configurable (tamaño, spacing, alineación)
+    * `SocialMediaLinksCompact`: Para navbar (24px, sin labels)
+    * `SocialMediaLinksExpanded`: Para footer (32px, con título)
+  - **Props Configurables**:
+    * `iconSize`: Tamaño de los iconos (default: 32)
+    * `showLabels`: Mostrar texto junto al ícono (default: false)
+    * `alignment`: Alineación horizontal (default: center)
+    * `spacing`: Espaciado entre íconos (default: 16)
+  - **Tecnología**: `url_launcher` para abrir enlaces externos
+
+- **Integración en AppBar** ✅
+  - Íconos compactos en la barra de navegación superior
+  - Posición: Lado derecho, antes del botón "Reservar Ahora"
+  - Tamaño: 24px para no competir visualmente
+  - Spacing: 12px entre íconos, 24px del botón
+  - Responsive: Visible en desktop
+
+- **Integración en Footer** ✅
+  - Sección dedicada "Síguenos en Redes Sociales"
+  - Posición: Encima del copyright en footer oscuro
+  - Tamaño: 32px más visible
+  - Layout: Centrado horizontalmente
+  - Spacing: 20px entre íconos, 24px del copyright
+  - Visible en todas las resoluciones
+
+### 🔧 Mejoras
+
+- Animaciones suaves en hover (200ms)
+- Feedback visual claro al interactuar
+- Apertura de enlaces en modo externo (nueva pestaña/app)
+- Tooltips informativos en todos los íconos
+- Diseño consistente con la identidad de marca
+
+### 🎨 UI/UX
+
+- Iconos con colores oficiales de cada plataforma
+- Efectos hover: Escala + background color
+- Bordes redondeados en variante con labels
+- Estados hover diferenciados por red social
+- Integración armoniosa en navbar y footer
+
+### 📚 Documentación
+
+- Documentado widget SocialMediaLinks
+- URLs oficiales de redes sociales
+- Guía de uso de variantes
+
+---
+
 ## [v0.14.0] - 2025-01-12
 
 ### ✨ Nueva Funcionalidad
