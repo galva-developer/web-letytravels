@@ -3,6 +3,10 @@ import 'package:by_lety_travels/presentation/widgets/call_now_button.dart';
 import 'package:by_lety_travels/presentation/widgets/quick_inquiry_dialog.dart';
 import 'package:by_lety_travels/presentation/widgets/appointment_booking_dialog.dart';
 import 'package:by_lety_travels/presentation/widgets/social_media_links.dart';
+import 'package:by_lety_travels/presentation/pages/privacy_policy_page.dart';
+import 'package:by_lety_travels/presentation/pages/terms_conditions_page.dart';
+import 'package:by_lety_travels/presentation/pages/cookie_policy_page.dart';
+import 'package:by_lety_travels/presentation/pages/refund_policy_page.dart';
 
 // Widget for the footer section, typically containing contact information or copyright.
 class ContactFooterSection extends StatelessWidget {
@@ -289,25 +293,120 @@ class ContactFooterSection extends StatelessWidget {
             ),
           ),
 
-          // Footer copyright
+          // Footer copyright y políticas
           Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
             color: Colors.grey[900],
             child: Column(
               children: [
                 // Redes sociales
                 const SocialMediaLinksExpanded(vertical: false),
+                const SizedBox(height: 32),
+
+                // Enlaces a políticas
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 24,
+                  runSpacing: 12,
+                  children: [
+                    _PolicyLink(
+                      text: 'Política de Privacidad',
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrivacyPolicyPage(),
+                            ),
+                          ),
+                    ),
+                    _PolicyLink(
+                      text: 'Términos y Condiciones',
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TermsConditionsPage(),
+                            ),
+                          ),
+                    ),
+                    _PolicyLink(
+                      text: 'Política de Cookies',
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CookiePolicyPage(),
+                            ),
+                          ),
+                    ),
+                    _PolicyLink(
+                      text: 'Política de Reembolsos',
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RefundPolicyPage(),
+                            ),
+                          ),
+                    ),
+                  ],
+                ),
+
                 const SizedBox(height: 24),
                 // Copyright
                 const Text(
-                  '© 2025 ByLetyTravels. Todos los derechos reservados. | Contacto: info@byletytravels.com',
+                  '© 2025 ByLetyTravels. Todos los derechos reservados.',
                   style: TextStyle(color: Colors.white70, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Contacto: info@byletytravels.com | Tel: +54 9 3884102859',
+                  style: TextStyle(color: Colors.white60, fontSize: 12),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Widget para enlaces de políticas en el footer
+class _PolicyLink extends StatefulWidget {
+  final String text;
+  final VoidCallback onTap;
+
+  const _PolicyLink({required this.text, required this.onTap});
+
+  @override
+  State<_PolicyLink> createState() => _PolicyLinkState();
+}
+
+class _PolicyLinkState extends State<_PolicyLink> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            color: _isHovered ? const Color(0xFFFFDC00) : Colors.white60,
+            fontSize: 14,
+            decoration:
+                _isHovered ? TextDecoration.underline : TextDecoration.none,
+            decorationColor: const Color(0xFFFFDC00),
+          ),
+          child: Text(widget.text),
+        ),
       ),
     );
   }

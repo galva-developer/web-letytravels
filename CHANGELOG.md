@@ -4,6 +4,159 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.16.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 📄 Páginas de Políticas Legales
+
+Sistema completo de políticas y términos legales para cumplir con regulaciones y generar confianza.
+
+- **Privacy Policy Page** (`lib/presentation/pages/privacy_policy_page.dart`) ✅
+  - Página completa de Política de Privacidad
+  - **Secciones**:
+    * Información que recopilamos (personal, viaje, pago, navegación)
+    * Cómo usamos tu información
+    * Compartir información (solo con proveedores necesarios)
+    * Protección de datos (encriptación SSL, almacenamiento seguro)
+    * Derechos del usuario (acceso, corrección, eliminación, portabilidad)
+    * Política de cookies
+    * Protección de menores de edad
+    * Cambios en la política
+    * Información de contacto
+  - **Características**:
+    * Diseño limpio y legible
+    * Listas con viñetas para fácil escaneo
+    * Información de contacto destacada
+    * Banner de aceptación al final
+    * Fecha de última actualización
+    * Layout responsivo con ancho máximo 900px
+  - **Cumplimiento**: GDPR, CCPA, leyes de privacidad
+
+- **Terms and Conditions Page** (`lib/presentation/pages/terms_conditions_page.dart`) ✅
+  - Página completa de Términos y Condiciones
+  - **Secciones (13 puntos)**:
+    * 1. Aceptación de términos
+    * 2. Descripción del servicio
+    * 3. Proceso de reserva
+    * 4. Precios y pagos (USD, múltiples métodos, depósito 30%)
+    * 5. Cancelaciones y reembolsos (política general)
+    * 6. Documentación de viaje (responsabilidades del cliente)
+    * 7. Seguros de viaje (recomendaciones)
+    * 8. Limitación de responsabilidad
+    * 9. Comportamiento del cliente
+    * 10. Propiedad intelectual
+    * 11. Modificaciones del servicio
+    * 12. Resolución de disputas
+    * 13. Información de contacto
+  - **Características**:
+    * Banner de advertencia destacado
+    * Formato fácil de leer
+    * Listas detalladas por sección
+    * Información de contacto legal
+  - **Protección Legal**: Términos vinculantes para reservas
+
+- **Cookie Policy Page** (`lib/presentation/pages/cookie_policy_page.dart`) ✅
+  - Página explicativa sobre uso de cookies
+  - **Secciones**:
+    * Qué son las cookies
+    * Cómo utilizamos las cookies
+    * Tipos de cookies (4 categorías)
+    * Cookies de terceros (Google, Facebook, Stripe, etc.)
+    * Duración de las cookies
+    * Cómo controlar las cookies
+    * Consecuencias de deshabilitar cookies
+    * Actualizaciones de la política
+  - **4 Tipos de Cookies**:
+    * Esenciales ✅ (verde) - No pueden desactivarse
+    * Rendimiento ⚡ (azul) - Analytics y métricas
+    * Funcionalidad ⚙️ (naranja) - Preferencias de usuario
+    * Marketing 📢 (morado) - Publicidad y remarketing
+  - **Características**:
+    * Cards coloridas para cada tipo de cookie
+    * Instrucciones por navegador (Chrome, Firefox, Safari, Edge)
+    * Ejemplos específicos de cada categoría
+    * Banner de aceptación
+  - **Cumplimiento**: GDPR, ePrivacy Directive
+
+- **Refund Policy Page** (`lib/presentation/pages/refund_policy_page.dart`) ✅
+  - Página completa de Política de Reembolsos
+  - **Política de Cancelación por Tiempo**:
+    * 30+ días: 100% reembolso ✅ (verde)
+    * 15-30 días: 50% reembolso ⚠️ (naranja)
+    * <15 días: 0% reembolso ❌ (rojo)
+  - **Secciones (11 puntos)**:
+    * 1. Política general de cancelación
+    * 2. Proceso de cancelación (email, timeframes)
+    * 3. Excepciones (emergencias médicas, fallecimientos, desastres)
+    * 4. Modificación de reservas (cambios de fecha/destino)
+    * 5. Servicios no reembolsables
+    * 6. Cancelación por parte de ByLetyTravels
+    * 7. No shows (sin reembolso)
+    * 8. Retrasos y cancelaciones de vuelos
+    * 9. Método de reembolso (mismo método original)
+    * 10. Seguros de viaje (recomendaciones)
+    * 11. Información de contacto
+  - **Características**:
+    * Cards visuales por tier de reembolso
+    * Consejos para evitar cargos
+    * Banner de advertencia importante
+    * Proceso claro paso a paso
+  - **Transparencia**: Política clara y justa
+
+- **Integración en Footer** ✅
+  - Enlaces a las 4 políticas en el footer
+  - **Ubicación**: Entre redes sociales y copyright
+  - **Layout**: Wrap responsive que se adapta al ancho
+  - **Diseño**:
+    * Enlaces horizontales con spacing de 24px
+    * Hover: Color amarillo + subrayado
+    * Animación suave (200ms)
+    * Cursor pointer
+  - **Enlaces**:
+    1. Política de Privacidad
+    2. Términos y Condiciones
+    3. Política de Cookies
+    4. Política de Reembolsos
+  - **Navegación**: Click abre página completa con AppBar y back button
+
+### 🔧 Mejoras
+
+- Footer reorganizado con mejor estructura
+- Información de contacto más visible
+- Enlaces interactivos con hover effects
+- Diseño profesional y confiable
+- Cumplimiento legal mejorado
+
+### 🎨 UI/UX
+
+- Páginas legibles con tipografía clara
+- Secciones numeradas para fácil referencia
+- Listas con viñetas para mejor escaneo
+- Cards coloridas para categorización
+- Banners de información destacados
+- Diseño responsive (max-width 900px)
+- AppBar con botón de retorno
+- Scroll suave en páginas largas
+
+### ⚖️ Cumplimiento Legal
+
+- **GDPR**: Política de privacidad completa
+- **CCPA**: Derechos del consumidor claros
+- **ePrivacy**: Política de cookies detallada
+- **Transparencia**: Términos y condiciones explícitos
+- **Confianza**: Políticas de reembolso justas
+- **Protección**: Información de contacto legal
+
+### 📚 Documentación
+
+- 4 páginas legales completas
+- Contenido profesional y comprensible
+- Fácil actualización con fecha automática
+- Enlaces accesibles desde cualquier página
+
+---
+
 ## [v0.15.0] - 2025-01-12
 
 ### ✨ Nueva Funcionalidad

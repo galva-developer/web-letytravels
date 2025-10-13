@@ -331,55 +331,28 @@ Próximos pasos:
   - Hover effects con overlay gradient
   - Loading states y error handling
 
-- [ ] **Contador de seguidores**
-  - "10K+ seguidores en Instagram"
-  - "5K+ viajeros felices en Facebook"
-
-#### 7. FAQ (Preguntas Frecuentes)
-- [ ] Sección de FAQ expandible/colapsable
-- [ ] Preguntas categorizadas:
-  - Sobre reservas
-  - Sobre pagos
-  - Sobre cancelaciones
-  - Sobre documentación
-  - Sobre seguros
-  - Sobre equipaje
-
-**Ejemplo de FAQs:**
-```
-❓ ¿Cómo puedo reservar un paquete?
-▼ Puedes reservar directamente desde nuestra web...
-
-❓ ¿Qué métodos de pago aceptan?
-▼ Aceptamos tarjetas, PayPal, transferencias...
-
-❓ ¿Cuál es la política de cancelación?
-▼ Puedes cancelar hasta 30 días antes...
-```
-
-#### 8. Chat en Vivo (Opcional)
-- [ ] Integrar sistema de chat en vivo
-- [ ] Opciones:
-  - Tawk.to (gratis)
-  - Tidio
-  - Zendesk Chat
-  - Intercom
-- [ ] Respuestas automáticas con IA
-- [ ] Horario de atención visible
-- [ ] Mensaje offline cuando no hay asesores
-
-#### 9. Certificaciones y Confianza
-- [ ] **Badges de confianza**
-  - Certificado de seguridad SSL
-  - Registro oficial de turismo
-  - Miembro de asociaciones de turismo
-  - Premios y reconocimientos
-
-- [ ] **Políticas visibles**
-  - Política de privacidad
-  - Términos y condiciones
-  - Política de cookies
-  - Política de reembolso
+- [x] **Políticas visibles** ✅ COMPLETADO (v0.16.0)
+  - [x] Política de privacidad
+    * 9 secciones (datos recopilados, uso, protección, derechos)
+    * Banner de aceptación
+    * Contacto: privacy@byletytravels.com
+  - [x] Términos y condiciones
+    * 13 secciones (servicio, reservas, pagos, cancelaciones)
+    * Términos legales completos
+    * Contacto: legal@byletytravels.com
+  - [x] Política de cookies
+    * 4 tipos de cookies (Esenciales, Rendimiento, Funcionalidad, Marketing)
+    * Instrucciones por navegador (Chrome, Firefox, Safari, Edge)
+    * Cards coloridas con iconos
+  - [x] Política de reembolso
+    * Tiers de cancelación (30+ días: 100%, 15-30: 50%, <15: 0%)
+    * Excepciones y casos especiales
+    * Consejos y recomendaciones
+    * Contacto: cancellations@byletytravels.com
+  - [x] Integración en footer
+    * 4 enlaces interactivos con hover effects
+    * Navegación completa a cada página
+    * Layout responsivo (Wrap)
 
 ---
 
@@ -719,6 +692,35 @@ dependencies:
 - [ ] **Gestión de suscripción**
   - Link para darse de baja
   - Política de privacidad visible
+
+#### FAQ (Preguntas Frecuentes)
+- [ ] Sección de FAQ expandible/colapsable
+- [ ] Preguntas categorizadas:
+  - Sobre reservas
+  - Sobre pagos
+  - Sobre cancelaciones
+  - Sobre documentación
+  - Sobre seguros
+  - Sobre equipaje
+
+**Ejemplo de FAQs:**
+```
+❓ ¿Cómo puedo reservar un paquete?
+▼ Puedes reservar directamente desde nuestra web...
+
+❓ ¿Qué métodos de pago aceptan?
+▼ Aceptamos tarjetas, PayPal, transferencias...
+
+❓ ¿Cuál es la política de cancelación?
+▼ Puedes cancelar hasta 30 días antes...
+```
+
+#### Certificaciones y Confianza
+- [ ] **Badges de confianza**
+  - Certificado de seguridad SSL
+  - Registro oficial de turismo
+  - Miembro de asociaciones de turismo
+  - Premios y reconocimientos
 
 ---
 
