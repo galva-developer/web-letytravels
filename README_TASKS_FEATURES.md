@@ -331,7 +331,7 @@ Próximos pasos:
   - Hover effects con overlay gradient
   - Loading states y error handling
 
-- [x] **Políticas visibles** ✅ COMPLETADO (v0.16.0)
+- [x] **Políticas visibles**
   - [x] Política de privacidad
     * 9 secciones (datos recopilados, uso, protección, derechos)
     * Banner de aceptación
@@ -353,200 +353,6 @@ Próximos pasos:
     * 4 enlaces interactivos con hover effects
     * Navegación completa a cada página
     * Layout responsivo (Wrap)
-
----
-
-## 🌟 Características Generales
-
-### ✅ Funcionalidades Transversales
-
-#### 1. Sistema de Autenticación (Opcional pero recomendado)
-- [ ] Registro de usuarios
-- [ ] Login con email/contraseña
-- [ ] Login con Google
-- [ ] Login con Facebook
-- [ ] Recuperación de contraseña
-- [ ] Perfil de usuario
-- [ ] Historial de reservas
-
-#### 2. Panel de Usuario
-- [ ] Mis Reservas
-- [ ] Mis Favoritos
-- [ ] Mis Datos Personales
-- [ ] Cambiar Contraseña
-- [ ] Preferencias de notificaciones
-- [ ] Historial de pagos
-- [ ] Descargar facturas
-
-#### 3. Sistema de Notificaciones
-- [ ] Email de bienvenida
-- [ ] Email de confirmación de reserva
-- [ ] Email de recordatorio (7 días antes del viaje)
-- [ ] Email de seguimiento post-viaje
-- [ ] Notificaciones push en web
-- [ ] SMS para confirmaciones importantes
-
-#### 4. Blog de Viajes (Contenido)
-- [ ] Sección de blog/artículos
-- [ ] Guías de destinos
-- [ ] Tips de viaje
-- [ ] Experiencias de viajeros
-- [ ] SEO optimizado
-- [ ] Compartir en redes sociales
-- [ ] Comentarios en artículos
-
-#### 5. Comparador de Paquetes
-- [ ] Seleccionar hasta 3 paquetes
-- [ ] Tabla comparativa lado a lado
-- [ ] Comparar: Precio, servicios, duración, hotel
-- [ ] Highlighting de diferencias
-- [ ] Botón "Elegir este" en cada columna
-
-#### 6. Sistema de Cupones/Descuentos
-- [ ] Campo para ingresar código de cupón
-- [ ] Validación de cupones
-- [ ] Mostrar descuento aplicado
-- [ ] Cupones por:
-  - Primera reserva
-  - Referidos
-  - Temporada baja
-  - Early booking
-- [ ] Fecha de expiración de cupones
-
-#### 7. Programa de Referidos
-- [ ] Código de referido único por usuario
-- [ ] Compartir código con amigos
-- [ ] Beneficios:
-  - Referidor: 10% descuento
-  - Referido: 5% descuento
-- [ ] Dashboard de referidos
-- [ ] Tracking de referidos exitosos
-
----
-
-## 🔧 Integraciones Técnicas
-
-### ✅ Servicios a Integrar
-
-#### 1. Email Service
-- [ ] Integrar SendGrid o Mailgun
-- [ ] Templates de email profesionales
-- [ ] Emails transaccionales
-- [ ] Emails de marketing
-- [ ] Tracking de apertura de emails
-
-#### 2. WhatsApp Business API
-- [ ] Configurar WhatsApp Business
-- [ ] Mensajes automáticos
-- [ ] Confirmaciones por WhatsApp
-- [ ] Recordatorios de viaje
-- [ ] Soporte por WhatsApp
-
-#### 3. Pasarela de Pago
-- [ ] Integrar Stripe
-- [ ] Integrar PayPal
-- [ ] Mercado Pago (para Latinoamérica)
-- [ ] Izipay / Niubiz (Perú)
-- [ ] Entorno de prueba configurado
-- [ ] Webhooks para confirmaciones
-
-#### 4. Google Services
-- [ ] Google Analytics 4
-- [ ] Google Tag Manager
-- [ ] Google Search Console
-- [ ] Google My Business
-- [ ] Google Maps API
-- [ ] Google Calendar API (para citas)
-
-#### 5. Redes Sociales
-- [ ] Facebook Pixel para remarketing
-- [ ] Instagram Feed API
-- [ ] Share buttons optimizados
-- [ ] Open Graph tags
-- [ ] Twitter Cards
-
-#### 6. CRM (Customer Relationship Management)
-- [ ] Integrar con HubSpot (gratis)
-- [ ] O Zoho CRM
-- [ ] Gestión de leads
-- [ ] Automatización de marketing
-- [ ] Pipeline de ventas
-
-#### 7. Storage de Imágenes
-- [ ] Cloudinary para optimización de imágenes
-- [ ] O Firebase Storage
-- [ ] CDN para carga rápida
-- [ ] Lazy loading de imágenes
-- [ ] WebP format para mejor compresión
-
-#### 8. Base de Datos
-- [ ] Firebase Firestore (NoSQL)
-- [ ] O PostgreSQL con Supabase
-- [ ] Colecciones:
-  - packages (paquetes)
-  - bookings (reservas)
-  - users (usuarios)
-  - reviews (reseñas)
-  - coupons (cupones)
-
----
-
-## 🎨 Mejoras de UI/UX
-
-### ✅ Diseño y Experiencia
-
-#### 1. Animaciones y Transiciones
-- [ ] Scroll animations (elementos aparecen al scroll)
-- [ ] Hover effects en cards
-- [ ] Loading skeletons mientras carga contenido
-- [ ] Page transitions suaves
-- [ ] Micro-interactions en botones
-- [ ] Parallax effect en hero section
-
-**Paquetes útiles:**
-```yaml
-dependencies:
-  animate_do: ^3.1.2
-  shimmer: ^3.0.0
-  lottie: ^2.7.0
-```
-
-#### 2. Dark Mode (Opcional)
-- [ ] Toggle para cambiar entre light/dark
-- [ ] Guardar preferencia en localStorage
-- [ ] Colores adaptados para modo oscuro
-- [ ] Transición suave entre modos
-
-#### 3. Accesibilidad
-- [ ] Alt text en todas las imágenes
-- [ ] ARIA labels en elementos interactivos
-- [ ] Navegación por teclado
-- [ ] Contraste de colores adecuado (WCAG)
-- [ ] Tamaños de fuente escalables
-- [ ] Focus indicators visibles
-
-#### 4. Performance
-- [ ] Lazy loading de imágenes
-- [ ] Code splitting
-- [ ] Minificación de assets
-- [ ] Compresión gzip
-- [ ] Optimización de imágenes (WebP)
-- [ ] Service Worker para PWA
-- [ ] Caching estratégico
-
-#### 5. Feedback Visual
-- [ ] Loading spinners
-- [ ] Progress bars
-- [ ] Toast notifications para acciones
-- [ ] Confirmaciones modales
-- [ ] Estados de error claros
-- [ ] Estados vacíos (empty states)
-
-#### 6. Breadcrumbs
-- [ ] Navegación breadcrumb
-- [ ] Ejemplo: Home > Paquetes > Europa > París
-- [ ] Links clickeables
-- [ ] Útil para SEO
 
 ---
 
@@ -593,59 +399,9 @@ dependencies:
 
 ---
 
-## 📊 Priorización de Tareas
+## ✅ Checklist de Implementación a Largo Plazo
 
-### 🔴 Alta Prioridad (Hacer primero)
-
-1. ✅ Mejorar Hero Section con slider
-2. ✅ Implementar filtros en sección Paquetes
-3. ✅ Crear modal de detalles de paquete
-4. ✅ Formulario de reserva completo
-5. ✅ WhatsApp integration flotante
-6. ✅ Formulario de contacto funcional
-7. ✅ Responsive design para móvil
-8. ✅ Sistema de envío de emails
-
-### 🟡 Media Prioridad (Hacer después)
-
-9. ✅ Sistema de favoritos
-10. ✅ Testimonios de clientes
-11. ✅ FAQ section
-12. ✅ Blog básico
-13. ✅ Google Maps integration
-14. ✅ Redes sociales links
-15. ✅ Newsletter signup
-
-### 🟢 Baja Prioridad (Hacer cuando sea posible)
-
-16. ✅ Sistema de autenticación
-17. ✅ Chat en vivo
-18. ✅ Pasarela de pago real
-19. ✅ Programa de referidos
-20. ✅ Dark mode
-21. ✅ PWA completa
-22. ✅ Múltiples idiomas
-
----
-
-## 📈 Métricas de Éxito
-
-### KPIs a Medir
-
-- [ ] **Tráfico web**: Visitas mensuales
-- [ ] **Tasa de conversión**: Visitas → Reservas
-- [ ] **Bounce rate**: Tiempo en sitio
-- [ ] **Clicks en WhatsApp**: Engagement
-- [ ] **Formularios completados**: Leads generados
-- [ ] **Paquetes más vistos**: Optimizar oferta
-- [ ] **Origen del tráfico**: SEO, redes, directo
-- [ ] **Dispositivos usados**: Móvil vs Desktop
-
----
-
-## ✅ Checklist de Implementación
-
-### Fase 1: MVP (4-6 semanas)
+### MVP
 - [ ] Hero section mejorado
 - [ ] Catálogo de paquetes funcional
 - [ ] Formulario de contacto
@@ -653,7 +409,7 @@ dependencies:
 - [ ] Responsive básico
 - [ ] Deploy en Firebase
 
-### Fase 2: Features Core (6-8 semanas)
+### Features Core
 - [ ] Sistema de filtros
 - [ ] Modal de detalles
 - [ ] Formulario de reserva
@@ -661,7 +417,7 @@ dependencies:
 - [ ] Google Maps
 - [ ] Blog básico
 
-### Fase 3: Optimización (4-6 semanas)
+### Optimización
 - [ ] Sistema de pago
 - [ ] Autenticación
 - [ ] Panel de usuario
@@ -669,7 +425,7 @@ dependencies:
 - [ ] SEO optimization
 - [ ] Performance tuning
 
-### Fase 4: Advanced (Ongoing)
+### Advanced
 - [ ] Chat en vivo
 - [ ] CRM integration
 - [ ] Marketing automation
@@ -722,6 +478,129 @@ dependencies:
   - Miembro de asociaciones de turismo
   - Premios y reconocimientos
 
+#### Sistema de Autenticación (Opcional pero recomendado)
+- [ ] Registro de usuarios
+- [ ] Login con email/contraseña
+- [ ] Login con Google
+- [ ] Login con Facebook
+- [ ] Recuperación de contraseña
+- [ ] Perfil de usuario
+- [ ] Historial de reservas
+
+#### Panel de Usuario
+- [ ] Mis Reservas
+- [ ] Mis Favoritos
+- [ ] Mis Datos Personales
+- [ ] Cambiar Contraseña
+- [ ] Preferencias de notificaciones
+- [ ] Historial de pagos
+- [ ] Descargar facturas
+
+#### Sistema de Notificaciones
+- [ ] Email de bienvenida
+- [ ] Email de confirmación de reserva
+- [ ] Email de recordatorio (7 días antes del viaje)
+- [ ] Email de seguimiento post-viaje
+- [ ] Notificaciones push en web
+- [ ] SMS para confirmaciones importantes
+
+#### Blog de Viajes (Contenido)
+- [ ] Sección de blog/artículos
+- [ ] Guías de destinos
+- [ ] Tips de viaje
+- [ ] Experiencias de viajeros
+- [ ] SEO optimizado
+- [ ] Compartir en redes sociales
+- [ ] Comentarios en artículos
+
+#### Comparador de Paquetes
+- [ ] Seleccionar hasta 3 paquetes
+- [ ] Tabla comparativa lado a lado
+- [ ] Comparar: Precio, servicios, duración, hotel
+- [ ] Highlighting de diferencias
+- [ ] Botón "Elegir este" en cada columna
+
+#### Sistema de Cupones/Descuentos
+- [ ] Campo para ingresar código de cupón
+- [ ] Validación de cupones
+- [ ] Mostrar descuento aplicado
+- [ ] Cupones por:
+  - Primera reserva
+  - Referidos
+  - Temporada baja
+  - Early booking
+- [ ] Fecha de expiración de cupones
+
+#### Programa de Referidos
+- [ ] Código de referido único por usuario
+- [ ] Compartir código con amigos
+- [ ] Beneficios:
+  - Referidor: 10% descuento
+  - Referido: 5% descuento
+- [ ] Dashboard de referidos
+- [ ] Tracking de referidos exitosos
+
+#### Email Service
+- [ ] Integrar SendGrid o Mailgun
+- [ ] Templates de email profesionales
+- [ ] Emails transaccionales
+- [ ] Emails de marketing
+- [ ] Tracking de apertura de emails
+
+#### WhatsApp Business API
+- [ ] Configurar WhatsApp Business
+- [ ] Mensajes automáticos
+- [ ] Confirmaciones por WhatsApp
+- [ ] Recordatorios de viaje
+- [ ] Soporte por WhatsApp
+
+#### Pasarela de Pago
+- [ ] Integrar Stripe
+- [ ] Integrar PayPal
+- [ ] Mercado Pago (para Latinoamérica)
+- [ ] Izipay / Niubiz (Perú)
+- [ ] Entorno de prueba configurado
+- [ ] Webhooks para confirmaciones
+
+#### Google Services
+- [ ] Google Analytics 4
+- [ ] Google Tag Manager
+- [ ] Google Search Console
+- [ ] Google My Business
+- [ ] Google Maps API
+- [ ] Google Calendar API (para citas)
+
+#### Redes Sociales
+- [ ] Facebook Pixel para remarketing
+- [ ] Instagram Feed API
+- [ ] Share buttons optimizados
+- [ ] Open Graph tags
+- [ ] Twitter Cards
+
+#### CRM (Customer Relationship Management)
+- [ ] Integrar con HubSpot (gratis)
+- [ ] O Zoho CRM
+- [ ] Gestión de leads
+- [ ] Automatización de marketing
+- [ ] Pipeline de ventas
+
+#### Storage de Imágenes
+- [ ] Cloudinary para optimización de imágenes
+- [ ] O Firebase Storage
+- [ ] CDN para carga rápida
+- [ ] Lazy loading de imágenes
+- [ ] WebP format para mejor compresión
+
+#### Base de Datos
+- [ ] Firebase Firestore (NoSQL)
+- [ ] O PostgreSQL con Supabase
+- [ ] Colecciones:
+  - packages (paquetes)
+  - bookings (reservas)
+  - users (usuarios)
+  - reviews (reseñas)
+  - coupons (cupones)
+
 ---
 
 ## 🎯 Objetivos Finales
@@ -740,8 +619,6 @@ Al completar todas estas tareas, tu sitio web tendrá:
 ---
 
 <div align="center">
-
-**¡Manos a la obra! 🚀**
 
 Tu agencia de viajes estará lista para competir con las mejores plataformas del mercado.
 
