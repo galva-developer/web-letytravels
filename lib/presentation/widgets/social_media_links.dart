@@ -219,10 +219,10 @@ class SocialMediaLinksCompact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SocialMediaLinks(
-      iconSize: 24,
+      iconSize: 22,
       showLabels: false,
       alignment: MainAxisAlignment.end,
-      spacing: 12,
+      spacing: 6,
     );
   }
 }

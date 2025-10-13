@@ -319,52 +319,60 @@ class ContactFooterSection extends StatelessWidget {
                       children: [
                         _PolicyLink(
                           text: 'Política de Privacidad',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PrivacyPolicyPage(),
-                            ),
-                          ),
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const PrivacyPolicyPage(),
+                                ),
+                              ),
                         ),
                         _PolicyLink(
                           text: 'Términos y Condiciones',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TermsConditionsPage(),
-                            ),
-                          ),
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const TermsConditionsPage(),
+                                ),
+                              ),
                         ),
                         _PolicyLink(
                           text: 'Política de Cookies',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CookiePolicyPage(),
-                            ),
-                          ),
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const CookiePolicyPage(),
+                                ),
+                              ),
                         ),
                         _PolicyLink(
                           text: 'Política de Reembolsos',
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const RefundPolicyPage(),
-                            ),
-                          ),
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const RefundPolicyPage(),
+                                ),
+                              ),
                         ),
                       ],
                     ),
 
                     const SizedBox(height: 32),
-                    
+
                     // Separador visual
                     Container(
                       height: 1,
                       color: Colors.white24,
                       margin: const EdgeInsets.symmetric(vertical: 24),
                     ),
-                    
+
                     // Copyright y contacto
                     Column(
                       children: [
@@ -429,7 +437,8 @@ class ContactFooterSection extends StatelessWidget {
                                 }
                               },
                               child: const Tooltip(
-                                message: 'Enviar email a alvaro.gonzales.dev@gmail.com',
+                                message:
+                                    'Enviar email a alvaro.gonzales.dev@gmail.com',
                                 child: MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: Icon(
