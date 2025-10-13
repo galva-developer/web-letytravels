@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:by_lety_travels/presentation/pages/home_page.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 import 'package:by_lety_travels/presentation/providers/search_provider.dart';
 
-void main() {
+void main() async {
+  // Ensure Flutter binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Pre-initialize SharedPreferences to avoid delays in production
+  try {
+    await SharedPreferences.getInstance();
+  } catch (e) {
+    debugPrint('Warning: Failed to pre-initialize SharedPreferences: $e');
+  }
+
   runApp(const MyApp());
 }
 

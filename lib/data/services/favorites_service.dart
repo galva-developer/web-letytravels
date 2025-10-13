@@ -1,63 +1,122 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 // Service to manage favorite packages using localStorage (SharedPreferences)
 class FavoritesService {
   static const String _favoritesKey = 'favorite_packages';
 
+  // Cache the SharedPreferences instance for better performance
+  static SharedPreferences? _prefsInstance;
+
+  // Get SharedPreferences instance with caching
+  Future<SharedPreferences> _getPrefs() async {
+    _prefsInstance ??= await SharedPreferences.getInstance();
+    return _prefsInstance!;
+  }
+
   // Add a package to favorites
   Future<void> addFavorite(String packageTitle) async {
-    final prefs = await SharedPreferences.getInstance();
-    final favorites = await getFavorites();
+    try {
+      final prefs = await _getPrefs();
+      final favorites = await getFavorites();
 
-    if (!favorites.contains(packageTitle)) {
-      favorites.add(packageTitle);
-      await prefs.setStringList(_favoritesKey, favorites);
+      if (!favorites.contains(packageTitle)) {
+        favorites.add(packageTitle);
+        await prefs.setStringList(_favoritesKey, favorites);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding favorite: $e');
+      }
+      rethrow;
     }
   }
 
   // Remove a package from favorites
   Future<void> removeFavorite(String packageTitle) async {
-    final prefs = await SharedPreferences.getInstance();
-    final favorites = await getFavorites();
+    try {
+      final prefs = await _getPrefs();
+      final favorites = await getFavorites();
 
-    favorites.remove(packageTitle);
-    await prefs.setStringList(_favoritesKey, favorites);
+      favorites.remove(packageTitle);
+      await prefs.setStringList(_favoritesKey, favorites);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error removing favorite: $e');
+      }
+      rethrow;
+    }
   }
 
   // Get all favorite package titles
   Future<List<String>> getFavorites() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(_favoritesKey) ?? [];
+    try {
+      final prefs = await _getPrefs();
+      return prefs.getStringList(_favoritesKey) ?? [];
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting favorites: $e');
+      }
+      return [];
+    }
   }
 
   // Check if a package is in favorites
   Future<bool> isFavorite(String packageTitle) async {
-    final favorites = await getFavorites();
-    return favorites.contains(packageTitle);
+    try {
+      final favorites = await getFavorites();
+      return favorites.contains(packageTitle);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error checking favorite: $e');
+      }
+      return false;
+    }
   }
 
   // Get number of favorites
   Future<int> getFavoritesCount() async {
-    final favorites = await getFavorites();
-    return favorites.length;
+    try {
+      final favorites = await getFavorites();
+      return favorites.length;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting favorites count: $e');
+      }
+      return 0;
+    }
   }
 
   // Clear all favorites
   Future<void> clearFavorites() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_favoritesKey);
+    try {
+      final prefs = await _getPrefs();
+      await prefs.remove(_favoritesKey);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error clearing favorites: $e');
+      }
+      rethrow;
+    }
   }
 
   // Toggle favorite status
   Future<bool> toggleFavorite(String packageTitle) async {
-    final isFav = await isFavorite(packageTitle);
+    try {
+      final isFav = await isFavorite(packageTitle);
 
-    if (isFav) {
-      await removeFavorite(packageTitle);
-      return false;
-    } else {
-      await addFavorite(packageTitle);
-      return true;
+      if (isFav) {
+        await removeFavorite(packageTitle);
+        return false;
+      } else {
+        await addFavorite(packageTitle);
+        return true;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error toggling favorite: $e');
+      }
+      rethrow;
     }
   }
 }

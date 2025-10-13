@@ -35,10 +35,26 @@ class FavoritesProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _favoriteTitles = await _favoritesService.getFavorites();
-
-    _isLoading = false;
-    notifyListeners();
+    try {
+      // Add timeout to prevent infinite loading in production
+      _favoriteTitles = await _favoritesService.getFavorites().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          if (kDebugMode) {
+            print('Warning: Loading favorites timed out, using empty list');
+          }
+          return <String>[];
+        },
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading favorites: $e');
+      }
+      _favoriteTitles = [];
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Check if a package is favorite
