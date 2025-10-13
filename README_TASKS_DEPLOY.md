@@ -194,17 +194,14 @@ flutter clean
 ### Paso 11: Generar Build Optimizado
 
 ```bash
-flutter build web --release --web-renderer html
+flutter build web --release
 ```
 
-**Opciones del renderer:**
-- `html`: Mejor compatibilidad con navegadores antiguos
-- `canvaskit`: Mejor rendimiento y fidelidad visual
-
-Para una experiencia óptima, también puedes probar:
-```bash
-flutter build web --release --web-renderer auto
-```
+**Nota**: La opción `--web-renderer` fue eliminada en versiones recientes de Flutter (3.x+).
+Flutter ahora automáticamente:
+- Usa **CanvasKit** por defecto (mejor rendimiento y fidelidad visual)
+- Hace fallback a **HTML renderer** cuando es necesario
+- Optimiza según el navegador del usuario
 
 ### Paso 12: Verificar el Build
 

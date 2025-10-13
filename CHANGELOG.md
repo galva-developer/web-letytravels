@@ -41,20 +41,29 @@ Registro de cambios y mejoras implementadas en el proyecto.
 - Instancias de SharedPreferences: **Múltiples → 1 cacheada**
 - Estado de loading: **Potencialmente infinito → Máximo 5 segundos**
 
+**Build y Deploy**:
+```bash
+flutter clean
+flutter pub get
+flutter build web --release  # Comando actualizado (sin --web-renderer)
+firebase deploy --only hosting
+```
+
+**Nota**: Actualizado comando de build a `flutter build web --release` (sin `--web-renderer`) ya que la opción fue eliminada en Flutter 3.x+.
+
 **Testing**:
 - ✅ Test local con `flutter run -d chrome` - OK
-- ✅ Test de build local con `firebase serve` - OK
-- ✅ Favoritos persisten al recargar página - OK
-- ✅ Sin errores en consola del navegador - OK
+- ✅ Build de producción generado exitosamente
+- ✅ Deploy a Firebase Hosting completado
+- ✅ Hosting URL: https://web-letytravels.web.app
 
 **Archivos Modificados**:
 - `lib/main.dart` - Pre-inicialización de SharedPreferences
 - `lib/presentation/providers/favorites_provider.dart` - Timeout y error handling
 - `lib/data/services/favorites_service.dart` - Caché y manejo robusto de errores
+- `README_TASKS_DEPLOY.md` - Actualizado comando de build para Flutter 3.x+
 
-**Documentación**: Ver `FIX_FAVORITOS_DEPLOY.md` para detalles completos y troubleshooting.
-
-**Status**: ✅ **LISTO PARA DEPLOY A PRODUCCIÓN**
+**Status**: ✅ **DESPLEGADO EN PRODUCCIÓN**
 
 ---
 
