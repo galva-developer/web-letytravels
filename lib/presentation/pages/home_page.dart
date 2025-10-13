@@ -10,6 +10,7 @@ import 'package:by_lety_travels/presentation/widgets/sections/contact_footer_sec
 import 'package:by_lety_travels/data/repositories/sample_packages.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 import 'package:by_lety_travels/presentation/pages/search_results_page.dart';
+import 'package:by_lety_travels/presentation/widgets/floating_whatsapp_button.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -421,24 +422,30 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(width: 8),
         ],
       ),
-      body: SingleChildScrollView(
-        // Keep SingleChildScrollView for overall page scroll
-        child: Column(
-          children: <Widget>[
-            HeroSection(sectionKey: _heroSectionKey),
-            // New Filterable Packages Section with Advanced Filters
-            FilterablePackagesSection(
-              sectionKey: _popularDestinationsSectionKey,
-              allPackages: SamplePackages.allPackages,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            // Keep SingleChildScrollView for overall page scroll
+            child: Column(
+              children: <Widget>[
+                HeroSection(sectionKey: _heroSectionKey),
+                // New Filterable Packages Section with Advanced Filters
+                FilterablePackagesSection(
+                  sectionKey: _popularDestinationsSectionKey,
+                  allPackages: SamplePackages.allPackages,
+                ),
+                OurPackagesSection(
+                  sectionKey: _ourPackagesSectionKey,
+                ), // Use the new, unique key
+                MyFavoritesSection(sectionKey: _favoritesSectionKey),
+                BookingSection(sectionKey: _bookingSectionKey),
+                ContactFooterSection(sectionKey: _contactSectionKey),
+              ],
             ),
-            OurPackagesSection(
-              sectionKey: _ourPackagesSectionKey,
-            ), // Use the new, unique key
-            MyFavoritesSection(sectionKey: _favoritesSectionKey),
-            BookingSection(sectionKey: _bookingSectionKey),
-            ContactFooterSection(sectionKey: _contactSectionKey),
-          ],
-        ),
+          ),
+          // Botón flotante de WhatsApp
+          const FloatingWhatsAppButton(),
+        ],
       ),
     );
   }

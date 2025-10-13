@@ -4,6 +4,418 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.14.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 📅 Sistema de Citas para Asesoría Personalizada
+
+Implementación completa del sistema de reserva de citas con calendario interactivo y múltiples modalidades de atención.
+
+- **Modelo Appointment** (`lib/data/models/appointment.dart`) ✅
+  - Modelo para gestión de citas de asesoría
+  - **Campos**:
+    * `id` (String) - Identificador único (UUID)
+    * `date` (DateTime) - Fecha de la cita
+    * `timeSlot` (String) - Hora en formato "09:00 AM"
+    * `type` (AppointmentType) - Tipo de cita
+    * `clientName` (String) - Nombre del cliente
+    * `clientEmail` (String) - Email del cliente
+    * `clientPhone` (String?) - Teléfono opcional
+    * `notes` (String?) - Notas adicionales
+    * `status` (AppointmentStatus) - Estado de la cita
+    * `createdAt` (DateTime) - Fecha de creación
+  - **Enum AppointmentType**: 3 modalidades
+    * `inPerson` - Cita presencial en oficina
+    * `video` - Videollamada (Google Meet/Zoom)
+    * `phone` - Llamada telefónica
+  - **Enum AppointmentStatus**: 5 estados
+    * `pending` - Pendiente de confirmación
+    * `confirmed` - Confirmada por el equipo
+    * `completed` - Cita completada
+    * `canceled` - Cancelada
+    * `noShow` - Cliente no se presentó
+  - **Métodos de Validación**:
+    * `isValid()` - Verifica campos requeridos y email
+    * `isFuture()` - Valida que la cita sea futura
+    * `canBeCanceled()` - Permite cancelar con 24h de anticipación
+    * `getInvalidReason()` - Retorna razón de invalidez
+  - **Getters**: `formattedDate`, `formattedTime`, `formattedDateTime`
+  - **Extensiones**: `displayName`, `icon`, `description` para tipos y estados
+  - Conversión: `toMap()`, `fromMap()`, `copyWith()`
+
+- **Modelo TimeSlot** (`lib/data/models/time_slot.dart`) ✅
+  - Modelo para slots de tiempo de 30 minutos
+  - **Campos**:
+    * `time` (String) - Hora en formato "09:00 AM"
+    * `isAvailable` (bool) - Disponibilidad del slot
+    * `hour` (int) - Hora en formato 24h
+    * `minute` (int) - Minutos
+  - **Factory**: `fromTime(hour, minute)` - Crea slot con formato
+  - **Métodos**: `isPast(date)`, `copyWith(isAvailable)`
+  - **TimeSlotGenerator** (clase estática):
+    * `generateDailySlots(date, bookedSlots)` - Genera slots del día
+    * **Horarios de Negocio**:
+      - Lunes a Viernes: 9:00 AM - 7:00 PM (20 slots)
+      - Sábados: 9:00 AM - 2:00 PM (10 slots)
+      - Domingos: Cerrado (0 slots)
+    * `getMorningSlots(slots)` - Filtra mañana (9AM-12PM)
+    * `getAfternoonSlots(slots)` - Filtra tarde (12PM-7PM)
+    * `hasAvailableSlots(date)` - Verifica disponibilidad del día
+    * `getNextAvailableSlot(fromDate)` - Encuentra próximo slot libre (60 días)
+
+- **AppointmentService** (`lib/data/services/appointment_service.dart`) ✅
+  - Servicio para gestión completa de citas
+  - **Storage**: Lista en memoria (preparado para Firebase/Supabase)
+  - **Métodos CRUD**:
+    * `getAppointments()` - Obtiene todas las citas
+    * `getAppointmentsByDate(date)` - Filtra por fecha
+    * `bookAppointment(appointment)` - Crea nueva cita con validación
+    * `updateAppointmentStatus(id, status)` - Actualiza estado
+    * `cancelAppointment(id)` - Cancela con validación 24h
+    * `confirmAppointment(id)` - Confirma la cita
+  - **Métodos de Disponibilidad**:
+    * `getBookedSlots(date)` - Obtiene slots ocupados
+    * `getAvailableSlots(date)` - Retorna lista de TimeSlot con disponibilidad
+    * `isSlotAvailable(date, timeSlot)` - Verifica slot específico
+    * `hasSlotsAvailable(date)` - Valida disponibilidad del día
+    * `getNextAvailableDate()` - Encuentra próxima fecha disponible
+  - **Métodos de Consulta**:
+    * `getPendingAppointments()` - Citas pendientes futuras
+    * `getConfirmedAppointments()` - Citas confirmadas futuras
+    * `getUpcomingAppointments()` - Próximos 7 días
+    * `getStatistics()` - Estadísticas por estado y tipo
+  - **Métodos de Desarrollo**:
+    * `clearAllAppointments()` - Limpia todas las citas
+    * `addSampleAppointments()` - Agrega datos de prueba
+
+- **AppointmentCalendar Widget** (`lib/presentation/widgets/appointment_calendar.dart`) ✅
+  - Calendario mensual interactivo para selección de fecha
+  - **Características**:
+    * Navegación de meses (anterior/siguiente)
+    * Encabezados de día de la semana (L M M J V S D)
+    * Grid de calendario con alineación correcta
+    * **Indicadores Visuales**:
+      - Fecha seleccionada: Fondo azul, texto blanco
+      - Día actual: Borde azul
+      - Fechas pasadas: Deshabilitadas, texto gris
+      - Domingos: Siempre deshabilitados (cerrado)
+      - Días con disponibilidad: Texto negro
+      - Días sin disponibilidad: Fondo gris claro
+    * Leyenda explicativa (Disponible/No disponible)
+    * Cache de disponibilidad para performance
+  - **Estado**: `_currentMonth`, `_selectedDate`, `_availabilityCache`
+  - **Métodos**: 
+    * `_loadAvailability()` - Carga disponibilidad del mes
+    * `_isDateAvailable()` - Verifica disponibilidad
+    * `_selectDate()` - Maneja selección
+  - **Callbacks**: `onDateSelected(DateTime)`
+  - **Restricciones**: No permite navegar a meses pasados
+
+- **AppointmentTimePicker Widget** (`lib/presentation/widgets/appointment_time_picker.dart`) ✅
+  - Selector de horarios con slots de 30 minutos
+  - **Características**:
+    * Carga asíncrona de slots disponibles
+    * **Separación por Periodo**:
+      - Mañana: 9:00 AM - 12:00 PM (☀️ icono sol)
+      - Tarde: 12:00 PM - 7:00 PM (🌆 icono twilight)
+    * **Visualización de Chips**:
+      - Slot seleccionado: Fondo azul, texto blanco, borde 2px, bold
+      - Slot disponible: Fondo blanco, borde gris
+      - Slot no disponible: Fondo gris, texto gris, no clickeable
+    * Estado vacío: Icono + mensaje cuando no hay slots
+    * Reactivo: Recarga al cambiar fecha
+  - **Estado**: `_allSlots`, `_selectedTime`, `_isLoading`
+  - **Callbacks**: `onTimeSelected(String)`
+  - Layout: Wrap responsive para slots
+
+- **AppointmentBookingDialog Widget** (`lib/presentation/widgets/appointment_booking_dialog.dart`) ✅
+  - Diálogo modal de 4 pasos para reservar cita
+  - **Estructura**:
+    * Header: Fondo azul, título, subtítulo, botón cerrar
+    * Body: Área scrollable con contenido del paso actual
+    * Footer: Fondo gris, botones de navegación
+  - **Paso 1: Selección de Fecha**:
+    * Indicador de progreso (4 barras)
+    * Texto de instrucciones
+    * Widget AppointmentCalendar
+    * Botón "Siguiente" habilitado al seleccionar fecha
+  - **Paso 2: Selección de Hora**:
+    * Widget AppointmentTimePicker para fecha seleccionada
+    * Resetea hora al volver del paso 3
+    * Botón "Siguiente" habilitado al seleccionar hora
+  - **Paso 3: Tipo de Cita**:
+    * 3 opciones en cards estilo radio:
+      - 🏢 Presencial - Reunión en oficina
+      - 📹 Video Llamada - Consulta virtual (defecto)
+      - 📞 Teléfono - Llamada telefónica
+    * Card seleccionada: Borde azul, fondo azul claro, check icon
+    * Siempre tiene una selección (video por defecto)
+  - **Paso 4: Formulario de Contacto**:
+    * Card de resumen (fondo azul): Fecha, hora, tipo
+    * **Campos del formulario**:
+      - Nombre completo* (min 3 caracteres)
+      - Email* (validación de formato)
+      - Teléfono (opcional, validación si se llena)
+      - Notas adicionales (opcional, max 500 caracteres)
+    * Botón "Confirmar Cita" (verde)
+  - **Gestión de Estado**:
+    * `_currentStep` (0-3)
+    * `_selectedDate`, `_selectedTime`, `_selectedType`
+    * Controladores: `_nameController`, `_emailController`, `_phoneController`, `_notesController`
+    * `_isSubmitting` para loading
+  - **Navegación**:
+    * Botón "Atrás": Visible en pasos 1-3
+    * Botón "Siguiente": Visible en pasos 0-2, habilitado si paso válido
+    * Botón "Confirmar": Paso 3, async con spinner
+  - **Envío**:
+    * Crea objeto Appointment
+    * Llama `AppointmentService.bookAppointment()`
+    * Éxito: Cierra diálogo, SnackBar verde con confirmación
+    * Error: SnackBar rojo con mensaje de error
+    * Loading: Botón deshabilitado con CircularProgressIndicator
+  - **AppointmentBookingButton**:
+    * Variante compacta: Icono + "Agendar"
+    * Variante completa: Icono + "Agendar Asesoría Gratuita"
+    * Fondo verde, texto blanco
+    * Abre diálogo con `showDialog()`
+
+- **Integración en ContactFooterSection** ✅
+  - Agregado botón de citas en las 3 layouts responsivas
+  - **Desktop (>900px)**: 3 columnas
+    * Columna 1: Información de contacto
+    * Columna 2: Asesoría personalizada (nuevo) 📅
+    * Columna 3: Consulta rápida
+  - **Tablet (>600px)**: 2 filas
+    * Fila 1: Info contacto + Asesoría (2 columnas)
+    * Fila 2: Consulta rápida (ancho completo)
+  - **Móvil (<600px)**: 3 cards apiladas
+    * Card 1: Información de contacto
+    * Card 2: Asesoría personalizada (nuevo) 📅
+    * Card 3: Consulta rápida
+  - **Diseño de Card de Asesoría**:
+    * Icono: `calendar_today` (verde)
+    * Título: "Asesoría Personalizada"
+    * Descripción: "Agenda una cita gratuita con nuestros expertos"
+    * Botón: AppointmentBookingButton
+    * Tema: Verde para diferenciar de otros métodos
+
+### 🔧 Mejoras
+
+- Optimización de cache de disponibilidad en calendario
+- Validación completa de formularios con mensajes específicos
+- Separación clara de slots AM/PM para mejor UX
+- Loading states en todos los pasos del proceso
+- Manejo robusto de errores con feedback al usuario
+- Layout responsivo completo en todas las pantallas
+
+### 📚 Documentación
+
+- Documentados todos los modelos de citas
+- Guía de uso del sistema de reservas
+- Especificación de horarios de negocio
+- Descripciones de tipos y estados de citas
+
+---
+
+## [v0.13.0] - 2025-01-12
+
+### ✨ Nueva Funcionalidad
+
+#### 📞 Sistema de Métodos de Contacto Rápido
+
+Implementación completa de los métodos de contacto rápido para mejorar la comunicación con los clientes.
+
+- **Modelo ContactInquiry** (`lib/data/models/contact_inquiry.dart`) ✅
+  - Modelo para consultas de contacto rápido
+  - Campos:
+    * `name` (String) - Nombre completo del cliente
+    * `email` (String) - Email del cliente
+    * `phone` (String?) - Teléfono opcional
+    * `message` (String) - Mensaje de consulta
+    * `timestamp` (DateTime) - Fecha y hora de la consulta
+    * `type` (InquiryType) - Tipo de consulta
+    * `subject` (String?) - Asunto opcional
+  - **Enum InquiryType**: 8 tipos de consulta
+    * General, PackageInfo, Booking, Modification
+    * Cancellation, Complaint, Payment, Other
+  - **Métodos de Validación**:
+    * `isValid()` - Verifica campos obligatorios
+    * `_isValidEmail()` - Valida formato de email
+    * `getInvalidReason()` - Retorna mensaje de error específico
+  - Conversión: `toMap()`, `fromMap()`, `copyWith()`
+
+- **ContactService** (`lib/data/services/contact_service.dart`) ✅
+  - Servicio centralizado para gestión de contactos
+  - **Información de Contacto**:
+    * Teléfono: +51 984 102 859
+    * WhatsApp: 51984102859
+    * Email: info@byletytravels.com
+    * Teléfono emergencia: +51 984 102 859
+  - **Horarios de Atención**:
+    * Lunes a Viernes: 9:00 AM - 7:00 PM
+    * Sábados: 9:00 AM - 2:00 PM
+    * Domingos: Cerrado
+  - **Métodos Principales**:
+    * `isOpenNow()` - Verifica si está abierto ahora
+    * `getCurrentBusinessHoursText()` - Obtiene horario actual
+    * `getAvailabilityStatus()` - Estado: "En línea" o "Fuera de horario"
+    * `getWhatsAppMessage()` - Genera mensaje predefinido
+    * `getWhatsAppUrl()` - URL con mensaje para WhatsApp
+    * `getPhoneCallUrl()` - URL para llamada telefónica (tel:)
+    * `getEmailUrl()` - URL mailto con subject/body
+    * `sendInquiry()` - Envía consulta (simulado)
+    * `isValidEmail()`, `isValidPhone()` - Validadores
+    * `getNextOpeningTime()` - Próximo horario de apertura
+
+- **FloatingWhatsAppButton** (`lib/presentation/widgets/floating_whatsapp_button.dart`) ✅
+  - **Versión Completa**:
+    * Botón flotante verde oficial WhatsApp (#25D366)
+    * Posición fija: esquina inferior derecha
+    * Animación de pulso con `SingleTickerProviderStateMixin`
+    * Badge "En línea" cuando está disponible
+    * Mensaje predefinido según contexto (puede recibir packageName)
+    * Shadow effect con blur y spread
+    * FloatingActionButton.extended con icono + texto
+  - **Versión Compacta** (FloatingWhatsAppButtonCompact):
+    * Solo icono circular
+    * Badge verde de estado (punto)
+    * Animación de pulso más pronunciada
+    * FloatingActionButton estándar
+  - **Integración**:
+    * Usa `url_launcher` para abrir WhatsApp
+    * Mode: LaunchMode.externalApplication
+    * Manejo de errores con SnackBar
+    * Verifica canLaunchUrl antes de abrir
+
+- **CallNowButton** (`lib/presentation/widgets/call_now_button.dart`) ✅
+  - **Versión Completa**:
+    * Card blanco con padding y shadow
+    * Icono de teléfono en círculo azul
+    * Muestra número: +51 984 102 859
+    * Sección de horario de atención
+    * Badge verde/naranja según disponibilidad
+    * Botón "Llamar Ahora" destacado
+    * Click-to-call funcional en móviles
+  - **Versión Compacta**:
+    * Solo botón con icono + número
+    * Padding reducido
+    * Para uso en headers/toolbars
+  - **CallNowIconButton**:
+    * Solo icono con tooltip
+    * Para espacios reducidos
+  - **ContactInfoCard**:
+    * Card completa con toda la info de contacto
+    * Estado actual: "Estamos disponibles" / "Cerrado"
+    * Lista completa de horarios por día
+    * Integra CallNowButton compacto
+    * Diseño responsivo
+
+- **QuickInquiryDialog** (`lib/presentation/widgets/quick_inquiry_dialog.dart`) ✅
+  - **Diálogo Modal**:
+    * Máximo width: 500px
+    * Border radius: 16px
+    * Scrollable para móviles
+    * Botón X para cerrar
+  - **Formulario Completo**:
+    * GlobalKey<FormState> para validación
+    * Controllers: name, email, phone, message
+    * Dropdown: InquiryType con 8 opciones
+    * Nombre (3+ chars, requerido)
+    * Email (formato válido, requerido)
+    * Teléfono (opcional, validación si se llena)
+    * Mensaje (10+ chars, requerido)
+  - **Estados**:
+    * _isSubmitting - Loading durante envío
+    * Deshabilitado durante submit
+    * CircularProgressIndicator en botón
+  - **Confirmaciones**:
+    * SnackBar verde con ícono check al enviar
+    * Mensaje: "¡Consulta enviada! Nos pondremos en contacto pronto"
+    * Duration: 4 segundos
+    * SnackBar rojo si hay error
+  - **QuickInquiryButton**:
+    * Botón para abrir el diálogo
+    * Versión completa y compacta
+    * Puede recibir defaultType y defaultSubject
+    * Llama showDialog con QuickInquiryDialog
+
+- **Integración en Páginas** ✅
+  - **HomePage** (`lib/presentation/pages/home_page.dart`):
+    * Body cambió de SingleChildScrollView a Stack
+    * FloatingWhatsAppButton posicionado sobre el contenido
+    * Siempre visible durante scroll
+  - **ContactFooterSection** mejorado:
+    * Nueva sección "📞 Contáctanos" con título grande
+    * Layout responsivo con LayoutBuilder:
+      - **Desktop** (>900px): 3 columnas
+        1. CallNowButton
+        2. ContactInfoCard
+        3. Card con QuickInquiryButton
+      - **Tablet** (>600px): 2 filas
+        1. CallNowButton + ContactInfoCard
+        2. QuickInquiryButton full width
+      - **Móvil** (<600px): 3 tarjetas apiladas
+    * Padding vertical: 60px
+    * Fondo: #072A47 (azul oscuro)
+    * Footer copyright: gris oscuro con texto 2025
+
+### 🎨 Mejoras UI/UX
+
+- **Animaciones**:
+  - Pulso continuo en FloatingWhatsAppButton (2 segundos loop)
+  - Scale de 1.0 a 1.1 con ease-in-out
+  - Badge "En línea" con punto verde animado
+  - Transiciones suaves en todos los botones
+
+- **Diseño Responsivo**:
+  - ContactFooterSection con 3 breakpoints
+  - Widgets adaptativos: CallNowButton isCompact
+  - QuickInquiryDialog scrollable en móviles
+  - Botones con padding ajustado según pantalla
+
+- **Accesibilidad**:
+  - Tooltips en IconButtons
+  - Labels descriptivos en formularios
+  - Mensajes de error específicos
+  - Color contrast adecuado (WCAG)
+  - Click-to-call funcional en móviles
+
+### 🔧 Dependencias
+
+- **url_launcher**: ^6.3.1 (ya existente)
+  - Usado para WhatsApp, llamadas telefónicas y emails
+  - Modos: externalApplication para apps
+  - Validación con canLaunchUrl()
+
+### 📱 Funcionalidades Móviles
+
+- **Click-to-Call**:
+  - URL: `tel:+51984102859`
+  - Abre app de teléfono nativa
+  - Funciona en Android/iOS/Web
+
+- **WhatsApp Directo**:
+  - URL: `https://wa.me/51984102859?text=...`
+  - Mensaje predefinido personalizable
+  - Abre WhatsApp o WhatsApp Web
+
+- **Email Mailto**:
+  - URL: `mailto:info@byletytravels.com?subject=...&body=...`
+  - Pre-llena subject y body
+  - Abre cliente de email predeterminado
+
+### 🚀 Próximos Pasos
+
+- [ ] Conectar ContactService.sendInquiry() con backend real
+- [ ] Integrar con Firebase Firestore para guardar consultas
+- [ ] Configurar SendGrid/Mailgun para envío de emails
+- [ ] Agregar WhatsApp Business API para respuestas automáticas
+- [ ] Implementar CRM para gestión de leads (HubSpot/Zoho)
+- [ ] Analytics: rastrear clicks en botones de contacto
+
+---
+
 ## [v0.12.0] - 2025-01-12
 
 ### ✨ Nueva Funcionalidad

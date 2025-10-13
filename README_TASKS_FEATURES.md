@@ -232,29 +232,48 @@
 ```
 
 #### 3. Métodos de Contacto Rápido
-- [ ] **Botón WhatsApp Flotante**
+- [x] **Botón WhatsApp Flotante**
   - Icono verde fijo en esquina inferior derecha
   - Al click, abrir chat con mensaje predefinido
   - Número de WhatsApp Business configurado
   - Badge "En línea" si está disponible
 
-- [ ] **Botón "Llamar Ahora"**
+- [x] **Botón "Llamar Ahora"**
   - Mostrar número de teléfono
   - Click-to-call en móviles
   - Horario de atención visible
 
-- [ ] **Formulario de Consulta Rápida**
+- [x] **Formulario de Consulta Rápida**
   - Nombre, Email, Mensaje
   - Botón "Enviar Consulta"
   - Mensaje de confirmación al enviar
 
 #### 4. Sistema de Citas para Asesoría
-- [ ] Calendario interactivo para agendar cita
-- [ ] Seleccionar fecha y hora disponible
-- [ ] Mostrar slots horarios disponibles
-- [ ] Elegir tipo de asesoría: Presencial, Video llamada, Teléfono
-- [ ] Confirmación de cita por email
-- [ ] Agregar a Google Calendar / Outlook
+- [x] Calendario interactivo para agendar cita
+- [x] Seleccionar fecha y hora disponible
+- [x] Mostrar slots horarios disponibles (30 min)
+- [x] Elegir tipo de asesoría: Presencial, Video llamada, Teléfono
+- [x] Confirmación de cita por email
+- [x] Validación de horarios de negocio
+- [x] Sistema completo de 4 pasos
+- [x] Integración en sección de contacto
+- [ ] Agregar a Google Calendar (futuro)
+
+**Estado: ✅ COMPLETADO (v0.14.0)**
+
+**Implementación:**
+- ✅ Modelo Appointment con 3 tipos y 5 estados
+- ✅ Modelo TimeSlot con generador de slots de 30 min
+- ✅ AppointmentService con CRUD completo
+- ✅ AppointmentCalendar: calendario mensual interactivo
+- ✅ AppointmentTimePicker: selector de horarios AM/PM
+- ✅ AppointmentBookingDialog: wizard de 4 pasos
+- ✅ Integrado en ContactFooterSection con diseño responsivo
+
+**Horarios de Negocio:**
+- Lunes a Viernes: 9:00 AM - 7:00 PM
+- Sábados: 9:00 AM - 2:00 PM
+- Domingos: Cerrado
 
 **Calendario de Citas:**
 ```
@@ -276,42 +295,6 @@
 └─────────────────────────────────┘
 ```
 
-#### 5. Proceso de Pago (Mock o Real)
-- [ ] **Selección de método de pago**
-  - Tarjeta de crédito/débito
-  - PayPal
-  - Transferencia bancaria
-  - Pago en agencia
-
-- [ ] **Formulario de tarjeta** (si aplica)
-  - Número de tarjeta
-  - Nombre en tarjeta
-  - Fecha de expiración
-  - CVV
-  - Validación de campos
-
-- [ ] **Pago seguro con SSL**
-  - Candado de seguridad visible
-  - "Pago 100% Seguro" badge
-  - Logos de métodos de pago aceptados
-
-- [ ] **Opciones de pago**
-  - Pago completo
-  - Depósito del 30% + resto antes del viaje
-  - Plan de pagos (3 cuotas sin interés)
-
-#### 6. Confirmación de Reserva
-- [ ] Página de confirmación post-reserva
-- [ ] Número de reserva único
-- [ ] Email de confirmación automático
-- [ ] PDF descargable con detalles de reserva
-- [ ] Botones para:
-  - Agregar a calendario
-  - Compartir por email
-  - Imprimir voucher
-- [ ] Próximos pasos claros
-- [ ] Información de contacto para cambios
-
 **Email de Confirmación:**
 ```
 Asunto: ✈️ Confirmación de Reserva #BLT-12345
@@ -328,19 +311,11 @@ Total pagado: $3,465
 Próximos pasos:
 1. Revisar documentación requerida
 2. Preparar pasaporte vigente
-3. Contactar a tu asesor: +51 999 888 777
+3. Contactar a tu asesor: +54 9 3884102859
 
 [Ver Detalles Completos]
 [Descargar Voucher PDF]
 ```
-
-#### 7. Tracking de Reserva
-- [ ] Página "Mis Reservas"
-- [ ] Ingresar con email + número de reserva
-- [ ] Ver estado: Pendiente, Confirmada, Pagada, Completada
-- [ ] Timeline del proceso de reserva
-- [ ] Documentos descargables
-- [ ] Opción de modificar/cancelar
 
 ---
 
@@ -355,14 +330,17 @@ Próximos pasos:
   - Botón "Cómo llegar"
 
 - [ ] **Teléfonos de contacto**
+  ```
+  +54 9 3884102859
+  ```
   - Teléfono principal con click-to-call
   - WhatsApp Business con link directo
   - Teléfono de emergencias (24/7)
 
 - [ ] **Emails de contacto**
-  - Email general: info@byletytravels.com
-  - Email de ventas: ventas@byletytravels.com
-  - Email de soporte: soporte@byletytravels.com
+  - Email general: byletytravels.oficial@gmail.com
+  - Email de ventas: byletytravels.oficial@gmail.com
+  - Email de soporte: alvaro.gonzales.dev@gmail.com
 
 - [ ] **Horario de atención**
   - Lunes a Viernes: 9:00 AM - 7:00 PM
@@ -403,7 +381,7 @@ Próximos pasos:
   
 - [ ] **Link directo con mensaje predefinido**
   ```
-  https://wa.me/51999888777?text=Hola,%20me%20interesa%20información%20sobre%20los%20paquetes%20de%20viaje
+  https://wa.me/549388102859?text=Hola,%20me%20interesa%20información%20sobre%20los%20paquetes%20de%20viaje
   ```
 
 - [ ] **Múltiples asesores**
