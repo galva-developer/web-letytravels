@@ -7,86 +7,10 @@ class CouponService {
     // Percentage discounts
     Coupon(
       code: 'WELCOME10',
-      description: 'Descuento de bienvenida para nuevos clientes',
+      description: 'Descuento de bienvenida - 10% OFF',
       type: CouponType.percentage,
       value: 10,
       expirationDate: DateTime(2025, 12, 31),
-    ),
-    Coupon(
-      code: 'SUMMER20',
-      description: 'Promoción de verano',
-      type: CouponType.percentage,
-      value: 20,
-      expirationDate: DateTime(2025, 9, 30),
-      minPurchaseAmount: 1000,
-    ),
-    Coupon(
-      code: 'FAMILY15',
-      description: 'Descuento para viajes familiares',
-      type: CouponType.percentage,
-      value: 15,
-      minPurchaseAmount: 2000,
-    ),
-    Coupon(
-      code: 'VIP25',
-      description: 'Cupón VIP exclusivo',
-      type: CouponType.percentage,
-      value: 25,
-      expirationDate: DateTime(2025, 11, 30),
-      minPurchaseAmount: 3000,
-      maxUses: 50,
-    ),
-
-    // Fixed amount discounts
-    Coupon(
-      code: 'SAVE50',
-      description: 'Ahorra \$50 en tu próxima reserva',
-      type: CouponType.fixedAmount,
-      value: 50,
-      minPurchaseAmount: 500,
-    ),
-    Coupon(
-      code: 'SAVE100',
-      description: 'Ahorra \$100 en tu reserva',
-      type: CouponType.fixedAmount,
-      value: 100,
-      expirationDate: DateTime(2025, 12, 31),
-      minPurchaseAmount: 1500,
-    ),
-    Coupon(
-      code: 'EARLYBIRD',
-      description: 'Descuento por reserva anticipada',
-      type: CouponType.fixedAmount,
-      value: 150,
-      minPurchaseAmount: 2500,
-    ),
-
-    // Special promotions
-    Coupon(
-      code: 'BLACKFRIDAY',
-      description: 'Black Friday - ¡30% de descuento!',
-      type: CouponType.percentage,
-      value: 30,
-      expirationDate: DateTime(2025, 11, 30),
-      minPurchaseAmount: 800,
-      maxUses: 100,
-    ),
-    Coupon(
-      code: 'NEWYEAR2026',
-      description: 'Año Nuevo 2026 - Celebra con descuento',
-      type: CouponType.percentage,
-      value: 15,
-      expirationDate: DateTime(2026, 1, 15),
-      minPurchaseAmount: 1200,
-    ),
-
-    // Referral and loyalty
-    Coupon(
-      code: 'REFERIDO',
-      description: 'Descuento por referido',
-      type: CouponType.fixedAmount,
-      value: 75,
-      minPurchaseAmount: 1000,
     ),
   ];
 

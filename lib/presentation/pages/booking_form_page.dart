@@ -30,8 +30,8 @@ class _BookingFormPageState extends State<BookingFormPage> {
   final _couponController = TextEditingController();
 
   // Form state
-  String _selectedCountryCode = '+51'; // Default Peru
-  String _selectedCountry = 'Perú';
+  String _selectedCountryCode = '+54'; // Default Argentina
+  String _selectedCountry = 'Argentina';
   DateTime? _birthDate;
   DateTime? _departureDate;
   int _numberOfAdults = 1;
@@ -640,7 +640,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                 child: TextFormField(
                   controller: _passportController,
                   decoration: const InputDecoration(
-                    labelText: 'Número de Pasaporte',
+                    labelText: 'Número de Pasaporte o DNI',
                     hintText: 'AB123456',
                     prefixIcon: Icon(Icons.card_travel_outlined),
                     border: OutlineInputBorder(),
@@ -899,7 +899,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
 
   Widget _buildAdditionalServicesSection() {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(48),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -912,95 +912,27 @@ class _BookingFormPageState extends State<BookingFormPage> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildServiceCheckbox(
-            'Seguro de Viaje',
-            '+\$50 por persona',
-            'Cobertura médica y cancelación',
-            Icons.health_and_safety_outlined,
-            _travelInsurance,
-            (value) => setState(() => _travelInsurance = value!),
-          ),
-          const Divider(height: 24),
-          _buildServiceCheckbox(
-            'Traslado Aeropuerto',
-            '+\$30 por persona',
-            'Recogida y traslado al hotel',
-            Icons.airport_shuttle_outlined,
-            _airportTransfer,
-            (value) => setState(() => _airportTransfer = value!),
-          ),
-          const Divider(height: 24),
-          _buildServiceCheckbox(
-            'Tour Adicional',
-            '+\$100 por persona',
-            'Tour especial no incluido',
-            Icons.tour_outlined,
-            _additionalTour,
-            (value) => setState(() => _additionalTour = value!),
-          ),
-          const Divider(height: 24),
-          _buildServiceCheckbox(
-            'Upgrade Hotel 5★',
-            '+\$200 por habitación',
-            'Mejora a categoría superior',
-            Icons.hotel_outlined,
-            _hotelUpgrade,
-            (value) => setState(() => _hotelUpgrade = value!),
-          ),
-          const Divider(height: 24),
-          _buildServiceCheckbox(
-            'Asientos Preferentes',
-            '+\$40 por persona',
-            'Asientos con más espacio',
-            Icons.airline_seat_recline_extra_outlined,
-            _preferredSeats,
-            (value) => setState(() => _preferredSeats = value!),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildServiceCheckbox(
-    String title,
-    String price,
-    String description,
-    IconData icon,
-    bool value,
-    Function(bool?) onChanged,
-  ) {
-    return CheckboxListTile(
-      value: value,
-      onChanged: onChanged,
-      title: Row(
-        children: [
-          Icon(icon, color: const Color(0xFF072A47), size: 20),
-          const SizedBox(width: 8),
+          Icon(Icons.engineering_outlined, size: 64, color: Colors.grey[400]),
+          const SizedBox(height: 16),
           Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const Spacer(),
-          Text(
-            price,
-            style: const TextStyle(
-              fontSize: 14,
+            'PRÓXIMAMENTE',
+            style: TextStyle(
+              fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF072A47),
+              color: Colors.grey[700],
+              letterSpacing: 2,
             ),
           ),
+          const SizedBox(height: 8),
+          Text(
+            'Los servicios adicionales estarán disponibles pronto',
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(left: 28),
-        child: Text(
-          description,
-          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-        ),
-      ),
-      activeColor: const Color(0xFF072A47),
-      contentPadding: EdgeInsets.zero,
     );
   }
 
@@ -1029,7 +961,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                   controller: _couponController,
                   decoration: InputDecoration(
                     labelText: 'Código de Cupón',
-                    hintText: 'Ej: SUMMER20, WELCOME10',
+                    hintText: 'Ingresa WELCOME10',
                     prefixIcon: const Icon(Icons.discount_outlined),
                     border: const OutlineInputBorder(),
                     errorText: _couponErrorMessage,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
+import 'package:by_lety_travels/presentation/pages/booking_form_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Modal dialog to display detailed package information with tabs
@@ -15,7 +16,6 @@ class PackageDetailsModal extends StatefulWidget {
 class _PackageDetailsModalState extends State<PackageDetailsModal>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _isFavorite = false;
   int _selectedImageIndex = 0;
 
   @override
@@ -76,7 +76,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
     );
   }
 
-  // Build modal header with title, close, favorite, and share buttons
+  // Build modal header with title, close and share buttons
   Widget _buildHeader(bool isMobile) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -122,19 +122,6 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
               ],
             ),
           ),
-          // Favorite button
-          IconButton(
-            icon: Icon(
-              _isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: _isFavorite ? Colors.red : Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                _isFavorite = !_isFavorite;
-              });
-            },
-            tooltip: 'Add to favorites',
-          ),
           // Share button
           IconButton(
             icon: const Icon(Icons.share, color: Colors.white),
@@ -163,10 +150,10 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
         indicatorColor: const Color(0xFFFFDC00),
         indicatorWeight: 3,
         tabs: const [
-          Tab(icon: Icon(Icons.photo_library), text: 'Gallery'),
-          Tab(icon: Icon(Icons.map), text: 'Itinerary'),
-          Tab(icon: Icon(Icons.check_circle_outline), text: 'Included'),
-          Tab(icon: Icon(Icons.location_on), text: 'Map'),
+          Tab(icon: Icon(Icons.photo_library), text: 'Galería'),
+          Tab(icon: Icon(Icons.map), text: 'Itinerario'),
+          Tab(icon: Icon(Icons.check_circle_outline), text: 'Incluido'),
+          Tab(icon: Icon(Icons.location_on), text: 'Mapa'),
         ],
       ),
     );
@@ -313,7 +300,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
     final itinerary = widget.package.itinerary;
 
     if (itinerary.isEmpty) {
-      return const Center(child: Text('Itinerary details coming soon'));
+      return const Center(child: Text('Detalles del itinerario próximamente'));
     }
 
     return ListView.builder(
@@ -345,7 +332,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
             ),
             child: Center(
               child: Text(
-                'Day\n${day.dayNumber}',
+                'Día\n${day.dayNumber}',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Color(0xFFFFDC00),
@@ -422,25 +409,25 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
 
           // Inclusions
           _buildSection(
-            title: 'What\'s Included',
+            title: 'Qué Incluye',
             icon: Icons.check_circle,
             iconColor: Colors.green,
             items:
                 widget.package.inclusions.isNotEmpty
                     ? widget.package.inclusions
-                    : ['Package details coming soon'],
+                    : ['Detalles del paquete próximamente'],
           ),
           const SizedBox(height: 20),
 
           // Exclusions
           _buildSection(
-            title: 'What\'s Not Included',
+            title: 'Qué No Incluye',
             icon: Icons.cancel,
             iconColor: Colors.red,
             items:
                 widget.package.exclusions.isNotEmpty
                     ? widget.package.exclusions
-                    : ['See terms and conditions'],
+                    : ['Ver términos y condiciones'],
           ),
           const SizedBox(height: 20),
 
@@ -468,7 +455,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Price per person',
+                      'Precio por persona',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 4),
@@ -601,7 +588,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
         child: ExpansionTile(
           leading: const Icon(Icons.description, color: Color(0xFF072A47)),
           title: const Text(
-            'Terms & Conditions',
+            'Términos y Condiciones',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           children: [
@@ -677,7 +664,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Available Departure Dates',
+                  'Fechas Disponibles',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
@@ -776,14 +763,18 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
   Widget _buildBookNowButton() {
     return ElevatedButton.icon(
       onPressed: () {
+        // Close the modal
         Navigator.of(context).pop();
-        // TODO: Navigate to booking page
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Booking feature coming soon!')),
+
+        // Navigate to booking form page
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => BookingFormPage(package: widget.package),
+          ),
         );
       },
       icon: const Icon(Icons.flight_takeoff, size: 20),
-      label: const Text('Book Now'),
+      label: const Text('Reservar'),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFFFDC00),
         foregroundColor: const Color(0xFF072A47),
@@ -821,9 +812,9 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
   // Share package
   void _sharePackage() {
     // TODO: Implement share functionality with share_plus package
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Share feature coming soon!')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Función de compartir próximamente!')),
+    );
   }
 
   // Open Google Maps

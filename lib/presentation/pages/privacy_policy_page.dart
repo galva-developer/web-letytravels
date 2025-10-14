@@ -42,7 +42,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                   'Información de viaje: destinos de interés, fechas de viaje, preferencias',
                   'Información de pago: datos de tarjeta de crédito (procesados de forma segura)',
                   'Información de navegación: cookies, dirección IP, tipo de navegador',
-                  'Documentación: número de pasaporte, fecha de nacimiento (cuando sea necesario)',
+                  'Documentación: número de pasaporte o DNI, fecha de nacimiento (cuando sea necesario)',
                 ],
               ),
 
