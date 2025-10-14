@@ -4,7 +4,6 @@ import 'package:by_lety_travels/data/models/package_travel.dart';
 import 'package:by_lety_travels/data/models/booking_data.dart';
 import 'package:by_lety_travels/data/models/coupon.dart';
 import 'package:by_lety_travels/data/services/coupon_service.dart';
-import 'package:intl/intl.dart';
 
 /// Comprehensive booking form page
 class BookingFormPage extends StatefulWidget {
@@ -627,7 +626,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                     child: Text(
                       _birthDate == null
                           ? 'Seleccionar fecha'
-                          : DateFormat('dd/MM/yyyy').format(_birthDate!),
+                          : '${_birthDate!.day}/${_birthDate!.month}/${_birthDate!.year}',
                       style: TextStyle(
                         color: _birthDate == null ? Colors.grey : Colors.black,
                       ),
@@ -731,50 +730,100 @@ class _BookingFormPageState extends State<BookingFormPage> {
             ),
           ),
           const SizedBox(height: 16),
-          InkWell(
-            onTap: () async {
-              final date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now().add(const Duration(days: 7)),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
-                builder: (context, child) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: const ColorScheme.light(
-                        primary: Color(0xFF072A47),
-                      ),
+          // Available dates selection
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.calendar_today_outlined,
+                    color: Color(0xFF072A47),
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Fecha de Salida Preferida *',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF072A47),
                     ),
-                    child: child!,
-                  );
-                },
-              );
-              if (date != null) {
-                setState(() => _departureDate = date);
-              }
-            },
-            child: InputDecorator(
-              decoration: InputDecoration(
-                labelText: 'Fecha de Salida Preferida *',
-                prefixIcon: const Icon(Icons.calendar_today_outlined),
-                border: const OutlineInputBorder(),
-                errorText:
-                    _departureDate == null && _formKey.currentState != null
-                        ? 'Seleccione una fecha'
-                        : null,
+                  ),
+                ],
               ),
-              child: Text(
-                _departureDate == null
-                    ? 'Seleccionar fecha de salida'
-                    : DateFormat(
-                      'EEEE, dd MMMM yyyy',
-                      'es',
-                    ).format(_departureDate!),
-                style: TextStyle(
-                  color: _departureDate == null ? Colors.grey : Colors.black,
+              const SizedBox(height: 12),
+              if (widget.package.availableDates.isEmpty)
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey[300]!),
+                  ),
+                  child: const Text(
+                    'No hay fechas disponibles en este momento',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                )
+              else
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children:
+                      widget.package.availableDates.map((date) {
+                        final isSelected =
+                            _departureDate != null &&
+                            _departureDate!.year == date.year &&
+                            _departureDate!.month == date.month &&
+                            _departureDate!.day == date.day;
+
+                        return ChoiceChip(
+                          label: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.calendar_today, size: 14),
+                              const SizedBox(width: 6),
+                              Text(
+                                '${date.day}/${date.month}/${date.year}',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              _departureDate = selected ? date : null;
+                            });
+                          },
+                          selectedColor: const Color(0xFF072A47),
+                          backgroundColor: const Color(0xFFF5F5F5),
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight:
+                                isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                          ),
+                          side: BorderSide(
+                            color:
+                                isSelected
+                                    ? const Color(0xFF072A47)
+                                    : Colors.grey[300]!,
+                            width: isSelected ? 2 : 1,
+                          ),
+                        );
+                      }).toList(),
                 ),
-              ),
-            ),
+              if (_departureDate == null && _formKey.currentState != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 12),
+                  child: Text(
+                    'Seleccione una fecha de salida',
+                    style: TextStyle(color: Colors.red[700], fontSize: 12),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 16),
           const Text(
@@ -1186,7 +1235,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                 Icon(Icons.calendar_today, color: Colors.grey[600], size: 16),
                 const SizedBox(width: 8),
                 Text(
-                  DateFormat('dd MMM yyyy', 'es').format(_departureDate!),
+                  '${_departureDate!.day}/${_departureDate!.month}/${_departureDate!.year}',
                   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                 ),
               ],
