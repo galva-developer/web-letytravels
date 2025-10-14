@@ -4,6 +4,9 @@ import 'package:by_lety_travels/data/models/package_travel.dart';
 import 'package:by_lety_travels/data/models/booking_data.dart';
 import 'package:by_lety_travels/data/models/coupon.dart';
 import 'package:by_lety_travels/data/services/coupon_service.dart';
+import 'package:by_lety_travels/data/services/email_service.dart';
+import 'package:by_lety_travels/data/services/voucher_service.dart';
+import 'package:universal_html/html.dart' as html;
 
 /// Comprehensive booking form page
 class BookingFormPage extends StatefulWidget {
@@ -182,15 +185,45 @@ class _BookingFormPageState extends State<BookingFormPage> {
 
     setState(() => _isSubmitting = true);
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      // Generate booking number
+      final bookingNumber =
+          'BLT-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
 
-    setState(() => _isSubmitting = false);
+      final bookingData = _currentBookingData;
 
-    if (!mounted) return;
+      // Send emails (client and business)
+      await EmailService.sendBookingEmails(
+        bookingNumber: bookingNumber,
+        bookingData: bookingData,
+        package: widget.package,
+      );
 
-    // Show success dialog
-    showDialog(
+      setState(() => _isSubmitting = false);
+
+      if (!mounted) return;
+
+      // Show success dialog
+      await _showConfirmationDialog(bookingNumber, bookingData);
+    } catch (e) {
+      setState(() => _isSubmitting = false);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al procesar la reserva: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _showConfirmationDialog(
+    String bookingNumber,
+    BookingData bookingData,
+  ) async {
+    return showDialog(
       context: context,
       barrierDismissible: false,
       builder:
@@ -230,7 +263,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'BLT-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+                        bookingNumber,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -241,11 +274,11 @@ class _BookingFormPageState extends State<BookingFormPage> {
                       _buildConfirmationRow('Paquete:', widget.package.title),
                       _buildConfirmationRow(
                         'Viajeros:',
-                        '${_currentBookingData.totalTravelers}',
+                        '${bookingData.totalTravelers}',
                       ),
                       _buildConfirmationRow(
                         'Total:',
-                        '\$${_currentBookingData.totalAmount.toStringAsFixed(2)}',
+                        '\$${bookingData.totalAmount.toStringAsFixed(2)}',
                       ),
                     ],
                   ),
@@ -266,14 +299,7 @@ class _BookingFormPageState extends State<BookingFormPage> {
                 child: const Text('Cerrar'),
               ),
               ElevatedButton.icon(
-                onPressed: () {
-                  // TODO: Implement download voucher
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Función de descarga próximamente'),
-                    ),
-                  );
-                },
+                onPressed: () => _downloadVoucher(bookingNumber, bookingData),
                 icon: const Icon(Icons.download),
                 label: const Text('Descargar Voucher'),
                 style: ElevatedButton.styleFrom(
@@ -284,6 +310,46 @@ class _BookingFormPageState extends State<BookingFormPage> {
             ],
           ),
     );
+  }
+
+  Future<void> _downloadVoucher(
+    String bookingNumber,
+    BookingData bookingData,
+  ) async {
+    try {
+      // Generate PDF
+      final pdfBytes = await VoucherService.generateVoucherPdf(
+        bookingNumber: bookingNumber,
+        bookingData: bookingData,
+        package: widget.package,
+      );
+
+      // Create download link for web
+      final blob = html.Blob([pdfBytes], 'application/pdf');
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      html.AnchorElement(href: url)
+        ..setAttribute('download', 'Voucher_$bookingNumber.pdf')
+        ..click();
+      html.Url.revokeObjectUrl(url);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Voucher descargado exitosamente'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al descargar el voucher: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildConfirmationRow(String label, String value) {

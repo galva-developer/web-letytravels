@@ -52,6 +52,15 @@ dependencies:
   
   # Internationalization for date formatting
   intl: ^0.19.0
+  
+  # PDF generation for vouchers
+  pdf: ^3.11.1
+  
+  # Download files in web
+  universal_html: ^2.2.4
+  
+  # Email sending (using EmailJS for web)
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
