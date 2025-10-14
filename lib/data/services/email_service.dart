@@ -2,21 +2,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:by_lety_travels/data/models/booking_data.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
+import 'package:by_lety_travels/config/email_config.dart';
 
 /// Service to send booking confirmation emails using EmailJS
 ///
-/// EmailJS Setup Required:
-/// 1. Create account at https://www.emailjs.com/
-/// 2. Add email service (Gmail, etc.)
-/// 3. Create email templates
-/// 4. Get your Service ID, Template ID, and Public Key
+/// ⚠️ IMPORTANTE: Las credenciales de EmailJS están en lib/config/email_config.dart
+/// Ese archivo NO se sube al repositorio (está en .gitignore)
+///
+/// Para configurar:
+/// 1. Lee README_EMAIL_SETUP.md
+/// 2. Crea una cuenta en https://www.emailjs.com/
+/// 3. Configura tus credenciales en lib/config/email_config.dart
 class EmailService {
-  // TODO: Replace these with your actual EmailJS credentials
-  // Get them from https://dashboard.emailjs.com/
-  static const String _serviceId = 'YOUR_SERVICE_ID';
-  static const String _templateIdClient = 'YOUR_TEMPLATE_ID_CLIENT';
-  static const String _templateIdBusiness = 'YOUR_TEMPLATE_ID_BUSINESS';
-  static const String _publicKey = 'YOUR_PUBLIC_KEY';
+  // Credenciales importadas desde archivo de configuración seguro
+  static final String _serviceId = EmailConfig.serviceId;
+  static final String _templateIdClient = EmailConfig.templateIdClient;
+  static final String _templateIdBusiness = EmailConfig.templateIdBusiness;
+  static final String _publicKey = EmailConfig.publicKey;
   static const String _emailJsUrl =
       'https://api.emailjs.com/api/v1.0/email/send';
 

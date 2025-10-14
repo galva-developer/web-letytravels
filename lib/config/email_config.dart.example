@@ -1,0 +1,29 @@
+/// EmailJS Configuration Template
+/// 
+/// 📋 INSTRUCCIONES:
+/// 
+/// 1. Copia este archivo y renómbralo a: email_config.dart
+/// 2. Reemplaza los valores YOUR_* con tus credenciales reales de EmailJS
+/// 3. El archivo email_config.dart está en .gitignore y NO se subirá al repositorio
+/// 
+/// Para obtener las credenciales:
+/// - Lee el archivo README_EMAIL_SETUP.md en la raíz del proyecto
+/// - Ve a https://dashboard.emailjs.com/
+/// 
+class EmailConfig {
+  // Service ID de EmailJS
+  // Ejemplo: 'service_abc1234'
+  static const String serviceId = 'YOUR_SERVICE_ID';
+  
+  // Template ID para emails a clientes
+  // Ejemplo: 'template_xyz5678'
+  static const String templateIdClient = 'YOUR_TEMPLATE_ID_CLIENT';
+  
+  // Template ID para emails al negocio (byletytravels.oficial@gmail.com)
+  // Ejemplo: 'template_def9012'
+  static const String templateIdBusiness = 'YOUR_TEMPLATE_ID_BUSINESS';
+  
+  // Public Key (User ID) de EmailJS
+  // Ejemplo: 'user_klm3456'
+  static const String publicKey = 'YOUR_PUBLIC_KEY';
+}

@@ -162,27 +162,48 @@ Sistema de Reservas - By Lety Travels
 1. Ve a **"Account"** → **"General"**
 2. Copia tu **Public Key** (también llamado User ID)
 
-### 5. Actualizar el Código
+### 5. Configurar las Credenciales de Forma Segura
 
-Abre el archivo `lib/data/services/email_service.dart` y reemplaza:
+🔒 **IMPORTANTE: Tus credenciales NO se subirán al repositorio**
+
+1. Abre el archivo `lib/config/email_config.dart`
+2. Reemplaza los valores de ejemplo con tus credenciales reales:
 
 ```dart
-static const String _serviceId = 'YOUR_SERVICE_ID';
-static const String _templateIdClient = 'YOUR_TEMPLATE_ID_CLIENT';
-static const String _templateIdBusiness = 'YOUR_TEMPLATE_ID_BUSINESS';
-static const String _publicKey = 'YOUR_PUBLIC_KEY';
+class EmailConfig {
+  static const String serviceId = 'service_abc1234';  // Tu Service ID real
+  static const String templateIdClient = 'template_xyz5678';  // Tu Template ID del cliente
+  static const String templateIdBusiness = 'template_def9012';  // Tu Template ID del negocio
+  static const String publicKey = 'user_klm3456';  // Tu Public Key real
+}
+```
+
+3. Guarda el archivo
+
+✅ **Este archivo está protegido en `.gitignore` y NO se subirá a GitHub**
+
+**Nota:** Si el archivo `email_config.dart` no existe, cópialo desde `email_config.dart.example`:
+```bash
+cp lib/config/email_config.dart.example lib/config/email_config.dart
 ```
 
 Con tus valores reales de EmailJS.
 
 ## 📝 Ejemplo de Configuración
 
+Abre `lib/config/email_config.dart` y configura así:
+
 ```dart
-static const String _serviceId = 'service_abc1234';
-static const String _templateIdClient = 'template_xyz5678';
-static const String _templateIdBusiness = 'template_def9012';
-static const String _publicKey = 'user_klm3456';
+class EmailConfig {
+  // Reemplaza estos valores con los tuyos de EmailJS
+  static const String serviceId = 'service_abc1234';
+  static const String templateIdClient = 'template_xyz5678';
+  static const String templateIdBusiness = 'template_def9012';
+  static const String publicKey = 'user_klm3456';
+}
 ```
+
+🔒 **Recordatorio:** Este archivo NO se subirá a Git (está en .gitignore)
 
 ## ✅ Verificación
 
