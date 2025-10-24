@@ -18,6 +18,9 @@ class ContactFooterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Container(
       key: sectionKey,
       color: const Color(0xFF072A47),
@@ -25,24 +28,35 @@ class ContactFooterSection extends StatelessWidget {
         children: [
           // Sección de contacto rápido
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
+            padding: EdgeInsets.symmetric(
+              vertical: 60,
+              horizontal:
+                  isMobile ? 0 : 24, // Remove horizontal padding on mobile
+            ),
             child: Column(
               children: [
                 // Título
-                const Text(
-                  '📞 Contáctanos',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: isMobile ? 16 : 0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        '📞 Contáctanos',
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Estamos aquí para ayudarte a planificar tu próxima aventura',
+                        style: TextStyle(fontSize: 18, color: Colors.white70),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Estamos aquí para ayudarte a planificar tu próxima aventura',
-                  style: TextStyle(fontSize: 18, color: Colors.white70),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 48),
 
@@ -229,16 +243,21 @@ class ContactFooterSection extends StatelessWidget {
                         ],
                       );
                     } else {
-                      // Móvil: 3 cards apiladas
+                      // Móvil: 3 cards apiladas - Full width
                       return Column(
                         children: [
                           const ContactInfoCard(),
-                          const SizedBox(height: 16),
+                          const SizedBox(
+                            height: 0,
+                          ), // Remove gap for seamless cards
                           Container(
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
+                            width: double.infinity, // Full width
+                            padding: const EdgeInsets.all(32),
+                            decoration: const BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius:
+                                  BorderRadius
+                                      .zero, // Sharp corners for full width
                             ),
                             child: Column(
                               children: [
@@ -261,12 +280,17 @@ class ContactFooterSection extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(
+                            height: 0,
+                          ), // Remove gap for seamless cards
                           Container(
-                            padding: const EdgeInsets.all(24),
+                            width: double.infinity, // Full width
+                            padding: const EdgeInsets.all(32),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius:
+                                  BorderRadius
+                                      .zero, // Sharp corners for full width
                             ),
                             child: Column(
                               children: [

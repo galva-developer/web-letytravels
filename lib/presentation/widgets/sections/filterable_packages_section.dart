@@ -564,8 +564,8 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                       crossAxisSpacing: 24,
                       mainAxisExtent:
                           isMobile
-                              ? 580.0
-                              : 650.0, // Fixed height for consistent cards
+                              ? 520.0 // Reduced mobile height to eliminate bottom whitespace
+                              : 650.0, // Desktop height for consistent cards
                     ),
                     itemCount: _paginatedPackages.length,
                     itemBuilder: (context, index) {

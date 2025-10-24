@@ -257,13 +257,22 @@ class ContactInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final businessHours = ContactService.getBusinessHoursList();
     final isOpen = ContactService.isOpenNow();
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      width: double.infinity, // Full width
+      padding: EdgeInsets.all(isMobile ? 32 : 20), // More padding on mobile
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[300]!),
+        borderRadius:
+            isMobile
+                ? BorderRadius.zero
+                : BorderRadius.circular(12), // Sharp corners on mobile
+        border:
+            isMobile
+                ? null
+                : Border.all(color: Colors.grey[300]!), // No border on mobile
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),

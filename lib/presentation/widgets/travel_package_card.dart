@@ -148,7 +148,8 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   Widget _buildFrontCard(BuildContext context, bool isMobile) {
     // Responsive sizes
     final cardMargin = isMobile ? 4.0 : 16.0;
-    final cardPadding = isMobile ? 8.0 : 16.0;
+    final cardPadding =
+        isMobile ? 14.0 : 16.0; // Increased mobile padding for better spacing
     final titleFontSize = isMobile ? 16.0 : 20.0;
     final priceFontSize = isMobile ? 18.0 : 22.0;
     final locationFontSize = isMobile ? 12.0 : 16.0;
@@ -178,8 +179,9 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                       priceFontSize: priceFontSize,
                       isMobile: isMobile,
                     ),
-                    SizedBox(height: isMobile ? 3.0 : 8.0),
-
+                    SizedBox(
+                      height: isMobile ? 8.0 : 8.0,
+                    ), // Increased mobile spacing
                     // Location
                     Text(
                       widget.location,
@@ -189,8 +191,9 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: isMobile ? 5.0 : 12.0),
-
+                    SizedBox(
+                      height: isMobile ? 10.0 : 12.0,
+                    ), // Increased mobile spacing
                     // Description
                     Text(
                       widget.description,
@@ -198,12 +201,14 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                       maxLines: isMobile ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: isMobile ? 6.0 : 16.0),
-
+                    SizedBox(
+                      height: isMobile ? 12.0 : 16.0,
+                    ), // Increased mobile spacing
                     // Services icons (more visible)
                     _buildServicesIcons(isMobile),
-                    SizedBox(height: isMobile ? 6.0 : 16.0),
-
+                    SizedBox(
+                      height: isMobile ? 12.0 : 16.0,
+                    ), // Increased mobile spacing
                     // Details section (condensed on mobile)
                     _buildDetailRow(
                       Icons.calendar_today,
@@ -228,8 +233,9 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                         isMobile,
                       ),
 
-                    SizedBox(height: isMobile ? 12.0 : 20.0),
-
+                    SizedBox(
+                      height: isMobile ? 16.0 : 20.0,
+                    ), // Increased mobile spacing
                     // Action buttons
                     _buildActionButtons(isMobile),
                   ],

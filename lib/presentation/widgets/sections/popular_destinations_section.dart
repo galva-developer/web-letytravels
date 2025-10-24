@@ -45,7 +45,8 @@ class PopularDestinationsSection extends StatelessWidget {
                   maxCrossAxisExtent: maxCardWidth,
                   mainAxisSpacing: 16.0,
                   crossAxisSpacing: 16.0,
-                  mainAxisExtent: isMobile ? 580.0 : 650.0,
+                  mainAxisExtent:
+                      isMobile ? 520.0 : 650.0, // Reduced mobile height
                 ),
                 itemCount: popularDestinations.length,
                 itemBuilder: (context, index) {

@@ -262,7 +262,7 @@ class MyFavoritesSection extends StatelessWidget {
             maxCrossAxisExtent: maxCardWidth,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            mainAxisExtent: isMobile ? 580.0 : 650.0,
+            mainAxisExtent: isMobile ? 520.0 : 650.0, // Reduced mobile height
           ),
           itemCount: favoritePackages.length,
           itemBuilder: (context, index) {
