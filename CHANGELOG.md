@@ -4,6 +4,107 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.29] - 2025-01-25
+
+### 🔗 Social Media Buttons Functionality in Mobile Drawer
+
+#### ✨ New Feature: Active Social Media Links in Drawer Footer
+
+**Objective**: Agregar funcionalidad a los botones de redes sociales (Facebook, Instagram, WhatsApp) en el footer del drawer móvil.
+
+**Problem**: Los tres botones de redes sociales en el footer del drawer móvil no tenían funcionalidad - solo eran elementos decorativos con callbacks vacíos `() {}`.
+
+**Solution Applied**:
+
+Implementé funcionalidad completa para los tres botones de redes sociales usando `url_launcher`:
+
+**Changes in mobile_menu_drawer.dart**:
+
+1. **Import Added**:
+   ```dart
+   import 'package:url_launcher/url_launcher.dart';
+   ```
+
+2. **Updated Social Buttons**:
+   ```dart
+   // Before (sin funcionalidad)
+   _buildSocialIcon(Icons.facebook, () {}),
+   _buildSocialIcon(Icons.camera_alt, () {}),
+   _buildSocialIcon(Icons.chat, () {}),
+   
+   // After (con funcionalidad)
+   _buildSocialIcon(Icons.facebook, () => _openFacebook()),
+   _buildSocialIcon(Icons.camera_alt, () => _openInstagram()),
+   _buildSocialIcon(Icons.chat, () => _openWhatsApp()),
+   ```
+
+3. **New Methods Added**:
+
+   **Facebook**:
+   ```dart
+   Future<void> _openFacebook() async {
+     final uri = Uri.parse('https://www.facebook.com/byletytravels');
+     if (await canLaunchUrl(uri)) {
+       await launchUrl(uri, mode: LaunchMode.externalApplication);
+     }
+   }
+   ```
+
+   **Instagram**:
+   ```dart
+   Future<void> _openInstagram() async {
+     final uri = Uri.parse('https://www.instagram.com/byletytravels.ok/');
+     if (await canLaunchUrl(uri)) {
+       await launchUrl(uri, mode: LaunchMode.externalApplication);
+     }
+   }
+   ```
+
+   **WhatsApp**:
+   ```dart
+   Future<void> _openWhatsApp() async {
+     const phoneNumber = '5493884102859';
+     const message = '¡Hola! Me gustaría información sobre paquetes de viaje.';
+     final uri = Uri.parse(
+       'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+     );
+     if (await canLaunchUrl(uri)) {
+       await launchUrl(uri, mode: LaunchMode.externalApplication);
+     }
+   }
+   ```
+
+**Social Media Links**:
+| Botón | Icono | URL | Comportamiento |
+|-------|-------|-----|----------------|
+| **Facebook** | 👥 | `facebook.com/byletytravels` | Abre página de Facebook |
+| **Instagram** | 📸 | `instagram.com/byletytravels.ok/` | Abre perfil de Instagram |
+| **WhatsApp** | 💬 | `wa.me/5493884102859` | Abre chat con mensaje predefinido |
+
+**User Flow**:
+1. Usuario abre el drawer móvil
+2. Hace scroll hasta el footer
+3. Toca cualquier botón de red social:
+   - **Facebook**: Se abre la app de Facebook o el navegador con la página
+   - **Instagram**: Se abre la app de Instagram o el navegador con el perfil
+   - **WhatsApp**: Se abre WhatsApp con un mensaje predefinido listo para enviar
+
+**Launch Mode**: 
+- `LaunchMode.externalApplication` asegura que se abre en la app nativa cuando está disponible
+- Si la app no está instalada, abre en el navegador web
+
+**Benefits**:
+- ✅ **Conexión directa con redes sociales** - Un tap y el usuario está en contacto
+- ✅ **WhatsApp pre-configurado** - Mensaje predefinido para facilitar consultas
+- ✅ **Mejor engagement** - Los usuarios pueden seguir fácilmente en redes
+- ✅ **Experiencia nativa** - Se abre en la app instalada cuando está disponible
+- ✅ **Fallback inteligente** - Si no hay app, abre en navegador
+
+**File Modified**:
+- `lib/presentation/widgets/components/mobile_menu_drawer.dart`
+
+---
+
 ## [v0.18.28] - 2025-01-25
 
 ### 🐛 Fixed Mobile Drawer Overflow Issue

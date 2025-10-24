@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Mobile Hamburger Menu Drawer
 class MobileMenuDrawer extends StatelessWidget {
@@ -195,11 +196,20 @@ class MobileMenuDrawer extends StatelessWidget {
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              _buildSocialIcon(Icons.facebook, () {}),
+                              _buildSocialIcon(
+                                Icons.facebook,
+                                () => _openFacebook(),
+                              ),
                               const SizedBox(width: 12),
-                              _buildSocialIcon(Icons.camera_alt, () {}),
+                              _buildSocialIcon(
+                                Icons.camera_alt,
+                                () => _openInstagram(),
+                              ),
                               const SizedBox(width: 12),
-                              _buildSocialIcon(Icons.chat, () {}),
+                              _buildSocialIcon(
+                                Icons.chat,
+                                () => _openWhatsApp(),
+                              ),
                             ],
                           ),
                         ],
@@ -249,5 +259,31 @@ class MobileMenuDrawer extends StatelessWidget {
         child: Icon(icon, color: Colors.white, size: 20),
       ),
     );
+  }
+
+  // Métodos para abrir redes sociales
+  Future<void> _openFacebook() async {
+    final uri = Uri.parse('https://www.facebook.com/byletytravels');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _openInstagram() async {
+    final uri = Uri.parse('https://www.instagram.com/byletytravels.ok/');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _openWhatsApp() async {
+    const phoneNumber = '5493884102859';
+    const message = '¡Hola! Me gustaría información sobre paquetes de viaje.';
+    final uri = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }
