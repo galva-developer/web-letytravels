@@ -97,9 +97,9 @@ class SearchResultsPage extends StatelessWidget {
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
               final isMobile = screenWidth < 768;
-              final maxCardWidth = isMobile ? constraints.maxWidth : 580.0;
-              // Mobile: 370px minimum, Desktop: 580px minimum
-              final minCardWidth = isMobile ? 370.0 : 580.0;
+              final maxCardWidth = isMobile ? constraints.maxWidth : 620.0;
+              // Mobile: 370px minimum, Desktop: 620px minimum (ensures single column up to ~1280px)
+              final minCardWidth = isMobile ? 370.0 : 620.0;
 
               return GridView.builder(
                 shrinkWrap: true,

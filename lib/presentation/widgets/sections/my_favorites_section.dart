@@ -251,9 +251,9 @@ class MyFavoritesSection extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final maxCardWidth = isMobile ? constraints.maxWidth : 580.0;
-        // Mobile: 370px minimum, Desktop: 580px minimum
-        final minCardWidth = isMobile ? 370.0 : 580.0;
+        final maxCardWidth = isMobile ? constraints.maxWidth : 620.0;
+        // Mobile: 370px minimum, Desktop: 620px minimum (ensures single column up to ~1280px)
+        final minCardWidth = isMobile ? 370.0 : 620.0;
 
         return GridView.builder(
           shrinkWrap: true,

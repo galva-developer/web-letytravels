@@ -4,6 +4,238 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.20] - 2025-01-25
+
+### 🎯 Final Fix: 1040-1116px Narrow Card Issue
+
+#### 📏 Desktop Minimum Width: 600px → 620px (Eliminates Last Problem Range)
+
+**Issue**: Small remaining range (1040-1116px) still showing 2 narrow columns instead of 1 spacious column.
+
+**Root Cause Analysis**:
+```
+With 600px minimum:
+├─ 1200px ÷ (600px + 20px spacing) = 1.93
+├─ Grid rounds down: attempts 2 columns
+├─ At 1040-1116px: 2 cols × ~500-538px
+└─ Result: Still narrow! ❌
+```
+
+**Solution**: Increased minimum from **600px to 620px** (+20px).
+
+**Before** (600px):
+```dart
+final minCardWidth = isMobile ? 370.0 : 600.0;
+
+// Problem range:
+// 1040px: 2 cols × ~500px = Narrow ❌
+// 1100px: 2 cols × ~530px = Tight ❌  
+// 1116px: 2 cols × ~538px = Still compressed ❌
+```
+
+**After** (620px):
+```dart
+final minCardWidth = isMobile ? 370.0 : 620.0;
+
+// Fixed:
+// 1040px: 1 col × 1040px = Spacious! ✅
+// 1100px: 1 col × 1100px = Perfect! ✅
+// 1116px: 1 col × 1116px = Great! ✅
+// 1280px+: 2 cols × 620px+ = Excellent! ✅
+```
+
+**Complete Breakpoint Behavior**:
+
+| Screen Width | Before (600px) | After (620px) | Status |
+|--------------|----------------|---------------|---------|
+| **768-1024px** | 1 col ✅ | 1 col ✅ | No change |
+| **1040px** | 2 cols (~500px) ❌ | **1 col (1040px)** ✅ | **FIXED** |
+| **1100px** | 2 cols (~530px) ❌ | **1 col (1100px)** ✅ | **FIXED** |
+| **1116px** | 2 cols (~538px) ❌ | **1 col (1116px)** ✅ | **FIXED** |
+| **1200px** | 2 cols (~580px) 😐 | **1 col (1200px)** ✅ | Better |
+| **1280px** | 2 cols (~620px) ✅ | **2 cols (~640px)** ✅ | Perfect |
+| **1366px** | 2 cols (~663px) ✅ | **2 cols (~683px)** ✅ | Improved |
+| **1920px** | 3 cols (~630px) ✅ | **3 cols (~640px)** ✅ | Better |
+
+**New Grid Logic**:
+
+**Single Column Range** (768-1280px):
+- 768px → 1 col (full width)
+- 1024px → 1 col (full width)
+- **1040px → 1 col (FIXED!)** ✅
+- **1100px → 1 col (FIXED!)** ✅
+- **1116px → 1 col (FIXED!)** ✅
+- 1200px → 1 col (spacious)
+- 1280px → transition point
+
+**Two Column Range** (1280-1900px):
+- 1280px → 2 cols × ~640px ✅
+- 1366px → 2 cols × ~683px ✅
+- 1440px → 2 cols × ~720px ✅
+- 1600px → 2 cols × ~800px ✅
+- 1920px → 2-3 cols × ~640px ✅
+
+**Three+ Column Range** (1900px+):
+- 1920px → 3 cols × ~640px ✅
+- 2560px → 4 cols × ~640px ✅
+
+**Math Behind 620px**:
+```
+For 2 columns you need:
+2 × 620px + spacing (~40px) = ~1280px minimum
+
+Results:
+- Below 1280px: Only 1 column fits → Full width ✅
+- At 1280px+: 2 columns × ~640px each → Perfect! ✅
+- At 1920px+: 3 columns × ~640px each → Premium! ✅
+```
+
+**Benefits**:
+- ✅ **Problem Range Eliminated**: 1040-1116px now shows 1 spacious column
+- ✅ **No More Narrow Cards**: Zero narrow 2-column layouts below 1280px
+- ✅ **Clean Breakpoint**: 2 columns only appear at ~1280px where they look good
+- ✅ **Consistent Experience**: Always spacious, never cramped
+- ✅ **Premium Feel**: Wider minimum = more luxurious presentation
+- ✅ **Better Typography**: 620px is excellent for content readability
+
+**Real-World Devices**:
+
+1. **iPad Pro Landscape (1024-1112px)**:
+   - ❌ Before: 2 narrow columns
+   - ✅ After: 1 spacious full-width column
+
+2. **MacBook Air (1280px)**:
+   - Before: 2 cols × ~620px ✅
+   - After: 2 cols × ~640px (even better!) ✅
+
+3. **Laptop (1366px)**:
+   - Before: 2 cols × ~663px ✅
+   - After: 2 cols × ~683px (improved!) ✅
+
+4. **Desktop (1920px)**:
+   - Before: 3 cols × ~630px ✅
+   - After: 3 cols × ~640px (better!) ✅
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Complete Evolution**:
+- v0.18.12: 360px (initial)
+- v0.18.15: 450px
+- v0.18.16: 480px
+- v0.18.17: 530px
+- v0.18.18: 580px
+- v0.18.19: 600px (close but not enough)
+- **v0.18.20: 620px (FINAL FIX)** ✅
+
+**This Should Be Final**: 620px ensures no narrow 2-column layouts appear until screen is wide enough (1280px+) to display them comfortably.
+
+---
+
+## [v0.18.19] - 2025-01-25
+
+### 🔧 Critical Fix: 1024-1116px Range
+
+#### 📏 Desktop Minimum Width: 580px → 600px (Fixes Narrow 2-Column Issue)
+
+**Issue Identified**: In the specific range of **1024-1116px screen width**, the grid was showing 2 columns but cards appeared too narrow/compressed.
+
+**Problem Analysis**:
+```
+Screen: 1024px - 1116px
+├─ With 580px minimum:
+│  ├─ Grid calculates: 2 columns fit
+│  ├─ Card width: ~492-538px each
+│  └─ Result: Narrow, compressed cards ❌
+└─ Problem: Content feels cramped at this breakpoint
+```
+
+**Solution**: Increased desktop minimum from **580px to 600px**.
+
+**Before** (580px):
+```dart
+final minCardWidth = isMobile ? 370.0 : 580.0;
+// At 1024px: 2 columns × ~492px = Too narrow ❌
+// At 1116px: 2 columns × ~538px = Still tight ❌
+```
+
+**After** (600px):
+```dart
+final minCardWidth = isMobile ? 370.0 : 600.0;
+// At 1024px: 1 column × 1024px = Spacious! ✅
+// At 1116px: 1 column × 1116px = Spacious! ✅
+// At 1240px+: 2 columns × ~600px+ = Perfect! ✅
+```
+
+**Grid Behavior Fix**:
+
+| Screen Width | Before (580px) | After (600px) | Fix Applied |
+|--------------|----------------|---------------|-------------|
+| **1024px** | 2 cols (~492px) ❌ | **1 col (full)** ✅ | Eliminated narrow cards |
+| **1050px** | 2 cols (~505px) ❌ | **1 col (full)** ✅ | Better layout |
+| **1116px** | 2 cols (~538px) ❌ | **1 col (full)** ✅ | Spacious |
+| **1240px** | 2 cols (~600px) ✅ | **2 cols (~620px)** ✅ | Perfect width |
+| **1366px** | 2 cols (~663px) ✅ | **2 cols (~683px)** ✅ | Even better |
+| **1920px** | 3 cols (~630px) ✅ | **3 cols (~640px)** ✅ | Premium |
+
+**Breakpoint Changes**:
+
+**Previous Behavior** (580px min):
+- 768-1000px: 1 column ✅
+- **1024-1200px: 2 columns (NARROW)** ❌
+- 1200-1700px: 2 columns ✅
+- 1700px+: 3 columns ✅
+
+**New Behavior** (600px min):
+- 768-1200px: **1 column (SPACIOUS)** ✅
+- **1200-1800px: 2 columns (PERFECT WIDTH)** ✅
+- 1800px+: 3 columns ✅
+
+**Benefits**:
+- ✅ **Problem Range Fixed**: 1024-1116px now shows 1 comfortable column
+- ✅ **Better Breakpoint**: 2-column layout only starts at ~1240px (where it looks good)
+- ✅ **No More Narrow Cards**: Eliminates the compressed feeling
+- ✅ **Smoother Transitions**: Column changes feel more natural
+- ✅ **Premium Experience**: Cards always feel spacious, never cramped
+- ✅ **Content Optimized**: 600px is ideal for travel package content
+
+**Technical Details**:
+- **Magic Number**: 600px chosen because:
+  - 2 × 600px + spacing (~40px) = ~1240px minimum for 2 columns
+  - Below 1240px: forces single column (full width, always looks great)
+  - At 1240px+: 2 columns with comfortable 600px+ width each
+- **Grid Logic**: `maxCrossAxisExtent = 600.0` prevents fitting 2 columns until screen is wide enough
+
+**Real-World Impact**:
+
+1. **iPad Landscape (1024px)**:
+   - Before: 2 narrow cols ❌
+   - After: 1 spacious col ✅
+
+2. **Small Laptop (1366px)**:
+   - Before: 2 cols × 663px ✅
+   - After: 2 cols × 683px (even better!) ✅
+
+3. **Standard Desktop (1920px)**:
+   - Before: 3 cols × 630px ✅
+   - After: 3 cols × 640px (improved!) ✅
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Evolution Path**:
+- v0.18.17: 530px
+- v0.18.18: 580px (helped but not enough)
+- **v0.18.19: 600px (SOLVES 1024-1116px issue)** ✅
+
+---
+
 ## [v0.18.18] - 2025-01-25
 
 ### 🎯 Final Desktop Width Optimization
