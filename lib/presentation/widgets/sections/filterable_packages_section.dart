@@ -552,8 +552,8 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                   // Calculate max card width based on screen size
                   final screenWidth = constraints.maxWidth;
                   final maxCardWidth = isMobile ? screenWidth : 620.0;
-                  // Mobile: 370px minimum, Desktop: 620px minimum (ensures single column up to ~1280px)
-                  final minCardWidth = isMobile ? 370.0 : 620.0;
+                  // Ensure minCardWidth never exceeds maxCardWidth to avoid BoxConstraints errors
+                  final minCardWidth = isMobile ? screenWidth.clamp(280.0, 370.0) : 620.0;
 
                   return GridView.builder(
                     shrinkWrap: true,
