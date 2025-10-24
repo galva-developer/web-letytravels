@@ -553,7 +553,8 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                   final screenWidth = constraints.maxWidth;
                   final maxCardWidth = isMobile ? screenWidth : 620.0;
                   // Ensure minCardWidth never exceeds maxCardWidth to avoid BoxConstraints errors
-                  final minCardWidth = isMobile ? screenWidth.clamp(280.0, 370.0) : 620.0;
+                  final minCardWidth =
+                      isMobile ? screenWidth.clamp(280.0, 370.0) : 620.0;
 
                   return GridView.builder(
                     shrinkWrap: true,
