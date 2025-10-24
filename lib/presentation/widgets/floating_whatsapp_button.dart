@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:by_lety_travels/data/services/contact_service.dart';
+import 'package:by_lety_travels/utils/responsive_utils.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /// Botón flotante de WhatsApp con animación de pulso y badge de estado
 class FloatingWhatsAppButton extends StatefulWidget {
@@ -77,16 +79,23 @@ class _FloatingWhatsAppButtonState extends State<FloatingWhatsAppButton>
   @override
   Widget build(BuildContext context) {
     final isOpen = ContactService.isOpenNow();
+    final isMobile = ResponsiveUtils.isMobile(context);
+
+    // Tamaños responsive
+    final badgeFontSize = isMobile ? 10.0 : 12.0;
+    final bottomPosition = isMobile ? (widget.bottom! * 0.8) : widget.bottom!;
+    final rightPosition = isMobile ? (widget.right! * 0.7) : widget.right!;
 
     return Positioned(
-      bottom: widget.bottom,
-      right: widget.right,
+      bottom: bottomPosition,
+      right: rightPosition,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // Badge de estado
-          if (isOpen)
+          if (isOpen &&
+              !isMobile) // Ocultar badge en móvil para ahorrar espacio
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
@@ -112,10 +121,10 @@ class _FloatingWhatsAppButtonState extends State<FloatingWhatsAppButton>
                     ),
                   ),
                   const SizedBox(width: 6),
-                  const Text(
+                  Text(
                     'En línea',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: badgeFontSize,
                       fontWeight: FontWeight.w600,
                       color: Colors.black87,
                     ),
@@ -145,18 +154,14 @@ class _FloatingWhatsAppButtonState extends State<FloatingWhatsAppButton>
                   ),
                 ],
               ),
-              child: FloatingActionButton.extended(
+              child: FloatingActionButton(
                 onPressed: _openWhatsApp,
                 backgroundColor: const Color(0xFF25D366),
                 elevation: 8,
-                icon: const Icon(Icons.chat, color: Colors.white, size: 24),
-                label: const Text(
-                  'WhatsApp',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                child: FaIcon(
+                  FontAwesomeIcons.whatsapp,
+                  color: Colors.white,
+                  size: isMobile ? 28 : 32,
                 ),
               ),
             ),
@@ -268,7 +273,11 @@ class _FloatingWhatsAppButtonCompactState
                 onPressed: _openWhatsApp,
                 backgroundColor: const Color(0xFF25D366),
                 elevation: 8,
-                child: const Icon(Icons.chat, color: Colors.white, size: 28),
+                child: const FaIcon(
+                  FontAwesomeIcons.whatsapp,
+                  color: Colors.white,
+                  size: 28,
+                ),
               ),
             ),
 

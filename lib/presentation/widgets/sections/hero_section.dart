@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:by_lety_travels/presentation/widgets/components/stats_indicator.dart';
+import 'package:by_lety_travels/utils/responsive_utils.dart';
 
 // Widget for the main hero section of the home page with image carousel.
 class HeroSection extends StatefulWidget {
@@ -113,6 +114,19 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   Widget build(BuildContext context) {
+    // Responsive utilities
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
+
+    // Responsive font sizes
+    final titleFontSize = isMobile ? 32.0 : (isTablet ? 38.0 : 48.0);
+    final subtitleFontSize = isMobile ? 20.0 : (isTablet ? 24.0 : 32.0);
+    final descriptionFontSize = isMobile ? 14.0 : (isTablet ? 18.0 : 22.0);
+
+    // Responsive spacing
+    final horizontalPadding = isMobile ? 20.0 : (isTablet ? 40.0 : 60.0);
+    final verticalSpacing = isMobile ? 12.0 : 20.0;
+
     return Container(
       key: widget.sectionKey,
       height: MediaQuery.of(context).size.height,
@@ -170,133 +184,166 @@ class _HeroSectionState extends State<HeroSection>
 
           // Content overlay (text and buttons)
           Positioned.fill(
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Main title with fade-in animation
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 800),
-                    builder: (context, value, child) {
-                      return Opacity(
-                        opacity: value,
-                        child: Transform.translate(
-                          offset: Offset(0, 20 * (1 - value)),
-                          child: child,
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(
+                  left: horizontalPadding,
+                  right: horizontalPadding,
+                  top: isMobile ? 80.0 : 0.0, // Bajar contenido en móvil
+                ),
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Main title with fade-in animation
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 800),
+                      builder: (context, value, child) {
+                        return Opacity(
+                          opacity: value,
+                          child: Transform.translate(
+                            offset: Offset(0, 20 * (1 - value)),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        isMobile ? 'Aventura' : 'Descubre Tu Próxima Aventura',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          height: 1.1,
+                          letterSpacing: isMobile ? 0.5 : 1.0,
+                          shadows: const [
+                            Shadow(
+                              offset: Offset(2, 2),
+                              blurRadius: 8,
+                              color: Colors.black87,
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Descubre Tu Próxima Aventura',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(2, 2),
-                            blurRadius: 8,
-                            color: Colors.black87,
+                      ),
+                    ),
+                    SizedBox(height: verticalSpacing * 0.8),
+
+                    // Animated rotating text with typewriter effect
+                    SizedBox(
+                      height: isMobile ? 30 : 50,
+                      child: DefaultTextStyle(
+                        style: TextStyle(
+                          fontSize: subtitleFontSize,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFFFFDC00),
+                          height: 1.0,
+                          shadows: [
+                            Shadow(
+                              offset: const Offset(1, 1),
+                              blurRadius: 4,
+                              color: Colors.black.withOpacity(0.6),
+                            ),
+                          ],
+                        ),
+                        child: AnimatedTextKit(
+                          animatedTexts:
+                              _destinations
+                                  .map(
+                                    (destination) => TypewriterAnimatedText(
+                                      destination,
+                                      speed: const Duration(milliseconds: 100),
+                                    ),
+                                  )
+                                  .toList(),
+                          repeatForever: true,
+                          pause: const Duration(milliseconds: 1500),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: verticalSpacing * 0.6),
+
+                    // Subtitle with fade-in
+                    TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 1200),
+                      builder: (context, value, child) {
+                        return Opacity(opacity: value, child: child);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 10 : 0,
+                        ),
+                        child: Text(
+                          'Destinos increíbles a precios inmejorables.',
+                          textAlign: TextAlign.center,
+                          maxLines: isMobile ? 2 : 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: descriptionFontSize,
+                            color: Colors.white.withOpacity(0.9),
+                            height: 1.3,
+                            shadows: [
+                              Shadow(
+                                offset: const Offset(1, 1),
+                                blurRadius: 4,
+                                color: Colors.black.withOpacity(0.6),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    SizedBox(height: verticalSpacing * 1.2),
 
-                  // Animated rotating text with typewriter effect
-                  SizedBox(
-                    height: 50,
-                    child: DefaultTextStyle(
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFFFFDC00),
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(1, 1),
-                            blurRadius: 4,
-                            color: Colors.black.withOpacity(0.6),
-                          ),
-                        ],
-                      ),
-                      child: AnimatedTextKit(
-                        animatedTexts:
-                            _destinations
-                                .map(
-                                  (destination) => TypewriterAnimatedText(
-                                    destination,
-                                    speed: const Duration(milliseconds: 100),
-                                  ),
-                                )
-                                .toList(),
-                        repeatForever: true,
-                        pause: const Duration(milliseconds: 1500),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+                    // Statistics indicators with animation
+                    const StatsIndicator(),
+                    SizedBox(height: verticalSpacing * 1.5),
 
-                  // Subtitle with fade-in
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.0, end: 1.0),
-                    duration: const Duration(milliseconds: 1200),
-                    builder: (context, value, child) {
-                      return Opacity(opacity: value, child: child);
-                    },
-                    child: Text(
-                      'Destinos increíbles a precios inmejorables.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white.withOpacity(0.9),
-                        shadows: [
-                          Shadow(
-                            offset: const Offset(1, 1),
-                            blurRadius: 4,
-                            color: Colors.black.withOpacity(0.6),
-                          ),
-                        ],
+                    // Call-to-action buttons with bounce animation
+                    AnimatedBuilder(
+                      animation: _buttonAnimationController,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _buttonAnimation.value),
+                          child: child,
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile ? 8 : 0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Primary CTA: Explore Destinations
+                            Flexible(
+                              child: _buildPrimaryCTA(isMobile: isMobile),
+                            ),
+                            SizedBox(width: isMobile ? 8 : 20),
+                            // Secondary CTA: Contact Advisor via WhatsApp
+                            Flexible(
+                              child: _buildSecondaryCTA(isMobile: isMobile),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Statistics indicators with animation
-                  const StatsIndicator(),
-                  const SizedBox(height: 40),
-
-                  // Call-to-action buttons with bounce animation
-                  AnimatedBuilder(
-                    animation: _buttonAnimationController,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, _buttonAnimation.value),
-                        child: child,
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Primary CTA: Explore Destinations
-                        _buildPrimaryCTA(),
-                        const SizedBox(width: 20),
-                        // Secondary CTA: Contact Advisor via WhatsApp
-                        _buildSecondaryCTA(),
-                      ],
-                    ),
-                  ),
-                ],
+                    if (isMobile) SizedBox(height: verticalSpacing * 2),
+                  ],
+                ),
               ),
             ),
           ),
 
           // Carousel indicators (dots)
           Positioned(
-            bottom: 30,
+            bottom: isMobile ? 20 : 30,
             left: 0,
             right: 0,
             child: Row(
@@ -306,11 +353,11 @@ class _HeroSectionState extends State<HeroSection>
                     return GestureDetector(
                       onTap: () => _carouselController.animateToPage(entry.key),
                       child: Container(
-                        width: 12.0,
-                        height: 12.0,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 4.0,
+                        width: isMobile ? 8.0 : 12.0,
+                        height: isMobile ? 8.0 : 12.0,
+                        margin: EdgeInsets.symmetric(
+                          vertical: isMobile ? 6.0 : 8.0,
+                          horizontal: isMobile ? 3.0 : 4.0,
                         ),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -332,91 +379,96 @@ class _HeroSectionState extends State<HeroSection>
             ),
           ),
 
-          // Navigation arrows (left and right)
+          // Navigation arrows (left and right) - Hidden on mobile
           // Left arrow
-          Positioned(
-            left: 20,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    _carouselController.previousPage();
-                    setState(() {
-                      _isAutoPlaying =
-                          false; // Stop auto-play on manual navigation
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
-                      size: 30,
+          if (!ResponsiveUtils.isMobile(context))
+            Positioned(
+              left: 20,
+              top: 0,
+              bottom: 0,
+              child: Center(
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      _carouselController.previousPage();
+                      setState(() {
+                        _isAutoPlaying =
+                            false; // Stop auto-play on manual navigation
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
 
           // Right arrow
-          Positioned(
-            right: 20,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    _carouselController.nextPage();
-                    setState(() {
-                      _isAutoPlaying =
-                          false; // Stop auto-play on manual navigation
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                      size: 30,
+          if (!ResponsiveUtils.isMobile(context))
+            Positioned(
+              right: 20,
+              top: 0,
+              bottom: 0,
+              child: Center(
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      _carouselController.nextPage();
+                      setState(() {
+                        _isAutoPlaying =
+                            false; // Stop auto-play on manual navigation
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
   }
 
   // Build primary CTA button (Explore Destinations)
-  Widget _buildPrimaryCTA() {
+  Widget _buildPrimaryCTA({bool isMobile = false}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: ElevatedButton.icon(
         onPressed: _scrollToPackages,
-        icon: const Icon(Icons.explore, size: 24),
-        label: const Text('Explorar Destinos'),
+        icon: Icon(Icons.explore, size: isMobile ? 18 : 24),
+        label: Text(isMobile ? 'Explorar' : 'Explorar'),
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFFDC00),
           foregroundColor: const Color(0xFF072A47),
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-          textStyle: const TextStyle(
-            fontSize: 18,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : 40,
+            vertical: isMobile ? 14 : 24,
+          ),
+          textStyle: TextStyle(
+            fontSize: isMobile ? 13 : 18,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.5,
           ),
@@ -454,19 +506,22 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   // Build secondary CTA button (Contact via WhatsApp)
-  Widget _buildSecondaryCTA() {
+  Widget _buildSecondaryCTA({bool isMobile = false}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: OutlinedButton.icon(
         onPressed: _openWhatsApp,
-        icon: const Icon(Icons.chat, size: 24),
-        label: const Text('Hablar con Asesor'),
+        icon: Icon(Icons.chat, size: isMobile ? 18 : 24),
+        label: Text(isMobile ? 'Asesor' : 'Hablar con Asesor'),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.white,
           backgroundColor: Colors.white.withOpacity(0.15),
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-          textStyle: const TextStyle(
-            fontSize: 18,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : 40,
+            vertical: isMobile ? 14 : 24,
+          ),
+          textStyle: TextStyle(
+            fontSize: isMobile ? 13 : 18,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.5,
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
+import 'package:by_lety_travels/utils/responsive_utils.dart';
 
 // Enhanced widget to display travel package information in a card format with badges and flip animation.
 class TravelPackageCard extends StatefulWidget {
@@ -120,6 +121,8 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                 ..setEntry(3, 2, 0.001) // perspective
                 ..rotateY(angle);
 
+          final isMobile = ResponsiveUtils.isMobile(context);
+
           return AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
@@ -128,11 +131,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
               alignment: Alignment.center,
               child:
                   angle <= math.pi / 2
-                      ? _buildFrontCard(context)
+                      ? _buildFrontCard(context, isMobile)
                       : Transform(
                         transform: Matrix4.rotationY(math.pi),
                         alignment: Alignment.center,
-                        child: _buildBackCard(context),
+                        child: _buildBackCard(context, isMobile),
                       ),
             ),
           );
@@ -142,10 +145,18 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build the front side of the card (original design)
-  Widget _buildFrontCard(BuildContext context) {
+  Widget _buildFrontCard(BuildContext context, bool isMobile) {
+    // Responsive sizes
+    final cardMargin = isMobile ? 4.0 : 16.0;
+    final cardPadding = isMobile ? 8.0 : 16.0;
+    final titleFontSize = isMobile ? 16.0 : 20.0;
+    final priceFontSize = isMobile ? 18.0 : 22.0;
+    final locationFontSize = isMobile ? 12.0 : 16.0;
+    final descriptionFontSize = isMobile ? 12.0 : 14.0;
+
     return Card(
       elevation: _isHovered ? 12.0 : 4.0,
-      margin: const EdgeInsets.all(16.0),
+      margin: EdgeInsets.all(cardMargin),
       color: const Color(0xFFF5F5F5), // Fondo gris claro
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: Stack(
@@ -154,53 +165,73 @@ class _TravelPackageCardState extends State<TravelPackageCard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // Image section with badges overlay
-              _buildImageSection(),
+              _buildImageSection(isMobile),
 
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(cardPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Title and Price
-                    _buildTitleAndPrice(),
-                    const SizedBox(height: 8.0),
+                    _buildTitleAndPrice(
+                      titleFontSize: titleFontSize,
+                      priceFontSize: priceFontSize,
+                      isMobile: isMobile,
+                    ),
+                    SizedBox(height: isMobile ? 3.0 : 8.0),
 
                     // Location
                     Text(
                       widget.location,
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: locationFontSize,
                         color: Colors.grey[700],
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 12.0),
+                    SizedBox(height: isMobile ? 5.0 : 12.0),
 
                     // Description
                     Text(
                       widget.description,
-                      style: const TextStyle(fontSize: 14.0),
-                      maxLines: 2,
+                      style: TextStyle(fontSize: descriptionFontSize),
+                      maxLines: isMobile ? 1 : 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 16.0),
+                    SizedBox(height: isMobile ? 6.0 : 16.0),
 
                     // Services icons (more visible)
-                    _buildServicesIcons(),
-                    const SizedBox(height: 16.0),
+                    _buildServicesIcons(isMobile),
+                    SizedBox(height: isMobile ? 6.0 : 16.0),
 
-                    // Details section
-                    _buildDetailRow(Icons.calendar_today, widget.duration),
+                    // Details section (condensed on mobile)
+                    _buildDetailRow(
+                      Icons.calendar_today,
+                      widget.duration,
+                      isMobile,
+                    ),
                     if (widget.flightsIncluded)
-                      _buildDetailRow(Icons.flight, 'Flights included'),
-                    _buildDetailRow(Icons.hotel, '${widget.hotelRating} hotel'),
-                    if (widget.guidedTours)
-                      _buildDetailRow(Icons.directions_walk, 'Guided tours'),
+                      _buildDetailRow(
+                        Icons.flight,
+                        'Flights included',
+                        isMobile,
+                      ),
+                    _buildDetailRow(
+                      Icons.hotel,
+                      '${widget.hotelRating} hotel',
+                      isMobile,
+                    ),
+                    if (widget.guidedTours && !isMobile)
+                      _buildDetailRow(
+                        Icons.directions_walk,
+                        'Guided tours',
+                        isMobile,
+                      ),
 
-                    const SizedBox(height: 20.0),
+                    SizedBox(height: isMobile ? 12.0 : 20.0),
 
                     // Action buttons
-                    _buildActionButtons(),
+                    _buildActionButtons(isMobile),
                   ],
                 ),
               ),
@@ -212,7 +243,10 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build favorite button widget
-  Widget _buildFavoriteButton() {
+  Widget _buildFavoriteButton(bool isMobile) {
+    final iconSize = isMobile ? 16.0 : 20.0;
+    final padding = isMobile ? 5.0 : 8.0;
+
     return Consumer<FavoritesProvider>(
       builder: (context, favoritesProvider, child) {
         final isFavorite = favoritesProvider.isFavorite(widget.title);
@@ -225,7 +259,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
             },
             customBorder: const CircleBorder(),
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(padding),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.9),
                 shape: BoxShape.circle,
@@ -244,7 +278,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 color: isFavorite ? Colors.red : Colors.grey[600],
-                size: 20,
+                size: iconSize,
               ),
             ),
           ),
@@ -254,7 +288,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build the back side of the card (detailed info)
-  Widget _buildBackCard(BuildContext context) {
+  Widget _buildBackCard(BuildContext context, bool isMobile) {
+    final titleFontSize = isMobile ? 18.0 : 22.0;
+    final horizontalPadding = isMobile ? 16.0 : 24.0;
+    final topPadding = isMobile ? 48.0 : 56.0;
+
     return GestureDetector(
       onTap: _toggleFlip, // Click to flip back to front
       child: Card(
@@ -267,11 +305,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                24.0,
-                56.0,
-                24.0,
-                24.0,
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                topPadding,
+                horizontalPadding,
+                horizontalPadding,
               ), // Extra top padding to avoid checkbox overlap
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -280,10 +318,10 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                   // Title
                   Text(
                     widget.title,
-                    style: const TextStyle(
-                      fontSize: 22.0,
+                    style: TextStyle(
+                      fontSize: titleFontSize,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFFFDC00),
+                      color: const Color(0xFFFFDC00),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -307,45 +345,52 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                     Icons.location_on,
                     widget.location,
                     'Destino',
+                    isMobile,
                   ),
                   const SizedBox(height: 12),
                   _buildBackInfoRow(
                     Icons.calendar_today,
                     widget.duration,
                     'Duración',
+                    isMobile,
                   ),
                   const SizedBox(height: 12),
                   _buildBackInfoRow(
                     Icons.attach_money,
                     widget.price,
                     'Precio por persona',
+                    isMobile,
                   ),
                   const SizedBox(height: 12),
                   _buildBackInfoRow(
                     Icons.hotel,
                     widget.hotelRating,
                     'Alojamiento',
+                    isMobile,
                   ),
                   const SizedBox(height: 20),
 
                   // Features list
-                  const Text(
+                  Text(
                     'Incluye:',
                     style: TextStyle(
-                      color: Color(0xFFFFDC00),
+                      color: const Color(0xFFFFDC00),
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: isMobile ? 14.0 : 16.0,
                     ),
                   ),
                   const SizedBox(height: 12),
 
                   if (widget.flightsIncluded)
-                    _buildFeatureItem('✈️ Vuelos ida y vuelta'),
-                  _buildFeatureItem('🏨 Alojamiento ${widget.hotelRating}'),
+                    _buildFeatureItem('✈️ Vuelos ida y vuelta', isMobile),
+                  _buildFeatureItem(
+                    '🏨 Alojamiento ${widget.hotelRating}',
+                    isMobile,
+                  ),
                   if (widget.guidedTours)
-                    _buildFeatureItem('🎯 Tours guiados en español'),
+                    _buildFeatureItem('🎯 Tours guiados en español', isMobile),
                   if (widget.services.contains('Meals Included'))
-                    _buildFeatureItem('🍽️ Comidas incluidas'),
+                    _buildFeatureItem('🍽️ Comidas incluidas', isMobile),
 
                   const Spacer(),
 
@@ -355,12 +400,20 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: widget.onBookNowPressed,
-                          icon: const Icon(Icons.check_circle, size: 20),
+                          icon: Icon(
+                            Icons.check_circle,
+                            size: isMobile ? 18.0 : 20.0,
+                          ),
                           label: const Text('Reservar Ahora'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFFDC00),
                             foregroundColor: const Color(0xFF072A47),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding: EdgeInsets.symmetric(
+                              vertical: isMobile ? 12.0 : 14.0,
+                            ),
+                            textStyle: TextStyle(
+                              fontSize: isMobile ? 13.0 : 14.0,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -382,10 +435,10 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                   color: const Color(0xFFFFDC00).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.touch_app,
-                  color: Color(0xFFFFDC00),
-                  size: 20,
+                  color: const Color(0xFFFFDC00),
+                  size: isMobile ? 18.0 : 20.0,
                 ),
               ),
             ),
@@ -396,10 +449,19 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build info row for back card
-  Widget _buildBackInfoRow(IconData icon, String value, String label) {
+  Widget _buildBackInfoRow(
+    IconData icon,
+    String value,
+    String label,
+    bool isMobile,
+  ) {
+    final iconSize = isMobile ? 18.0 : 20.0;
+    final labelFontSize = isMobile ? 11.0 : 12.0;
+    final valueFontSize = isMobile ? 14.0 : 15.0;
+
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFFFFDC00), size: 20),
+        Icon(icon, color: const Color(0xFFFFDC00), size: iconSize),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -407,13 +469,16 @@ class _TravelPackageCardState extends State<TravelPackageCard>
             children: [
               Text(
                 label,
-                style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: labelFontSize,
+                ),
               ),
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 15,
+                  fontSize: valueFontSize,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -425,18 +490,22 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build feature item for back card
-  Widget _buildFeatureItem(String text) {
+  Widget _buildFeatureItem(String text, bool isMobile) {
+    final fontSize = isMobile ? 13.0 : 14.0;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+        style: TextStyle(color: Colors.white, fontSize: fontSize),
       ),
     );
   }
 
   /// Build image section with badges
-  Widget _buildImageSection() {
+  Widget _buildImageSection(bool isMobile) {
+    final imageHeight = isMobile ? 140.0 : 200.0;
+
     return MouseRegion(
       onEnter: (_) => _handleFlipHover(true),
       onExit: (_) => _handleFlipHover(false),
@@ -451,13 +520,13 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                 widget.imageUrl != null && widget.imageUrl!.isNotEmpty
                     ? Image.network(
                       widget.imageUrl!,
-                      height: 200.0,
+                      height: imageHeight,
                       width: double.infinity,
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Container(
-                          height: 200.0,
+                          height: imageHeight,
                           decoration: BoxDecoration(color: Colors.grey[300]),
                           alignment: Alignment.center,
                           child: CircularProgressIndicator(
@@ -471,7 +540,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                       },
                       errorBuilder: (context, exception, stackTrace) {
                         return Container(
-                          height: 200.0,
+                          height: imageHeight,
                           decoration: BoxDecoration(color: Colors.grey[300]),
                           alignment: Alignment.center,
                           child: Icon(
@@ -483,7 +552,7 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                       },
                     )
                     : Container(
-                      height: 200.0,
+                      height: imageHeight,
                       decoration: BoxDecoration(color: Colors.grey[300]),
                       alignment: Alignment.center,
                       child: Icon(
@@ -502,12 +571,18 @@ class _TravelPackageCardState extends State<TravelPackageCard>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.hasDiscount)
-                  _buildBadge('OFERTA', Colors.red, Icons.local_offer),
+                  _buildBadge(
+                    'OFERTA',
+                    Colors.red,
+                    Icons.local_offer,
+                    isMobile: isMobile,
+                  ),
                 if (widget.isNew)
                   _buildBadge(
                     'NUEVO',
                     const Color(0xFF072A47),
                     Icons.fiber_new,
+                    isMobile: isMobile,
                   ),
                 if (widget.isPopular)
                   _buildBadge(
@@ -515,12 +590,14 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                     const Color(0xFFFFDC00),
                     Icons.star,
                     textColor: const Color(0xFF072A47),
+                    isMobile: isMobile,
                   ),
                 if (widget.hasLimitedSeats)
                   _buildBadge(
                     'ÚLTIMAS PLAZAS',
                     Colors.orange,
                     Icons.warning_amber,
+                    isMobile: isMobile,
                   ),
               ],
             ),
@@ -529,30 +606,33 @@ class _TravelPackageCardState extends State<TravelPackageCard>
           // Discount percentage badge (top right)
           if (widget.hasDiscount && widget.discountPercentage != null)
             Positioned(
-              top: 12,
-              right: 12,
+              top: isMobile ? 8 : 12,
+              right: isMobile ? 8 : 12,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
+                padding:
+                    isMobile
+                        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 4)
+                        : const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                 decoration: BoxDecoration(
                   color: Colors.red,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(isMobile ? 12 : 20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
-                      blurRadius: 8,
+                      blurRadius: isMobile ? 4 : 8,
                       offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 child: Text(
                   '¡${widget.discountPercentage}% OFF!',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    fontSize: isMobile ? 10.0 : 14.0,
                   ),
                 ),
               ),
@@ -568,17 +648,27 @@ class _TravelPackageCardState extends State<TravelPackageCard>
     Color color,
     IconData icon, {
     Color textColor = Colors.white,
+    bool isMobile = false,
   }) {
+    final badgePadding =
+        isMobile
+            ? const EdgeInsets.symmetric(horizontal: 6, vertical: 3)
+            : const EdgeInsets.symmetric(horizontal: 10, vertical: 6);
+    final iconSize = isMobile ? 12.0 : 16.0;
+    final fontSize = isMobile ? 9.0 : 12.0;
+    final marginBottom = isMobile ? 4.0 : 8.0;
+    final spacing = isMobile ? 3.0 : 4.0;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      margin: EdgeInsets.only(bottom: marginBottom),
+      padding: badgePadding,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 20),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
-            blurRadius: 6,
+            blurRadius: isMobile ? 4 : 6,
             offset: const Offset(0, 2),
           ),
         ],
@@ -586,14 +676,14 @@ class _TravelPackageCardState extends State<TravelPackageCard>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: textColor),
-          const SizedBox(width: 4),
+          Icon(icon, size: iconSize, color: textColor),
+          SizedBox(width: spacing),
           Text(
             label,
             style: TextStyle(
               color: textColor,
               fontWeight: FontWeight.bold,
-              fontSize: 12,
+              fontSize: fontSize,
             ),
           ),
         ],
@@ -602,7 +692,11 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build title and price section
-  Widget _buildTitleAndPrice() {
+  Widget _buildTitleAndPrice({
+    required double titleFontSize,
+    required double priceFontSize,
+    required bool isMobile,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -610,16 +704,16 @@ class _TravelPackageCardState extends State<TravelPackageCard>
         Expanded(
           child: Text(
             widget.title,
-            style: const TextStyle(
-              fontSize: 20.0,
+            style: TextStyle(
+              fontSize: titleFontSize,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF072A47),
+              color: const Color(0xFF072A47),
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: isMobile ? 4 : 8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -630,8 +724,8 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                 if (widget.hasDiscount && widget.originalPrice != null)
                   Text(
                     widget.originalPrice!,
-                    style: const TextStyle(
-                      fontSize: 14.0,
+                    style: TextStyle(
+                      fontSize: isMobile ? 11.0 : 14.0,
                       color: Colors.red,
                       decoration: TextDecoration.lineThrough,
                       decorationColor: Colors.red,
@@ -641,17 +735,17 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                 // Current price (always green)
                 Text(
                   widget.price,
-                  style: const TextStyle(
-                    fontSize: 22.0,
+                  style: TextStyle(
+                    fontSize: priceFontSize,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: isMobile ? 3 : 8),
             // Favorite button next to price
-            _buildFavoriteButton(),
+            _buildFavoriteButton(isMobile),
           ],
         ),
       ],
@@ -659,27 +753,39 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build services icons section
-  Widget _buildServicesIcons() {
+  Widget _buildServicesIcons(bool isMobile) {
     return Wrap(
-      spacing: 12,
-      runSpacing: 8,
+      spacing: isMobile ? 6 : 12,
+      runSpacing: isMobile ? 4 : 8,
       children: [
         if (widget.flightsIncluded)
-          _buildServiceChip(Icons.flight, 'Vuelos', const Color(0xFF072A47)),
+          _buildServiceChip(
+            Icons.flight,
+            'Vuelos',
+            const Color(0xFF072A47),
+            isMobile,
+          ),
         if (widget.hotelRating.contains('5'))
           _buildServiceChip(
             Icons.hotel,
             'Hotel 5★',
             const Color(0xFFFFDC00),
+            isMobile,
             textColor: const Color(0xFF072A47),
           ),
         if (widget.guidedTours)
-          _buildServiceChip(Icons.tour, 'Tours', const Color(0xFF072A47)),
+          _buildServiceChip(
+            Icons.tour,
+            'Tours',
+            const Color(0xFF072A47),
+            isMobile,
+          ),
         if (widget.services.contains('Meals Included'))
           _buildServiceChip(
             Icons.restaurant,
             'Comidas',
             const Color(0xFF072A47),
+            isMobile,
           ),
       ],
     );
@@ -689,11 +795,20 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   Widget _buildServiceChip(
     IconData icon,
     String label,
-    Color color, {
+    Color color,
+    bool isMobile, {
     Color textColor = Colors.white,
   }) {
+    final iconSize = isMobile ? 12.0 : 16.0;
+    final fontSize = isMobile ? 10.0 : 12.0;
+    final horizontalPadding = isMobile ? 6.0 : 10.0;
+    final verticalPadding = isMobile ? 4.0 : 6.0;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
+      ),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         border: Border.all(color: color, width: 1.5),
@@ -702,14 +817,14 @@ class _TravelPackageCardState extends State<TravelPackageCard>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: color),
+          Icon(icon, size: iconSize, color: color),
           const SizedBox(width: 4),
           Text(
             label,
             style: TextStyle(
               color: color,
               fontWeight: FontWeight.w600,
-              fontSize: 12,
+              fontSize: fontSize,
             ),
           ),
         ],
@@ -718,66 +833,138 @@ class _TravelPackageCardState extends State<TravelPackageCard>
   }
 
   /// Build detail row
-  Widget _buildDetailRow(IconData icon, String text) {
+  Widget _buildDetailRow(IconData icon, String text, bool isMobile) {
+    final iconSize = isMobile ? 14.0 : 18.0;
+    final fontSize = isMobile ? 11.0 : 14.0;
+    final verticalPadding = isMobile ? 2.0 : 4.0;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: EdgeInsets.symmetric(vertical: verticalPadding),
       child: Row(
         children: <Widget>[
-          Icon(icon, size: 18.0, color: const Color(0xFF072A47)),
-          const SizedBox(width: 8.0),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 14.0))),
+          Icon(icon, size: iconSize, color: const Color(0xFF072A47)),
+          const SizedBox(width: 6.0),
+          Expanded(child: Text(text, style: TextStyle(fontSize: fontSize))),
         ],
       ),
     );
   }
 
   /// Build action buttons
-  Widget _buildActionButtons() {
-    return Row(
-      children: [
-        // View Details button
-        Expanded(
-          child: OutlinedButton.icon(
-            onPressed:
-                widget.onViewDetailsPressed ??
-                () {
-                  print('View Details pressed for: ${widget.title}');
-                },
-            icon: const Icon(Icons.info_outline, size: 18),
-            label: const Text('Ver Detalles'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFF072A47),
-              side: const BorderSide(color: Color(0xFF072A47), width: 2),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+  Widget _buildActionButtons(bool isMobile) {
+    final buttonFontSize = isMobile ? 12.0 : 14.0;
+    final buttonPadding = isMobile ? 10.0 : 14.0;
+    final iconSize = isMobile ? 14.0 : 18.0;
+    final spacing = isMobile ? 6.0 : 12.0;
+    final borderWidth = isMobile ? 1.5 : 2.0;
+
+    return isMobile
+        ? Column(
+          children: [
+            // View Details button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed:
+                    widget.onViewDetailsPressed ??
+                    () {
+                      print('View Details pressed for: ${widget.title}');
+                    },
+                icon: Icon(Icons.info_outline, size: iconSize),
+                label: const Text('Ver Detalles'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF072A47),
+                  side: BorderSide(
+                    color: const Color(0xFF072A47),
+                    width: borderWidth,
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
+                  textStyle: TextStyle(
+                    fontSize: buttonFontSize,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        // Book Now button
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed:
-                widget.onBookNowPressed ??
-                () {
-                  print('Book Now pressed for: ${widget.title}');
-                },
-            icon: const Icon(Icons.check_circle_outline, size: 18),
-            label: const Text('Reservar'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFDC00),
-              foregroundColor: const Color(0xFF072A47),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              elevation: _isHovered ? 8 : 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+            SizedBox(height: spacing),
+            // Book Now button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed:
+                    widget.onBookNowPressed ??
+                    () {
+                      print('Book Now pressed for: ${widget.title}');
+                    },
+                icon: Icon(Icons.check_circle_outline, size: iconSize),
+                label: const Text('Reservar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFDC00),
+                  foregroundColor: const Color(0xFF072A47),
+                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
+                  elevation: _isHovered ? 8 : 2,
+                  textStyle: TextStyle(
+                    fontSize: buttonFontSize,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
-    );
+          ],
+        )
+        : Row(
+          children: [
+            // View Details button
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed:
+                    widget.onViewDetailsPressed ??
+                    () {
+                      print('View Details pressed for: ${widget.title}');
+                    },
+                icon: Icon(Icons.info_outline, size: iconSize),
+                label: const Text('Ver Detalles'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF072A47),
+                  side: const BorderSide(color: Color(0xFF072A47), width: 2),
+                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
+                  textStyle: TextStyle(fontSize: buttonFontSize),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: spacing),
+            // Book Now button
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed:
+                    widget.onBookNowPressed ??
+                    () {
+                      print('Book Now pressed for: ${widget.title}');
+                    },
+                icon: Icon(Icons.check_circle_outline, size: iconSize),
+                label: const Text('Reservar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFDC00),
+                  foregroundColor: const Color(0xFF072A47),
+                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
+                  elevation: _isHovered ? 8 : 2,
+                  textStyle: TextStyle(fontSize: buttonFontSize),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
   }
 }

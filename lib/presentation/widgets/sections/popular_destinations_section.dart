@@ -17,6 +17,8 @@ class PopularDestinationsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+
     // Padding wrapper for the section.
     // This content will be moved from home_page.dart
     return Padding(
@@ -30,36 +32,54 @@ class PopularDestinationsSection extends StatelessWidget {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          GridView.count(
-            crossAxisCount: 3, // Display 3 items per row
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 16.0,
-            crossAxisSpacing: 16.0,
-            childAspectRatio: 0.75, // Adjust aspect ratio
-            children:
-                popularDestinations.map((package) {
-                  return TravelPackageCard(
-                    title: package.title,
-                    price: package.price,
-                    location: package.location,
-                    description: package.description,
-                    duration: package.duration,
-                    flightsIncluded: package.flightsIncluded,
-                    hotelRating: package.hotelRating,
-                    guidedTours: package.guidedTours,
-                    imageUrl: package.imageUrl,
-                    onBookNowPressed: () {
-                      // Navigate to booking form page
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (context) => BookingFormPage(package: package),
-                        ),
-                      );
-                    },
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final maxCardWidth = isMobile ? constraints.maxWidth : 580.0;
+              // Mobile: 370px minimum, Desktop: 580px minimum
+              final minCardWidth = isMobile ? 370.0 : 580.0;
+
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: maxCardWidth,
+                  mainAxisSpacing: 16.0,
+                  crossAxisSpacing: 16.0,
+                  mainAxisExtent: isMobile ? 580.0 : 650.0,
+                ),
+                itemCount: popularDestinations.length,
+                itemBuilder: (context, index) {
+                  final package = popularDestinations[index];
+
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: minCardWidth,
+                      maxWidth: maxCardWidth,
+                    ),
+                    child: TravelPackageCard(
+                      title: package.title,
+                      price: package.price,
+                      location: package.location,
+                      description: package.description,
+                      duration: package.duration,
+                      flightsIncluded: package.flightsIncluded,
+                      hotelRating: package.hotelRating,
+                      guidedTours: package.guidedTours,
+                      imageUrl: package.imageUrl,
+                      onBookNowPressed: () {
+                        // Navigate to booking form page
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) => BookingFormPage(package: package),
+                          ),
+                        );
+                      },
+                    ),
                   );
-                }).toList(),
+                },
+              );
+            },
           ),
         ],
       ),

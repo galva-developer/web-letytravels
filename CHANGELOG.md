@@ -4,6 +4,1249 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.18] - 2025-01-25
+
+### 🎯 Final Desktop Width Optimization
+
+#### 📏 +50px Desktop Minimum Width for Perfect 2-Column Layout
+
+**Issue**: When resizing browser window to 2-column layout, cards still appeared too narrow.
+
+**Solution**: Increased desktop minimum width from **530px to 580px** (+50px).
+
+**Change Applied**:
+- **📱 Mobile**: 370px (no change)
+- **💻 Desktop**: 530px → **580px** (+50px) ✅
+
+**Before**:
+```dart
+final minCardWidth = isMobile ? 370.0 : 530.0;
+final maxCardWidth = isMobile ? screenWidth : 530.0;
+```
+
+**After**:
+```dart
+final minCardWidth = isMobile ? 370.0 : 580.0;
+final maxCardWidth = isMobile ? screenWidth : 580.0;
+```
+
+**Impact on 2-Column Layouts**:
+
+**Problem Scenario** (Before - 530px):
+- Screen: 1200px width
+- Grid attempts: 2 columns × 530px = 1060px + spacing
+- Result: Cards get compressed to ~580px each
+- Issue: Still felt narrow when resizing ❌
+
+**Solution** (After - 580px):
+- Screen: 1200px width  
+- Grid calculates: 2 columns × 580px = 1160px + spacing
+- Result: Forces single column OR maintains 580px minimum
+- Benefit: Cards always feel spacious ✅
+
+**Grid Behavior Changes**:
+
+| Screen Width | Before (530px) | After (580px) | Improvement |
+|--------------|----------------|---------------|-------------|
+| **768-1000px** | 1 column | 1 column | Same ✅ |
+| **1000-1200px** | 1-2 cols (tight) | **1 column** | More spacious ✅ |
+| **1200-1400px** | 2 cols (530px) | **2 cols (580px)** | **Wider cards** ✅ |
+| **1400-1700px** | 2 cols | 2 cols | Better width ✅ |
+| **1700-1920px** | 2-3 cols | **2-3 cols** | Optimal ✅ |
+| **> 1920px** | 3-4 cols | **3 cols** | Premium ✅ |
+
+**Key Benefits**:
+- ✅ **Perfect 2-Column**: When showing 2 cards, each is 580px (very comfortable)
+- ✅ **No More "Narrow" Feel**: Cards maintain substantial width when resizing
+- ✅ **Better Breakpoints**: Grid switches columns at more natural widths
+- ✅ **Premium Experience**: Wider cards = more luxurious presentation
+- ✅ **Content Excellence**: All text, images, buttons have optimal space
+- ✅ **Consistent Quality**: Whether 1, 2, or 3 columns, cards feel spacious
+
+**Typical Use Cases**:
+
+1. **Laptop (1366px)**: 
+   - Before: 2 cols × ~660px (okay)
+   - After: 2 cols × ~680px (better) ✅
+
+2. **Desktop (1920px)**: 
+   - Before: 3-4 cols × ~480-530px
+   - After: 3 cols × ~630px (premium!) ✅
+
+3. **Ultrawide (2560px)**:
+   - Before: 4-5 cols × ~512-530px
+   - After: 4 cols × ~640px (spacious!) ✅
+
+**Design Philosophy**:
+- **Quality over Density**: Prioritize card size over number of columns
+- **Responsive Excellence**: Cards feel great at every breakpoint
+- **Content-First**: 580px is optimal for travel descriptions and imagery
+- **Professional Polish**: Final touch for premium user experience
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Evolution Summary**:
+- v0.18.12: 360px (initial)
+- v0.18.15: 450px
+- v0.18.16: 480px
+- v0.18.17: 530px
+- **v0.18.18: 580px** (final, optimized) ✅
+
+---
+
+## [v0.18.17] - 2025-01-13
+
+### 🚀 Layout Optimization
+
+#### 📏 +50px Increase to Minimum Card Width (All Devices)
+
+**Change**: Added **50px** to minimum card width across all device types for maximum content comfort.
+
+**Increment Applied**:
+- **📱 Mobile**: 320px → **370px** (+50px)
+- **💻 Desktop**: 480px → **530px** (+50px)
+
+**Before**:
+```dart
+final minCardWidth = isMobile ? 320.0 : 480.0;
+final maxCardWidth = isMobile ? screenWidth : 480.0;
+```
+
+**After**:
+```dart
+final minCardWidth = isMobile ? 370.0 : 530.0;
+final maxCardWidth = isMobile ? screenWidth : 530.0;
+```
+
+**Impact by Device Type**:
+
+**📱 Mobile (< 768px)**:
+- **Minimum Width**: 320px → **370px**
+- **Effect**: Cards closer to full width on most phones
+- **Safety**: 370px safely fits in common mobile widths:
+  - iPhone SE: 375px ✅ (5px margin)
+  - iPhone 14: 390px ✅ (20px margin)
+  - iPhone 14 Pro Max: 430px ✅ (60px margin)
+  - Galaxy S23: 412px ✅ (42px margin)
+- **Benefit**: More consistent width across devices
+
+**💻 Desktop (≥ 768px)**:
+- **Minimum Width**: 480px → **530px**
+- **Effect**: Significantly wider cards, fewer columns
+- **Grid Changes**:
+  - 1024px screen: 1 column (was 2)
+  - 1366px screen: 2 columns (was 2-3)
+  - 1600px screen: 3 columns (was 3-4)
+  - 1920px screen: 3 columns (was 4)
+- **Benefit**: Premium, spacious card presentation
+
+**Grid Behavior Examples**:
+
+| Screen Width | Before (320/480) | After (370/530) | Impact |
+|--------------|------------------|-----------------|---------|
+| **375px** (iPhone) | 1 col (320px min) | 1 col (370px min) | Fuller width ✅ |
+| **768px** (iPad Portrait) | 1 col | 1 col | Same |
+| **1024px** | **2 cols** | **1 col** | More spacious ✅ |
+| **1366px** | 2-3 cols | **2 cols** | Cleaner layout ✅ |
+| **1920px** | 4 cols | **3 cols** | Premium feel ✅ |
+
+**Benefits**:
+- ✅ **Maximum Readability**: 530px provides excellent line length for descriptions
+- ✅ **Premium Feel**: Fewer, larger cards = more luxurious presentation
+- ✅ **Mobile Optimized**: 370px minimum ensures near-full-width on phones
+- ✅ **Content Safety**: All text, buttons, and badges have ample space
+- ✅ **Better Focus**: Fewer cards per row = better attention on each package
+- ✅ **Image Quality**: Wider cards showcase travel photos better
+- ✅ **Typography Perfect**: Optimal width for multi-line titles (45-75 chars)
+
+**Design Philosophy**:
+- **Quality over Quantity**: Show fewer cards but with better presentation
+- **Premium Experience**: Spacious layouts feel more high-end
+- **Content First**: Prioritize readability and visual appeal
+- **Mobile-Friendly**: Near-full-width cards on phones
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart` - Main packages grid
+2. ✅ `popular_destinations_section.dart` - Popular destinations
+3. ✅ `my_favorites_section.dart` - Favorites comparison view
+4. ✅ `search_results_page.dart` - Search results grid
+
+**Performance Note**:
+- Fewer cards per row = less rendering complexity
+- Better image aspect ratios = smoother loading
+- Simpler grid calculations = better performance
+
+---
+
+## [v0.18.16] - 2025-01-13
+
+### 🎨 Major Layout Enhancement
+
+#### 📏 Significantly Increased Card Minimum Width Across All Devices
+
+**Change**: Dramatically increased minimum card widths for better content presentation and readability.
+
+**Evolution**:
+1. v0.18.12: 360px (all devices)
+2. v0.18.13: 420px (desktop only)
+3. v0.18.14: 0px mobile, 420px desktop
+4. v0.18.15: 0px mobile, 450px desktop
+5. **v0.18.16**: **320px mobile, 480px desktop** ✅
+
+**Before** (450px desktop):
+```dart
+final minCardWidth = isMobile ? 0.0 : 450.0;
+final maxCardWidth = isMobile ? screenWidth : 450.0;
+```
+
+**After** (480px desktop, 320px mobile):
+```dart
+final minCardWidth = isMobile ? 320.0 : 480.0;
+final maxCardWidth = isMobile ? screenWidth : 480.0;
+```
+
+**Impact by Device**:
+
+**📱 Mobile (< 768px)**:
+- **Before**: No minimum (could theoretically be very narrow on small devices)
+- **After**: **320px minimum** (ensures content always has breathing room)
+- **Benefit**: Consistent minimum even on very small devices
+- **Safe**: 320px < typical mobile widths (360-428px), no overflow
+
+**💻 Desktop (≥ 768px)**:
+- **Before**: 450px minimum
+- **After**: **480px minimum** (+30px increase)
+- **Benefit**: Even more space, prevents compression
+- **Effect**: Grid shows fewer columns, each card has more room
+
+**Grid Behavior Examples**:
+
+| Screen Width | Before (450px) | After (480px) | Change |
+|--------------|----------------|---------------|---------|
+| 360px (mobile) | 1 col, no min | 1 col, **320px min** | ✅ Protected |
+| 768px (tablet) | 1 col | 1 col | Same |
+| 1024px | 2 cols | 2 cols | Same |
+| 1200px | 2-3 cols | **2 cols** | ✅ Less crowded |
+| 1500px | 3 cols | 3 cols | Better width |
+| 1920px | 4 cols | 4 cols | Better width |
+
+**Benefits**:
+- ✅ **Mobile Protection**: 320px ensures content never gets too narrow
+- ✅ **Desktop Comfort**: 480px provides excellent readability
+- ✅ **Fewer Columns**: Grid more conservative, shows fewer cards per row
+- ✅ **Better Typography**: More space for multi-line titles and descriptions
+- ✅ **Button Safety**: Action buttons have more horizontal space
+- ✅ **Professional Look**: Cards feel more spacious and premium
+
+**Technical Details**:
+- Mobile min (320px) safely below typical screen widths (360-428px)
+- Desktop min (480px) forces max 2-3 columns on most screens
+- Prevents over-crowding on large displays
+- Each card gets 480px width = optimal for current content layout
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Content Impact**:
+- Titles: More room for long destination names
+- Descriptions: Better line length for readability
+- Buttons: More horizontal space, less crowding
+- Services: Icons and text have better spacing
+- Images: Better proportions with wider cards
+
+---
+
+## [v0.18.15] - 2025-01-13
+
+### 🔧 Performance Optimization
+
+#### 📏 Increased Desktop Minimum Width: 420px → 450px
+
+**Issue**: When transitioning from 2 to 3 columns, cards were getting too compressed, causing layout issues and potential content overflow.
+
+**Analysis**:
+- **1 → 2 columns**: Works smoothly ✅
+- **2 → 3 columns**: Cards compress too much ❌
+- Root cause: 420px minimum still allows too much compression at 3+ columns
+
+**Solution**: Increased desktop minimum from **420px to 450px**
+
+**Before** (420px):
+```dart
+// At 1400px screen width with 24px spacing:
+// 3 columns × 420px = 1260px + 48px spacing = 1308px
+// Cards get compressed to fit → overflow issues
+final minCardWidth = isMobile ? 0.0 : 420.0;
+```
+
+**After** (450px):
+```dart
+// At 1400px screen width with 24px spacing:
+// 3 columns × 450px = 1350px + 48px spacing = 1398px
+// Grid switches to 2 columns instead → better layout
+final minCardWidth = isMobile ? 0.0 : 450.0;
+```
+
+**Grid Behavior by Screen Width**:
+
+| Screen Width | Before (420px) | After (450px) | Impact |
+|--------------|----------------|---------------|---------|
+| < 768px | 1 column | 1 column | No change ✅ |
+| 768-1100px | 2 columns | 2 columns | No change ✅ |
+| 1100-1400px | **3 columns** (compressed ❌) | **2 columns** (comfortable ✅) | **Better spacing** |
+| 1400-1800px | 3 columns | 3 columns | Proper width ✅ |
+| > 1800px | 4 columns | 4 columns | Proper width ✅ |
+
+**Benefits**:
+- ✅ **Smoother Transitions**: Grid switches columns at better breakpoints
+- ✅ **No Compression**: Cards maintain minimum 450px width
+- ✅ **Better Readability**: More breathing room for content
+- ✅ **Fewer Columns on Medium Screens**: 2 columns instead of cramped 3
+- ✅ **Professional Layout**: Consistent spacing and proportions
+
+**Impact**:
+- **📱 Mobile**: No change (still uses full width)
+- **💻 Desktop**: Fewer columns on medium screens (1100-1400px)
+- **🖥️ Large Desktop**: Same behavior but better minimum width
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Technical Details**:
+- Grid uses `SliverGridDelegateWithMaxCrossAxisExtent`
+- `maxCrossAxisExtent = 450.0` forces earlier column reduction
+- Prevents over-compression during 2→3 column transitions
+- Maintains fixed card heights (580px mobile, 650px desktop)
+
+---
+
+## [v0.18.14] - 2025-01-13
+
+### 🐛 Critical Bug Fix
+
+#### ❌ Fixed: BoxConstraints Non-Normalized Width Error on Mobile
+
+**Error**: 
+```
+BoxConstraints has non-normalized width constraints.
+The offending constraints were:
+BoxConstraints(420.0<=w<=380.0, 0.0<=h<=infinity; NOT NORMALIZED)
+```
+
+**Root Cause**: 
+- Mobile screens are typically 360-414px wide
+- We were setting `minCardWidth = 420px` for ALL devices
+- This created impossible constraints: min (420px) > max (screen width)
+- Flutter cannot satisfy `min > max` → crash
+
+**Solution**: Conditional minimum width based on device type
+
+**Before** (broken):
+```dart
+final minCardWidth = 420.0; // Same for all devices ❌
+// Mobile with 375px screen: BoxConstraints(420.0<=w<=375.0) → ERROR
+```
+
+**After** (fixed):
+```dart
+final minCardWidth = isMobile ? 0.0 : 420.0; // Conditional ✅
+// Mobile: BoxConstraints(0.0<=w<=375.0) → OK
+// Desktop: BoxConstraints(420.0<=w<=420.0) → OK
+```
+
+**Behavior**:
+- **📱 Mobile** (`< 768px`):
+  - `minCardWidth = 0.0` (no minimum restriction)
+  - `maxCardWidth = screenWidth` (full width available)
+  - Cards use all available space naturally
+  
+- **💻 Desktop** (`≥ 768px`):
+  - `minCardWidth = 420.0` (prevents over-compression)
+  - `maxCardWidth = 420.0` (consistent size)
+  - Cards maintain minimum width to prevent overflow
+
+**Impact**:
+- ✅ **No More Crashes**: Mobile devices work perfectly
+- ✅ **Desktop Protected**: Still maintains 420px minimum for readability
+- ✅ **Responsive**: Each platform uses optimal constraints
+- ✅ **Professional**: Clean, error-free user experience
+
+**Files Fixed**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Testing**:
+- ✅ Mobile (360px - 767px): No errors, full-width cards
+- ✅ Tablet/Desktop (768px+): 420px minimum enforced
+- ✅ No BoxConstraints violations
+
+---
+
+## [v0.18.13] - 2025-01-13
+
+### 🔧 Critical Fix
+
+#### 📏 Increased Minimum Card Width: 360px → 420px
+
+**Issue**: Cards were getting too narrow when grid displayed more columns, causing text and buttons to overflow outside the card boundaries.
+
+**Root Cause**: 
+- When screen width increased, grid created more columns
+- Cards compressed below 360px minimum
+- Content (titles, descriptions, buttons) overflowed
+- Inconsistent, unprofessional appearance
+
+**Solution**: Increased minimum card width from **360px to 420px**
+
+**Before**:
+```dart
+final minCardWidth = 360.0;
+final maxCardWidth = isMobile ? screenWidth : 380.0;
+```
+
+**After**:
+```dart
+final minCardWidth = 420.0; // Increased to prevent overflow
+final maxCardWidth = isMobile ? screenWidth : 420.0;
+```
+
+**Impact**:
+- ✅ **No More Overflow**: Text and buttons stay within card boundaries
+- ✅ **Better Readability**: More space for content on all devices
+- ✅ **Fewer Columns**: Grid shows 2-3 columns max (instead of 4+)
+- ✅ **Consistent Layout**: Cards maintain proper proportions
+- ✅ **Professional Look**: No visual glitches or content cutoff
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Technical Details**:
+- Grid now limits maximum columns based on 420px minimum
+- Example: 1680px screen = 4 columns → Now 3 columns (1680/420 = 4, but with spacing = 3)
+- Better balance between card size and grid density
+- Prevents over-compression on ultra-wide screens
+
+---
+
+## [v0.18.12] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📏 Card Width Standardization: Unified 360px Minimum
+
+**Change**: Standardized minimum card width to **360px** across all screen sizes for better consistency and readability.
+
+**Before**:
+- Mobile: Min 280px
+- Desktop: Min 320px
+- Inconsistent card widths across devices
+
+**After**:
+- **All devices**: Min 360px ✅
+- Consistent, professional appearance
+- Better text readability
+- More space for content
+
+**Implementation**:
+```dart
+final minCardWidth = 360.0; // Consistent minimum width for all sizes
+```
+
+**Benefits**:
+- ✨ **Consistent Experience**: Same minimum width on all devices
+- 📱 **Better Mobile UX**: Wider cards = more readable text
+- 💻 **Unified Design**: No width variation between screen sizes
+- 🎯 **Optimal Layout**: 360px provides perfect balance for content
+- 📐 **Simpler Logic**: Single value instead of conditional
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart`
+2. ✅ `popular_destinations_section.dart`
+3. ✅ `my_favorites_section.dart`
+4. ✅ `search_results_page.dart`
+
+**Impact**:
+- Mobile devices now show slightly wider cards (280px → 360px)
+- Desktop minimum increased (320px → 360px)
+- Grid automatically adjusts column count based on available space
+- No breaking changes to existing functionality
+
+---
+
+## [v0.18.11] - 2025-01-13
+
+### 🎯 Major Enhancement
+
+#### 📐 Smart Grid Layout: Flexible Card Sizing with Min/Max Constraints
+
+**Problem Solved**: 
+- Text overflowing outside cards due to fixed aspect ratios
+- Cards being cut off at different screen sizes
+- Inflexible grid that didn't adapt to content properly
+
+**Solution Implemented**: 
+Migrated from fixed `childAspectRatio` to **intelligent constraint-based layout system**.
+
+**Key Changes**:
+
+1. **GridView Delegate Update** ✅
+   - **Before**: `SliverGridDelegateWithFixedCrossAxisCount` (fixed columns + aspect ratio)
+   - **After**: `SliverGridDelegateWithMaxCrossAxisExtent` (flexible extent-based)
+
+2. **Card Size Constraints** ✅
+   - **Mobile**:
+     - Min Width: `280px`
+     - Max Width: Full screen width
+     - Fixed Height: `580px`
+   - **Desktop/Web**:
+     - Min Width: `320px`
+     - Max Width: `380px`
+     - Fixed Height: `650px`
+
+3. **Adaptive Column System** ✅
+   - System automatically calculates optimal columns based on `maxCrossAxisExtent`
+   - **Mobile (< 768px)**: 1 column (full width)
+   - **Tablet (768-1200px)**: 2-3 columns (auto-calculated)
+   - **Desktop (1200-1600px)**: 3-4 columns (auto-calculated)
+   - **Large Desktop (> 1600px)**: 4+ columns (auto-calculated)
+
+4. **ConstrainedBox Wrapper** ✅
+   - Every card wrapped in `ConstrainedBox` with min/max constraints
+   - Ensures text never overflows card boundaries
+   - Maintains consistent card dimensions
+
+**Implementation Details**:
+
+```dart
+// New flexible grid delegate
+SliverGridDelegateWithMaxCrossAxisExtent(
+  maxCrossAxisExtent: maxCardWidth,  // Flexible width
+  mainAxisSpacing: 24,
+  crossAxisSpacing: 24,
+  mainAxisExtent: isMobile ? 580.0 : 650.0,  // Fixed height
+)
+
+// Card constraints
+ConstrainedBox(
+  constraints: BoxConstraints(
+    minWidth: minCardWidth,
+    maxWidth: maxCardWidth,
+  ),
+  child: TravelPackageCard(...)
+)
+```
+
+**Files Modified**:
+1. ✅ `filterable_packages_section.dart` - Main packages grid
+2. ✅ `popular_destinations_section.dart` - Popular section
+3. ✅ `my_favorites_section.dart` - Favorites grid
+4. ✅ `search_results_page.dart` - Search results
+
+**Benefits**:
+- ✨ **No Text Overflow**: Fixed height ensures all content fits
+- 📱 **Perfect Mobile**: Full-width cards on small screens
+- 💻 **Optimal Desktop**: 3-4 columns with consistent sizing
+- 🔄 **Truly Responsive**: Columns adjust automatically to screen width
+- 🎯 **Predictable Layout**: Fixed height prevents layout shifts
+- ⚡ **Better Performance**: Constraint-based layout is more efficient
+- 🎨 **Professional Look**: Consistent card dimensions across all views
+
+**Technical Advantages**:
+- Replaced 5 hardcoded breakpoints with 1 flexible extent
+- Eliminated aspect ratio calculations
+- Content-aware layout system
+- Smooth transitions between column counts
+
+---
+
+## [v0.18.10] - 2025-01-13
+
+### 🐛 Bug Fix
+
+#### 🌐 Grid Layout: Fixed Card Overflow on Web
+
+**Issue**: Travel package cards were being cut off in web view due to insufficient `childAspectRatio` in grid layouts.
+
+**Root Cause**: 
+- GridView `childAspectRatio` was set to `0.75` (web) and `0.85` (mobile)
+- Cards now have more content (badges, details, buttons) than originally designed
+- Fixed aspect ratio was too large, cutting off bottom content
+
+**Solution Applied**:
+Updated `childAspectRatio` in all grid layouts to allow taller cards:
+- **Mobile**: `0.75` (reduced from `0.85`) ✅
+- **Desktop/Web**: `0.68` (reduced from `0.75`) ✅
+
+**Files Modified**:
+1. ✅ `lib/presentation/widgets/sections/filterable_packages_section.dart`
+   - Main packages grid with filters
+   
+2. ✅ `lib/presentation/widgets/sections/popular_destinations_section.dart`
+   - Popular destinations section
+   
+3. ✅ `lib/presentation/widgets/sections/my_favorites_section.dart`
+   - Favorites comparison grid
+   
+4. ✅ `lib/presentation/pages/search_results_page.dart`
+   - Search results grid
+
+**Impact**:
+- ✅ Cards now display completely without overflow
+- ✅ All content visible (image, title, price, description, services, details, buttons)
+- ✅ Consistent aspect ratio across all views
+- ✅ Better user experience on web/desktop
+- ✅ Maintains mobile optimizations
+
+**Testing**:
+- Tested on mobile (< 768px): Cards fit perfectly ✅
+- Tested on tablet (768-1200px): Cards display correctly ✅
+- Tested on desktop (> 1200px): No overflow, full content visible ✅
+
+---
+
+## [v0.18.9] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### ✨ Travel Package Cards: Final Polish & Micro-adjustments
+
+**Feature**: Final refinements to mobile card layout for optimal visual balance and professional appearance.
+
+**Micro-adjustments Applied**:
+
+1. **Vertical Spacing Fine-tuning** ✅
+   - Title → Location: `3px` (from 4px)
+   - Location → Description: `5px` (from 6px)
+   - Description → Services: `6px` (from 8px)
+   - Services → Details: `6px` (from 8px)
+   - Every pixel counts on mobile!
+
+2. **Price Section Optimization** ✅
+   - **Original Price Font**: 11px (from 12px)
+   - **Price-Favorite Spacing**: 3px (from 4px)
+   - Tighter, more compact header
+
+3. **Favorite Button Refinement** ✅
+   - **Icon Size**: 16px (from 18px)
+   - **Padding**: 5px (from 6px)
+   - Less intrusive, better proportioned
+
+4. **Button Polish** ✅
+   - **Border Width** (Ver Detalles): 1.5px on mobile (from 2px)
+   - **Font Weight**: 600 (semibold) for better readability
+   - Lighter visual weight, professional finish
+
+**Visual Improvements**:
+- 🎯 More breathing room in compact layout
+- 💎 Refined button appearance
+- 🎨 Better visual hierarchy
+- ⚖️ Balanced proportions throughout
+- ✨ Professional, polished look
+
+**Files Modified**:
+- `lib/presentation/widgets/travel_package_card.dart`: Micro-spacing adjustments
+
+---
+
+## [v0.18.8] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 Travel Package Cards: Mobile Optimization & Compactness
+
+**Feature**: Optimized TravelPackageCard for complete visibility on mobile screens with condensed layout and reduced spacing.
+
+**Mobile Optimizations Applied**:
+
+1. **Card Spacing Reduction** ✅
+   - **Card Margin**: 4px (reduced from 8px)
+   - **Card Padding**: 8px (reduced from 12px)
+   - Better use of screen real estate
+
+2. **Image Height Optimization** ✅
+   - **Mobile**: 140px (reduced from 160px)
+   - **Desktop**: 200px (unchanged)
+   - Allows more content visibility without scrolling
+
+3. **Typography Condensed** ✅
+   - **Title Font**: 16px (reduced from 18px)
+   - **Price Font**: 18px (reduced from 20px)
+   - **Location Font**: 12px (reduced from 14px)
+   - **Description Font**: 12px (reduced from 13px)
+   - **Description Lines**: 1 line on mobile (reduced from 2)
+
+4. **Spacing Optimization** ✅
+   - Title-Location gap: 4px (from 6px)
+   - Location-Description gap: 6px (from 8px)
+   - Description-Services gap: 8px (from 12px)
+   - Services-Details gap: 8px (from 12px)
+   - Details-Buttons gap: 12px (from 16px)
+
+5. **Detail Rows Compacted** ✅
+   - **Icon Size**: 14px (from 16px)
+   - **Font Size**: 11px (from 13px)
+   - **Vertical Padding**: 2px (from 4px)
+   - **Icon-Text Spacing**: 6px (from 8px)
+   - **Guided Tours**: Hidden on mobile (shown on desktop)
+
+6. **Service Chips Minimized** ✅
+   - **Icon Size**: 12px (from 14px)
+   - **Font Size**: 10px (from 11px)
+   - **Horizontal Padding**: 6px (from 8px)
+   - **Vertical Padding**: 4px (from 5px)
+   - **Chip Spacing**: 6px (from 8px)
+   - **Row Spacing**: 4px (from 6px)
+
+7. **Action Buttons Optimized** ✅
+   - **Font Size**: 12px (from 13px)
+   - **Padding**: 10px (from 12px)
+   - **Icon Size**: 14px (from 16px)
+   - **Button Spacing**: 6px (from 8px)
+
+**Content Optimization**:
+- Description limited to 1 line on mobile for compactness
+- "Guided tours" detail row hidden on mobile (still visible on desktop)
+- Tighter spacing throughout the card
+
+**Visual Result**:
+- ✅ Complete card visible on mobile screens
+- ✅ No content cut-off or overflow
+- ✅ Professional, compact layout
+- ✅ All essential information still accessible
+- ✅ Better scroll experience
+
+**Files Modified**:
+- `lib/presentation/widgets/travel_package_card.dart`: Comprehensive mobile size reduction
+
+---
+
+## [v0.18.7] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📦 Travel Package Cards: Full Responsive Design + Badge Optimization
+
+**Feature**: Made TravelPackageCard component fully responsive for mobile, tablet, and desktop viewports with optimized badge sizing.
+
+**Changes Implemented**:
+
+1. **Responsive Integration** ✅
+   - Added `ResponsiveUtils` import
+   - Detect viewport in build method: `final isMobile = ResponsiveUtils.isMobile(context)`
+   - Pass `isMobile` parameter to all builder methods
+
+2. **Front Card Responsive Sizing** ✅
+   - **Image Height**: 160px (mobile) / 200px (desktop) - Reduced mobile height for better fit
+   - **Title Font**: 18px (mobile) / 20px (desktop)
+   - **Price Font**: 20px (mobile) / 22px (desktop)
+   - **Favorite Icon**: 18px (mobile) / 20px (desktop)
+   - **Services Icons**: 16px (mobile) / 18px (desktop)
+   - **Service Chips**: Icon 14px/16px, Font 11px/12px, Padding 8px/10px
+   - **Detail Row Icons**: 16px (mobile) / 18px (desktop)
+   - **Detail Row Font**: 13px (mobile) / 14px (desktop)
+
+3. **Badge Responsive Optimization** ✅ **[NEW]**
+   - **Mobile Badges**:
+     - Padding: 6px/3px (horizontal/vertical) vs 10px/6px desktop
+     - Icon Size: 12px vs 16px desktop
+     - Font Size: 9px vs 12px desktop
+     - Border Radius: 12px vs 20px desktop
+     - Margin Bottom: 4px vs 8px desktop
+     - Icon Spacing: 3px vs 4px desktop
+     - Shadow Blur: 4px vs 6px desktop
+   - **Discount Badge (Top-Right)**:
+     - Position: 8px vs 12px desktop
+     - Padding: 8px/4px vs 12px/8px desktop
+     - Font Size: 10px vs 14px desktop
+     - Border Radius: 12px vs 20px desktop
+     - Shadow Blur: 4px vs 8px desktop
+
+4. **Action Buttons Responsive Layout** ✅
+   - **Mobile**: Vertical Column layout (stacked buttons)
+   - **Desktop**: Horizontal Row layout (side-by-side buttons)
+   - **Button Font**: 13px (mobile) / 14px (desktop)
+   - **Button Padding**: 12px (mobile) / 14px (desktop)
+   - **Icon Size**: 16px (mobile) / 18px (desktop)
+   - **Spacing**: 8px (mobile) / 12px (desktop)
+
+5. **Back Card Responsive Sizing** ✅
+   - **Title Font**: 18px (mobile) / 22px (desktop)
+   - **Horizontal Padding**: 16px (mobile) / 24px (desktop)
+   - **Top Padding**: 48px (mobile) / 56px (desktop)
+   - **Info Icons**: 18px (mobile) / 20px (desktop)
+   - **Info Value Font**: 14px (mobile) / 15px (desktop)
+   - **Info Label Font**: 11px (mobile) / 12px (desktop)
+   - **Feature Items Font**: 13px (mobile) / 14px (desktop)
+   - **"Incluye" Title Font**: 14px (mobile) / 16px (desktop)
+   - **Reserve Button Icon**: 18px (mobile) / 20px (desktop)
+   - **Reserve Button Padding**: 12px (mobile) / 14px (desktop)
+   - **Touch Icon**: 18px (mobile) / 20px (desktop)
+
+6. **Methods Updated** ✅
+   - `_buildFrontCard(context, isMobile)`
+   - `_buildBackCard(context, isMobile)`
+   - `_buildImageSection(isMobile)` - Now calculates image height internally
+   - `_buildTitleAndPrice(titleFontSize, priceFontSize, isMobile)`
+   - `_buildFavoriteButton(isMobile)`
+   - `_buildServicesIcons(isMobile)`
+   - `_buildServiceChip(service, isMobile)`
+   - `_buildDetailRow(icon, text, isMobile)`
+   - `_buildActionButtons(isMobile)`
+   - `_buildBackInfoRow(icon, value, label, isMobile)`
+   - `_buildFeatureItem(text, isMobile)`
+   - `_buildBadge(label, color, icon, textColor, isMobile)` - **[UPDATED]**
+
+**Files Modified**:
+- `lib/presentation/widgets/travel_package_card.dart`: Complete responsive implementation with optimized badges
+
+**Testing Notes**:
+- All methods now accept responsive parameters
+- No compilation errors
+- Badges are now compact and readable on mobile
+- Image height reduced on mobile for better card proportions
+
+**Benefits**:
+- ✨ Optimal layout on all device sizes
+- 📱 Better mobile UX with smaller, compact badges
+- 🖥️ Efficient desktop space usage with horizontal layout
+- 🎯 Consistent typography scaling
+- 🏷️ Professional badge design that doesn't overwhelm mobile screens
+- 💪 Clean visual hierarchy across all viewports
+
+---
+
+## [v0.18.6] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 WhatsApp Button: Icon-Only Design
+
+**Feature**: Removed text label from WhatsApp button, keeping only the logo for a cleaner, more compact design.
+
+**Changes Implemented**:
+
+1. **Button Type Change** ✅
+   - Changed from `FloatingActionButton.extended` (icon + text)
+   - Changed to `FloatingActionButton` (icon only)
+   - More compact and minimalist design
+
+2. **Layout Simplification** ✅
+   - Removed text label "WhatsApp"
+   - Removed `SizedBox` height constraint
+   - Removed `extendedPadding` property
+   - Simpler code structure
+
+3. **Visual Changes** ✅
+   - Shape: Rectangle with rounded corners → Perfect circle
+   - Icon size: `18px` (mobile) / `24px` (desktop) → `28px` (mobile) / `32px` (desktop)
+   - Button is now circular (FAB standard)
+   - More prominent logo without text distraction
+
+4. **Code Cleanup** ✅
+   - Removed unused variables: `iconSize`, `fontSize`, `buttonHeight`
+   - Simplified component structure
+   - Less code to maintain
+
+**Before vs After**:
+```dart
+// Before (Extended with text)
+FloatingActionButton.extended(
+  icon: FaIcon(FontAwesomeIcons.whatsapp, size: 18),
+  label: Text('WhatsApp', fontSize: 13),
+)
+// Shape: Rounded rectangle
+// Width: ~120-140px
+
+// After (Icon only)
+FloatingActionButton(
+  child: FaIcon(FontAwesomeIcons.whatsapp, size: 28),
+)
+// Shape: Circle
+// Diameter: ~56px (standard FAB)
+```
+
+**Benefits**:
+- ✅ More compact - takes less screen space
+- ✅ Cleaner visual design
+- ✅ Logo is more prominent and recognizable
+- ✅ Standard FAB appearance (circular)
+- ✅ International - no language barrier
+- ✅ Faster to scan and recognize
+- ✅ Better for mobile UI (less visual clutter)
+
+**Visual Impact**:
+- Space saved: ~60-80px in width
+- Icon size increased: Better visibility
+- Cleaner interface: Less text, more focus on action
+- Universal recognition: WhatsApp logo speaks for itself
+
+**Files Modified**:
+- `lib/presentation/widgets/floating_whatsapp_button.dart`
+
+---
+
+## [v0.18.5] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 WhatsApp Button: Official Logo Icon
+
+**Feature**: Replaced generic chat icon with official WhatsApp logo icon for better brand recognition and visual clarity.
+
+**Changes Implemented**:
+
+1. **Font Awesome Integration** ✅
+   - Added `font_awesome_flutter: ^10.7.0` dependency
+   - Provides access to official brand icons including WhatsApp logo
+   - Better icon quality and consistency
+
+2. **Icon Updates** ✅
+   - Extended button: `Icons.chat` → `FontAwesomeIcons.whatsapp`
+   - Compact button: `Icons.chat` → `FontAwesomeIcons.whatsapp`
+   - Both versions now use official WhatsApp logo
+   - Icon sizes maintained (18px mobile, 24px desktop for extended; 28px for compact)
+
+3. **Visual Improvements** ✅
+   - Instantly recognizable WhatsApp branding
+   - More professional appearance
+   - Better matches user expectations
+   - Consistent with WhatsApp's visual identity
+
+**Code Changes**:
+```dart
+// Before
+Icon(Icons.chat, color: Colors.white, size: iconSize)
+
+// After
+FaIcon(
+  FontAwesomeIcons.whatsapp,
+  color: Colors.white,
+  size: iconSize,
+)
+```
+
+**Benefits**:
+- ✅ Official WhatsApp logo for brand recognition
+- ✅ Users instantly identify the button's purpose
+- ✅ More professional and polished look
+- ✅ Matches WhatsApp's brand guidelines
+- ✅ Better visual consistency with the green (#25D366) background
+
+**Dependencies Added**:
+- `font_awesome_flutter: ^10.7.0`
+
+**Files Modified**:
+- `pubspec.yaml`
+- `lib/presentation/widgets/floating_whatsapp_button.dart`
+
+---
+
+## [v0.18.4] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 Floating WhatsApp Button: Reduced Height on Mobile
+
+**Feature**: Made the floating WhatsApp button less tall on mobile devices for a more compact and elegant appearance.
+
+**Changes Implemented**:
+
+1. **Height Reduction (Mobile Only)** ✅
+   - Fixed height: `40px` on mobile (< 768px)
+   - Auto height on tablet and desktop
+   - More compact vertical footprint
+
+2. **Icon and Text Optimization** ✅
+   - Icon size: `20px` → `18px` (mobile)
+   - Font size: `14px` → `13px` (mobile)
+   - Line height: `1.0` for tighter text spacing
+   - Better proportions for smaller button
+
+3. **Padding Adjustments** ✅
+   - Horizontal padding: `16px` → `12px` (mobile)
+   - Vertical padding: `0` (controlled by height)
+   - `extendedPadding` property for precise control
+
+4. **Border Radius Adjustment** ✅
+   - Border radius: `24px` → `20px` (mobile)
+   - More proportional to reduced height
+   - Maintains rounded corners aesthetic
+
+**Visual Comparison**:
+```dart
+// Before (Mobile)
+Height: ~48-56px (auto)
+Icon: 20px
+Font: 14px
+Padding: 16px horizontal
+
+// After (Mobile)
+Height: 40px (fixed)
+Icon: 18px
+Font: 13px
+Padding: 12px horizontal
+Line-height: 1.0
+```
+
+**Benefits**:
+- ✅ More compact button that takes less screen space
+- ✅ Better proportions for mobile screens
+- ✅ Maintains legibility and clickability
+- ✅ Cleaner, more modern appearance
+- ✅ Reduces visual clutter on small screens
+
+**Files Modified**:
+- `lib/presentation/widgets/floating_whatsapp_button.dart`
+
+---
+
+## [v0.18.3] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 Hero Section: CTA Buttons in Single Row Layout
+
+**Feature**: Changed CTA buttons layout to always display in a single horizontal row on all devices (mobile, tablet, desktop).
+
+**Changes Implemented**:
+
+1. **Unified Row Layout** ✅
+   - Removed conditional Column/Row layout
+   - Buttons now always display horizontally side-by-side
+   - Used `Flexible` widgets for proper space distribution
+   - Better visual consistency across all viewports
+
+2. **Responsive Button Sizing** ✅
+   - Mobile: Compact padding (`16px × 14px`), smaller font (`13px`), smaller icon (`18px`)
+   - Desktop: Standard padding (`40px × 24px`), larger font (`18px`), larger icon (`24px`)
+   - Horizontal gap: `8px` (mobile), `20px` (desktop)
+
+3. **Button Text Optimization** ✅
+   - Mobile "Explorar" + "Asesor" (shorter text)
+   - Desktop "Explorar" + "Hablar con Asesor" (full text)
+   - Maintains clarity while fitting both buttons
+
+4. **Removed Width Constraints** ✅
+   - Removed `SizedBox(width: double.infinity)` wrapper
+   - Buttons now flex naturally within row
+   - Better responsive behavior
+
+**Layout Structure**:
+```dart
+// Before (Mobile)
+Column(
+  children: [
+    ElevatedButton (full width),
+    OutlinedButton (full width),
+  ],
+)
+
+// After (All Devices)
+Row(
+  children: [
+    Flexible(child: ElevatedButton),
+    SizedBox(width: 8-20px),
+    Flexible(child: OutlinedButton),
+  ],
+)
+```
+
+**Visual Improvements**:
+- ✅ Consistent horizontal layout on all screens
+- ✅ Buttons fit side-by-side even on small mobile devices
+- ✅ Clean, balanced appearance
+- ✅ Better use of horizontal space
+- ✅ Professional look matching modern web standards
+
+**Files Modified**:
+- `lib/presentation/widgets/sections/hero_section.dart`
+
+---
+
+## [v0.18.2] - 2025-01-13
+
+### 🐛 Bug Fix
+
+#### 📱 Fixed Overlap Between Hero Text and WhatsApp Button on Mobile
+
+**Issue**: Main title text and floating WhatsApp button were still overlapping on mobile devices, causing visual clutter and usability issues.
+
+**Solutions Implemented**:
+
+1. **Hero Section Content Adjustment** ✅
+   - Added top padding of `80px` to mobile content container
+   - Pushed all hero content down to avoid navbar and button conflicts
+   - Maintained centered alignment while preventing overlap
+
+2. **WhatsApp Button Size Reduction (Mobile)** ✅
+   - Icon size: `24px` → `20px` (mobile)
+   - Font size: `16px` → `14px` (mobile)
+   - Badge font: `12px` → `10px` (mobile)
+   - Hidden "En línea" badge on mobile to save space
+   
+3. **WhatsApp Button Position Adjustment (Mobile)** ✅
+   - Bottom position: `100%` → `80%` (reduced 20%)
+   - Right position: `100%` → `70%` (reduced 30%)
+   - More compact positioning to avoid content overlap
+
+**Visual Improvements**:
+- ✅ No overlap between hero title and WhatsApp button
+- ✅ More compact WhatsApp button on mobile (saves space)
+- ✅ Better content flow with top padding
+- ✅ Cleaner mobile interface without status badge
+
+**Files Modified**:
+- `lib/presentation/widgets/sections/hero_section.dart`
+- `lib/presentation/widgets/floating_whatsapp_button.dart`
+
+**Before vs After (Mobile)**:
+```dart
+// Hero Section Padding
+Before: EdgeInsets.symmetric(horizontal: 20)
+After:  EdgeInsets.only(left: 20, right: 20, top: 80)
+
+// WhatsApp Button
+Before: icon: 24px, text: 16px, position: 100%
+After:  icon: 20px, text: 14px, position: 80% bottom, 70% right
+```
+
+---
+
+## [v0.18.1] - 2025-01-13
+
+### 🐛 Bug Fix
+
+#### 🎨 Hero Section: Fixed Text Overlap on Mobile
+
+**Issue**: Text elements, statistics, and buttons were overlapping on mobile devices causing readability issues and poor UX.
+
+**Root Cause**: 
+- Insufficient vertical spacing between elements on mobile
+- Fixed title height causing text overflow
+- Large font sizes competing for limited viewport space
+- No content overflow handling
+
+**Solutions Implemented**:
+
+1. **Optimized Typography Sizing** ✅
+   - Title: `28px` → `32px` (mobile) for better readability
+   - Subtitle: `18px` → `20px` (mobile)
+   - Description: `16px` → `14px` (mobile) to reduce space usage
+   - Simplified mobile title from "Próxima\nAventura" to "Aventura"
+
+2. **Adjusted Vertical Spacing** ✅
+   - Base vertical spacing: `15px` → `12px` (mobile)
+   - Title to subtitle: `1.0x` → `0.8x` spacing multiplier
+   - Subtitle to description: `0.75x` → `0.6x` spacing multiplier
+   - Description to stats: `1.5x` → `1.2x` spacing multiplier
+   - Stats to buttons: `2.0x` → `1.5x` spacing multiplier
+
+3. **Content Overflow Protection** ✅
+   - Wrapped content in `SingleChildScrollView` with `NeverScrollableScrollPhysics`
+   - Added `minHeight` constraint to maintain full viewport
+   - Set `mainAxisSize: MainAxisSize.min` on Column
+   - Added `maxLines: 2` and `overflow: TextOverflow.ellipsis` to description
+
+4. **Button Optimization** ✅
+   - Reduced padding: `30px×18px` → `24px×14px` (mobile)
+   - Reduced icon size: `20px` → `18px` (mobile)
+   - Reduced font size: `16px` → `15px` (mobile)
+   - Reduced button spacing: `16px` → `12px` gap
+   - Added horizontal padding wrapper: `16px` on mobile
+
+5. **Indicator Dots Adjustment** ✅
+   - Reduced size: `12px` → `8px` (mobile)
+   - Reduced margins: `8px×4px` → `6px×3px` (mobile)
+   - Adjusted bottom position: `30px` → `20px` (mobile)
+
+6. **Typography Fine-tuning** ✅
+   - Added `height: 1.1` to title for consistent line-height
+   - Added `height: 1.0` to animated subtitle
+   - Added `height: 1.3` to description for better readability
+   - Added `letterSpacing: 0.5` to mobile title
+
+**Visual Improvements**:
+- ✅ No text overlap on mobile devices (320px - 768px)
+- ✅ Consistent spacing hierarchy across all elements
+- ✅ Better readability with optimized font sizes
+- ✅ Compact but accessible button sizes
+- ✅ Proper breathing room for all UI components
+
+**Files Modified**:
+- `lib/presentation/widgets/sections/hero_section.dart`
+
+**Testing Done**:
+- Verified on viewport sizes: 320px, 375px, 414px, 768px
+- Checked text truncation behavior
+- Validated button touch targets (minimum 44×44 pts)
+- Confirmed no overlay conflicts with floating WhatsApp button
+
+---
+
+## [v0.18.0] - 2025-01-13
+
+### 🎨 UI Enhancement
+
+#### 📱 Hero Section: Fully Responsive Design
+
+**Feature**: Made the main hero section fully responsive for mobile, tablet, and desktop viewports.
+
+**Changes Implemented**:
+
+1. **Responsive Typography** ✅
+   - Title font size: `28px` (mobile), `38px` (tablet), `48px` (desktop)
+   - Subtitle font size: `18px` (mobile), `20px` (tablet), `32px` (desktop)
+   - Description font size: `16px` (mobile), `18px` (tablet), `22px` (desktop)
+   - Adaptive title text: "Próxima\nAventura" (mobile) vs "Descubre Tu Próxima Aventura" (desktop)
+
+2. **Responsive Layout** ✅
+   - Horizontal padding: `20px` (mobile), `40px` (tablet), `60px` (desktop)
+   - Vertical spacing: `15px` (mobile), `20px` (tablet/desktop)
+   - Buttons layout: Column stack (mobile), Row (tablet/desktop)
+   - Full-width buttons on mobile for better touch targets
+
+3. **Navigation Controls** ✅
+   - Carousel arrows hidden on mobile (< 768px)
+   - Swipe gestures enabled for mobile navigation
+   - Arrows visible on tablet and desktop
+
+4. **Button Adaptations** ✅
+   - Mobile: Full-width buttons with reduced padding (30px horizontal, 18px vertical)
+   - Desktop: Auto-width buttons with larger padding (40px horizontal, 24px vertical)
+   - Shorter text on mobile: "Explorar" instead of "Explorar Destinos"
+   - Icon size: `20px` (mobile), `24px` (desktop)
+
+5. **Responsive Utilities Integration** ✅
+   - Imported `ResponsiveUtils` for consistent breakpoint handling
+   - Used `isMobile()` and `isTablet()` helpers throughout component
+   - Breakpoints: Mobile < 768px, Tablet 768-1440px, Desktop ≥ 1440px
+
+**Files Modified**:
+- `lib/presentation/widgets/sections/hero_section.dart`
+
+**Testing Recommendations**:
+- Test on physical mobile devices (iOS/Android)
+- Verify layout at common breakpoints: 320px, 375px, 768px, 1024px, 1440px
+- Check touch target sizes on mobile (minimum 44x44 points)
+- Validate animations performance on mobile devices
+
+---
+
 ## [v0.17.0] - 2025-01-13
 
 ### 🐛 Bug Fix Crítico

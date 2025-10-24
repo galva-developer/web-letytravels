@@ -96,46 +96,50 @@ class SearchResultsPage extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final screenWidth = MediaQuery.of(context).size.width;
-              final crossAxisCount =
-                  screenWidth > 1200
-                      ? 3
-                      : screenWidth > 768
-                      ? 2
-                      : 1;
+              final isMobile = screenWidth < 768;
+              final maxCardWidth = isMobile ? constraints.maxWidth : 580.0;
+              // Mobile: 370px minimum, Desktop: 580px minimum
+              final minCardWidth = isMobile ? 370.0 : 580.0;
 
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  childAspectRatio: 0.75,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: maxCardWidth,
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
+                  mainAxisExtent: isMobile ? 580.0 : 650.0,
                 ),
                 itemCount: results.length,
                 itemBuilder: (context, index) {
                   final package = results[index];
-                  return TravelPackageCard(
-                    title: package.title,
-                    price: package.price,
-                    location: package.location,
-                    description: package.description,
-                    duration: package.duration,
-                    flightsIncluded: package.flightsIncluded,
-                    hotelRating: package.hotelRating,
-                    guidedTours: package.guidedTours,
-                    imageUrl: package.imageUrl,
-                    hasDiscount: package.hasDiscount,
-                    originalPrice:
-                        package.originalPrice != null
-                            ? '\$${package.originalPrice!.toStringAsFixed(0)}'
-                            : null,
-                    discountPercentage: package.discountPercentage,
-                    isNew: package.isNew,
-                    isPopular: package.isPopular,
-                    hasLimitedSeats: package.hasLimitedSeats,
-                    availableSeats: package.availableSeats,
-                    services: package.services,
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minWidth: minCardWidth,
+                      maxWidth: maxCardWidth,
+                    ),
+                    child: TravelPackageCard(
+                      title: package.title,
+                      price: package.price,
+                      location: package.location,
+                      description: package.description,
+                      duration: package.duration,
+                      flightsIncluded: package.flightsIncluded,
+                      hotelRating: package.hotelRating,
+                      guidedTours: package.guidedTours,
+                      imageUrl: package.imageUrl,
+                      hasDiscount: package.hasDiscount,
+                      originalPrice:
+                          package.originalPrice != null
+                              ? '\$${package.originalPrice!.toStringAsFixed(0)}'
+                              : null,
+                      discountPercentage: package.discountPercentage,
+                      isNew: package.isNew,
+                      isPopular: package.isPopular,
+                      hasLimitedSeats: package.hasLimitedSeats,
+                      availableSeats: package.availableSeats,
+                      services: package.services,
+                    ),
                   );
                 },
               );

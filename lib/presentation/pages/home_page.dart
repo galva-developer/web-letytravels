@@ -11,6 +11,8 @@ import 'package:by_lety_travels/presentation/pages/search_results_page.dart';
 import 'package:by_lety_travels/presentation/widgets/floating_whatsapp_button.dart';
 import 'package:by_lety_travels/presentation/widgets/social_media_links.dart';
 import 'package:by_lety_travels/presentation/widgets/instagram_feed.dart';
+import 'package:by_lety_travels/presentation/widgets/components/mobile_menu_drawer.dart';
+import 'package:by_lety_travels/utils/responsive_utils.dart';
 
 class HomePage extends StatefulWidget {
   // Changed to StatefulWidget
@@ -30,7 +32,10 @@ class _HomePageState extends State<HomePage> {
       GlobalKey(); // Key for MyFavoritesSection
   final GlobalKey _contactSectionKey = GlobalKey();
 
-  // Hover states for AppBar buttons
+  // Scaffold key for drawer control
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Hover states for AppBar buttons (no longer needed but keeping for compatibility)
   bool _isInicioHovered = false;
   bool _isPaquetesHovered = false;
   bool _isContactoHovered = false;
@@ -138,11 +143,311 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Build mobile logo (compact version)
+  Widget _buildMobileLogo() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFFDC00).withOpacity(0.2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Image.asset(
+            'assets/images/icons8-airport-50.png',
+            width: 24,
+            height: 24,
+            color: const Color(0xFFFFDC00),
+          ),
+        ),
+        const SizedBox(width: 8),
+        RichText(
+          text: const TextSpan(
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'LetyTravelsFont',
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            children: [
+              TextSpan(text: 'ByLety'),
+              TextSpan(
+                text: 'Travels',
+                style: TextStyle(color: Color(0xFFFFDC00)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Build mobile actions (search and favorites)
+  List<Widget> _buildMobileActions(int favoritesCount) {
+    return [
+      // Search button
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.search, color: Colors.white, size: 20),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SearchResultsPage(),
+              ),
+            );
+          },
+          tooltip: 'Buscar',
+        ),
+      ),
+      const SizedBox(width: 4),
+      // Favorites badge
+      Stack(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.white),
+            onPressed: () {
+              _scrollToSection(_favoritesSectionKey);
+            },
+            tooltip: 'Mis Favoritos',
+          ),
+          if (favoritesCount > 0)
+            Positioned(
+              right: 8,
+              top: 8,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                child: Text(
+                  favoritesCount > 9 ? '9+' : favoritesCount.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 9,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+        ],
+      ),
+      const SizedBox(width: 8),
+    ];
+  }
+
+  // Build desktop content (full navigation bar)
+  Widget _buildDesktopContent(int favoritesCount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Logo
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFDC00).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Image.asset(
+                'assets/images/icons8-airport-50.png',
+                width: 32,
+                height: 32,
+                color: const Color(0xFFFFDC00),
+              ),
+            ),
+            const SizedBox(width: 12),
+            RichText(
+              text: const TextSpan(
+                style: TextStyle(
+                  fontSize: 22,
+                  fontFamily: 'LetyTravelsFont',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                children: [
+                  TextSpan(text: 'ByLety'),
+                  TextSpan(
+                    text: 'Travels',
+                    style: TextStyle(color: Color(0xFFFFDC00)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(width: 24),
+
+        // Navigation buttons
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildNavButton(
+                'Inicio',
+                _isInicioHovered,
+                () {
+                  _scrollToSection(_heroSectionKey);
+                },
+                (hovering) {
+                  setState(() => _isInicioHovered = hovering);
+                },
+              ),
+              _buildNavButton(
+                'Paquetes',
+                _isPaquetesHovered,
+                () {
+                  _scrollToSection(_popularDestinationsSectionKey);
+                },
+                (hovering) {
+                  setState(() => _isPaquetesHovered = hovering);
+                },
+              ),
+              _buildNavButton(
+                'Contacto',
+                _isContactoHovered,
+                () {
+                  _scrollToSection(_contactSectionKey);
+                },
+                (hovering) {
+                  setState(() => _isContactoHovered = hovering);
+                },
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(width: 24),
+
+        // Right side actions
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Social media icons
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const SocialMediaLinksCompact(),
+            ),
+            const SizedBox(width: 12),
+            // Search button
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.search, color: Colors.white, size: 22),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SearchResultsPage(),
+                    ),
+                  );
+                },
+                tooltip: 'Buscar',
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Favorites badge
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.favorite, color: Colors.white),
+                  onPressed: () {
+                    _scrollToSection(_favoritesSectionKey);
+                  },
+                  tooltip: 'Mis Favoritos',
+                ),
+                if (favoritesCount > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 18,
+                        minHeight: 18,
+                      ),
+                      child: Text(
+                        favoritesCount > 99 ? '99+' : favoritesCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(width: 8),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+    final favoritesCount = favoritesProvider.favoritesCount;
+
     return Scaffold(
-      extendBodyBehindAppBar:
-          true, // Permite que el contenido se extienda detrás del AppBar
+      key: _scaffoldKey,
+      extendBodyBehindAppBar: true,
+
+      // Mobile menu drawer
+      drawer:
+          isMobile
+              ? MobileMenuDrawer(
+                onHomePressed: () {
+                  Navigator.pop(context);
+                  _scrollToSection(_heroSectionKey);
+                },
+                onPackagesPressed: () {
+                  Navigator.pop(context);
+                  _scrollToSection(_popularDestinationsSectionKey);
+                },
+                onFavoritesPressed: () {
+                  Navigator.pop(context);
+                  _scrollToSection(_favoritesSectionKey);
+                },
+                onAboutPressed: () {
+                  Navigator.pop(context);
+                  // TODO: Navigate to about page
+                },
+                onContactPressed: () {
+                  Navigator.pop(context);
+                  _scrollToSection(_contactSectionKey);
+                },
+              )
+              : null,
+
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: Container(
@@ -168,187 +473,25 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             toolbarHeight: 70,
             automaticallyImplyLeading: false,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFDC00).withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10),
+            leading:
+                isMobile
+                    ? IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: 28,
                       ),
-                      child: Image.asset(
-                        'assets/images/icons8-airport-50.png',
-                        width: 32,
-                        height: 32,
-                        color: const Color(0xFFFFDC00),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: 'LetyTravelsFont',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        children: [
-                          TextSpan(text: 'ByLety'),
-                          TextSpan(
-                            text: 'Travels',
-                            style: TextStyle(color: Color(0xFFFFDC00)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(width: 24),
-
-                // Navigation buttons
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildNavButton(
-                        'Inicio',
-                        _isInicioHovered,
-                        () {
-                          _scrollToSection(_heroSectionKey);
-                        },
-                        (hovering) {
-                          setState(() => _isInicioHovered = hovering);
-                        },
-                      ),
-                      _buildNavButton(
-                        'Paquetes',
-                        _isPaquetesHovered,
-                        () {
-                          _scrollToSection(_popularDestinationsSectionKey);
-                        },
-                        (hovering) {
-                          setState(() => _isPaquetesHovered = hovering);
-                        },
-                      ),
-                      _buildNavButton(
-                        'Contacto',
-                        _isContactoHovered,
-                        () {
-                          _scrollToSection(_contactSectionKey);
-                        },
-                        (hovering) {
-                          setState(() => _isContactoHovered = hovering);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 24),
-
-                // Right side actions
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Social media icons
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const SocialMediaLinksCompact(),
-                    ),
-                    const SizedBox(width: 12),
-                    // Search button
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.search,
-                          color: Colors.white,
-                          size: 22,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const SearchResultsPage(),
-                            ),
-                          );
-                        },
-                        tooltip: 'Buscar',
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    // Favorites badge
-                    Consumer<FavoritesProvider>(
-                      builder: (context, favoritesProvider, child) {
-                        final count = favoritesProvider.favoritesCount;
-
-                        return Stack(
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.favorite,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                // TODO: Navigate to favorites section
-                                _scrollToSection(_favoritesSectionKey);
-                              },
-                              tooltip: 'Mis Favoritos',
-                            ),
-                            if (count > 0)
-                              Positioned(
-                                right: 8,
-                                top: 8,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 18,
-                                    minHeight: 18,
-                                  ),
-                                  child: Text(
-                                    count > 99 ? '99+' : count.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
                       },
-                    ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-              ],
-            ),
+                    )
+                    : null,
+            title:
+                isMobile
+                    ? _buildMobileLogo()
+                    : _buildDesktopContent(favoritesCount),
+            centerTitle: isMobile,
+            actions: isMobile ? _buildMobileActions(favoritesCount) : null,
           ),
         ),
       ),

@@ -513,8 +513,6 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
 
   /// Build the package grid based on screen size
   Widget _buildPackageGrid(bool isMobile, bool isTablet) {
-    final crossAxisCount = isMobile ? 1 : (isTablet ? 2 : 3);
-
     return Column(
       children: [
         // Packages info and grid
@@ -548,60 +546,82 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                 ),
               ),
 
-              // Grid
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 24,
-                  crossAxisSpacing: 24,
-                  childAspectRatio: isMobile ? 0.85 : 0.75,
-                ),
-                itemCount: _paginatedPackages.length,
-                itemBuilder: (context, index) {
-                  final package = _paginatedPackages[index];
+              // Grid with flexible card sizing
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  // Calculate max card width based on screen size
+                  final screenWidth = constraints.maxWidth;
+                  final maxCardWidth = isMobile ? screenWidth : 580.0;
+                  // Mobile: 370px minimum, Desktop: 580px minimum
+                  final minCardWidth = isMobile ? 370.0 : 580.0;
 
-                  // Calculate discount info
-                  String? originalPrice;
-                  if (package.hasDiscount && package.originalPrice != null) {
-                    originalPrice =
-                        '\$${package.originalPrice!.toStringAsFixed(0)}';
-                  }
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: maxCardWidth,
+                      mainAxisSpacing: 24,
+                      crossAxisSpacing: 24,
+                      mainAxisExtent:
+                          isMobile
+                              ? 580.0
+                              : 650.0, // Fixed height for consistent cards
+                    ),
+                    itemCount: _paginatedPackages.length,
+                    itemBuilder: (context, index) {
+                      final package = _paginatedPackages[index];
 
-                  return TravelPackageCard(
-                    title: package.title,
-                    price: package.price,
-                    location: package.location,
-                    description: package.description,
-                    duration: package.duration,
-                    flightsIncluded: package.flightsIncluded,
-                    hotelRating: package.hotelRating,
-                    guidedTours: package.guidedTours,
-                    imageUrl: package.imageUrl,
-                    services: package.services,
-                    hasDiscount: package.hasDiscount,
-                    originalPrice: originalPrice,
-                    discountPercentage: package.discountPercentage,
-                    isNew: package.isNew,
-                    isPopular: package.isPopular,
-                    hasLimitedSeats: package.hasLimitedSeats,
-                    availableSeats: package.availableSeats,
-                    onBookNowPressed: () {
-                      // Navigate to booking form page
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder:
-                              (context) => BookingFormPage(package: package),
+                      // Calculate discount info
+                      String? originalPrice;
+                      if (package.hasDiscount &&
+                          package.originalPrice != null) {
+                        originalPrice =
+                            '\$${package.originalPrice!.toStringAsFixed(0)}';
+                      }
+
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: minCardWidth,
+                          maxWidth: maxCardWidth,
                         ),
-                      );
-                    },
-                    onViewDetailsPressed: () {
-                      // Show package details modal
-                      showDialog(
-                        context: context,
-                        builder:
-                            (context) => PackageDetailsModal(package: package),
+                        child: TravelPackageCard(
+                          title: package.title,
+                          price: package.price,
+                          location: package.location,
+                          description: package.description,
+                          duration: package.duration,
+                          flightsIncluded: package.flightsIncluded,
+                          hotelRating: package.hotelRating,
+                          guidedTours: package.guidedTours,
+                          imageUrl: package.imageUrl,
+                          services: package.services,
+                          hasDiscount: package.hasDiscount,
+                          originalPrice: originalPrice,
+                          discountPercentage: package.discountPercentage,
+                          isNew: package.isNew,
+                          isPopular: package.isPopular,
+                          hasLimitedSeats: package.hasLimitedSeats,
+                          availableSeats: package.availableSeats,
+                          onBookNowPressed: () {
+                            // Navigate to booking form page
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        BookingFormPage(package: package),
+                              ),
+                            );
+                          },
+                          onViewDetailsPressed: () {
+                            // Show package details modal
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) =>
+                                      PackageDetailsModal(package: package),
+                            );
+                          },
+                        ),
                       );
                     },
                   );

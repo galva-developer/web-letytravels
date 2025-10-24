@@ -361,11 +361,11 @@ Próximos pasos:
 ### ✅ Adaptación Móvil
 
 #### 1. Diseño Responsive
-- [ ] Layout adaptativo para móvil
-- [ ] Breakpoints: 320px, 768px, 1024px, 1440px
-- [ ] Grid responsive (1 col móvil, 2 tablet, 3 desktop)
-- [ ] Menú hamburger en móvil
-- [ ] Bottom navigation bar en móvil
+- [x] Layout adaptativo para móvil ✅
+- [x] Breakpoints: 320px, 768px, 1024px, 1440px ✅
+- [x] Grid responsive (1 col móvil, 2 tablet, 3 desktop) ✅
+- [x] Menú hamburger en móvil ✅
+- [x] Bottom navigation bar en móvil ✅
 
 #### 2. Mobile-First Features
 - [ ] Click-to-call en botones de teléfono

@@ -247,24 +247,22 @@ class MyFavoritesSection extends StatelessWidget {
     List<dynamic> favoritePackages,
     FavoritesProvider favoritesProvider,
   ) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final crossAxisCount =
-        screenWidth > 1200
-            ? 3
-            : screenWidth > 768
-            ? 2
-            : 1;
+    final isMobile = MediaQuery.of(context).size.width < 768;
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        final maxCardWidth = isMobile ? constraints.maxWidth : 580.0;
+        // Mobile: 370px minimum, Desktop: 580px minimum
+        final minCardWidth = isMobile ? 370.0 : 580.0;
+
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            childAspectRatio: 0.75,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: maxCardWidth,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
+            mainAxisExtent: isMobile ? 580.0 : 650.0,
           ),
           itemCount: favoritePackages.length,
           itemBuilder: (context, index) {
@@ -275,102 +273,108 @@ class MyFavoritesSection extends StatelessWidget {
             final isMaxReached = favoritesProvider.isMaxComparisonReached;
             final canSelect = !isMaxReached || isSelected;
 
-            return Stack(
-              children: [
-                TravelPackageCard(
-                  title: package.title,
-                  price: package.price,
-                  location: package.location,
-                  description: package.description,
-                  duration: package.duration,
-                  flightsIncluded: package.flightsIncluded,
-                  hotelRating: package.hotelRating,
-                  guidedTours: package.guidedTours,
-                  imageUrl: package.imageUrl,
-                  hasDiscount: package.hasDiscount,
-                  originalPrice: package.originalPrice,
-                  discountPercentage: package.discountPercentage,
-                  isNew: package.isNew,
-                  isPopular: package.isPopular,
-                  hasLimitedSeats: package.hasLimitedSeats,
-                  availableSeats: package.availableSeats,
-                  services: package.services,
-                  onViewDetailsPressed: () {
-                    // Modal will be opened by the card itself
-                  },
-                ),
-                // Comparison checkbox overlay - centered at top
-                Positioned(
-                  top: 8,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap:
-                            canSelect
-                                ? () => favoritesProvider
-                                    .toggleComparisonSelection(package.title)
-                                : null,
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.95),
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color:
-                                  isSelected
-                                      ? const Color(0xFF072A47)
-                                      : Colors.grey.withOpacity(0.3),
-                              width: 2,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: minCardWidth,
+                maxWidth: maxCardWidth,
+              ),
+              child: Stack(
+                children: [
+                  TravelPackageCard(
+                    title: package.title,
+                    price: package.price,
+                    location: package.location,
+                    description: package.description,
+                    duration: package.duration,
+                    flightsIncluded: package.flightsIncluded,
+                    hotelRating: package.hotelRating,
+                    guidedTours: package.guidedTours,
+                    imageUrl: package.imageUrl,
+                    hasDiscount: package.hasDiscount,
+                    originalPrice: package.originalPrice,
+                    discountPercentage: package.discountPercentage,
+                    isNew: package.isNew,
+                    isPopular: package.isPopular,
+                    hasLimitedSeats: package.hasLimitedSeats,
+                    availableSeats: package.availableSeats,
+                    services: package.services,
+                    onViewDetailsPressed: () {
+                      // Modal will be opened by the card itself
+                    },
+                  ),
+                  // Comparison checkbox overlay - centered at top
+                  Positioned(
+                    top: 8,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap:
+                              canSelect
+                                  ? () => favoritesProvider
+                                      .toggleComparisonSelection(package.title)
+                                  : null,
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.95),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color:
+                                    isSelected
+                                        ? const Color(0xFF072A47)
+                                        : Colors.grey.withOpacity(0.3),
+                                width: 2,
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Checkbox(
-                                value: isSelected,
-                                onChanged:
-                                    canSelect
-                                        ? (value) => favoritesProvider
-                                            .toggleComparisonSelection(
-                                              package.title,
-                                            )
-                                        : null,
-                                activeColor: const Color(0xFF072A47),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                visualDensity: VisualDensity.compact,
-                              ),
-                              Text(
-                                'Comparar',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      canSelect
-                                          ? const Color(0xFF072A47)
-                                          : Colors.grey,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
-                              ),
-                              const SizedBox(width: 4),
-                            ],
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Checkbox(
+                                  value: isSelected,
+                                  onChanged:
+                                      canSelect
+                                          ? (value) => favoritesProvider
+                                              .toggleComparisonSelection(
+                                                package.title,
+                                              )
+                                          : null,
+                                  activeColor: const Color(0xFF072A47),
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                                Text(
+                                  'Comparar',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        canSelect
+                                            ? const Color(0xFF072A47)
+                                            : Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );
