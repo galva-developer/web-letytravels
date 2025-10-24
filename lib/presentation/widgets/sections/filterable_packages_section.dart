@@ -603,6 +603,7 @@ class _FilterablePackagesSectionState extends State<FilterablePackagesSection> {
                           isPopular: package.isPopular,
                           hasLimitedSeats: package.hasLimitedSeats,
                           availableSeats: package.availableSeats,
+                          comingSoon: package.comingSoon,
                           onBookNowPressed: () {
                             // Navigate to booking form page
                             Navigator.of(context).push(

@@ -27,6 +27,7 @@ class TravelPackageCard extends StatefulWidget {
   final bool hasLimitedSeats;
   final int? availableSeats;
   final List<String> services;
+  final bool comingSoon;
 
   const TravelPackageCard({
     super.key,
@@ -49,6 +50,7 @@ class TravelPackageCard extends StatefulWidget {
     this.hasLimitedSeats = false,
     this.availableSeats,
     this.services = const [],
+    this.comingSoon = false,
   });
 
   @override
@@ -109,6 +111,34 @@ class _TravelPackageCardState extends State<TravelPackageCard>
 
   @override
   Widget build(BuildContext context) {
+    // Disable interaction if coming soon
+    if (widget.comingSoon) {
+      return AnimatedBuilder(
+        animation: _flipAnimation,
+        builder: (context, child) {
+          final angle = _flipAnimation.value * math.pi;
+          final transform =
+              Matrix4.identity()
+                ..setEntry(3, 2, 0.001) // perspective
+                ..rotateY(angle);
+
+          final isMobile = ResponsiveUtils.isMobile(context);
+
+          return IgnorePointer(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              child: Transform(
+                transform: transform,
+                alignment: Alignment.center,
+                child: _buildFrontCard(context, isMobile),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    // Normal behavior for available packages
     return MouseRegion(
       onEnter: (_) => _handleHover(true),
       onExit: (_) => _handleHover(false),
@@ -158,91 +188,150 @@ class _TravelPackageCardState extends State<TravelPackageCard>
     return Card(
       elevation: _isHovered ? 12.0 : 4.0,
       margin: EdgeInsets.all(cardMargin),
-      color: const Color(0xFFF5F5F5), // Fondo gris claro
+      color:
+          widget.comingSoon
+              ? Colors.grey[300]
+              : const Color(0xFFF5F5F5), // Fondo gris si es próximamente
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // Image section with badges overlay
-              _buildImageSection(isMobile),
+          // Content with opacity when coming soon
+          Opacity(
+            opacity: widget.comingSoon ? 0.6 : 1.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Image section with badges overlay
+                _buildImageSection(isMobile),
 
-              Padding(
-                padding: EdgeInsets.all(cardPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title and Price
-                    _buildTitleAndPrice(
-                      titleFontSize: titleFontSize,
-                      priceFontSize: priceFontSize,
-                      isMobile: isMobile,
-                    ),
-                    SizedBox(
-                      height: isMobile ? 8.0 : 8.0,
-                    ), // Increased mobile spacing
-                    // Location
-                    Text(
-                      widget.location,
-                      style: TextStyle(
-                        fontSize: locationFontSize,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
+                Padding(
+                  padding: EdgeInsets.all(cardPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title and Price
+                      _buildTitleAndPrice(
+                        titleFontSize: titleFontSize,
+                        priceFontSize: priceFontSize,
+                        isMobile: isMobile,
                       ),
-                    ),
-                    SizedBox(
-                      height: isMobile ? 10.0 : 12.0,
-                    ), // Increased mobile spacing
-                    // Description
-                    Text(
-                      widget.description,
-                      style: TextStyle(fontSize: descriptionFontSize),
-                      maxLines: isMobile ? 1 : 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(
-                      height: isMobile ? 12.0 : 16.0,
-                    ), // Increased mobile spacing
-                    // Services icons (more visible)
-                    _buildServicesIcons(isMobile),
-                    SizedBox(
-                      height: isMobile ? 12.0 : 16.0,
-                    ), // Increased mobile spacing
-                    // Details section (condensed on mobile)
-                    _buildDetailRow(
-                      Icons.calendar_today,
-                      widget.duration,
-                      isMobile,
-                    ),
-                    if (widget.flightsIncluded)
+                      SizedBox(
+                        height: isMobile ? 8.0 : 8.0,
+                      ), // Increased mobile spacing
+                      // Location
+                      Text(
+                        widget.location,
+                        style: TextStyle(
+                          fontSize: locationFontSize,
+                          color: Colors.grey[700],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        height: isMobile ? 10.0 : 12.0,
+                      ), // Increased mobile spacing
+                      // Description
+                      Text(
+                        widget.description,
+                        style: TextStyle(fontSize: descriptionFontSize),
+                        maxLines: isMobile ? 1 : 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(
+                        height: isMobile ? 12.0 : 16.0,
+                      ), // Increased mobile spacing
+                      // Services icons (more visible)
+                      _buildServicesIcons(isMobile),
+                      SizedBox(
+                        height: isMobile ? 12.0 : 16.0,
+                      ), // Increased mobile spacing
+                      // Details section (condensed on mobile)
                       _buildDetailRow(
-                        Icons.flight,
-                        'Flights included',
+                        Icons.calendar_today,
+                        widget.duration,
                         isMobile,
                       ),
-                    _buildDetailRow(
-                      Icons.hotel,
-                      '${widget.hotelRating} hotel',
-                      isMobile,
-                    ),
-                    if (widget.guidedTours && !isMobile)
+                      if (widget.flightsIncluded)
+                        _buildDetailRow(
+                          Icons.flight,
+                          'Flights included',
+                          isMobile,
+                        ),
                       _buildDetailRow(
-                        Icons.directions_walk,
-                        'Guided tours',
+                        Icons.hotel,
+                        '${widget.hotelRating} hotel',
                         isMobile,
                       ),
+                      if (widget.guidedTours && !isMobile)
+                        _buildDetailRow(
+                          Icons.directions_walk,
+                          'Guided tours',
+                          isMobile,
+                        ),
 
-                    SizedBox(
-                      height: isMobile ? 16.0 : 20.0,
-                    ), // Increased mobile spacing
-                    // Action buttons
-                    _buildActionButtons(isMobile),
-                  ],
+                      SizedBox(
+                        height: isMobile ? 16.0 : 20.0,
+                      ), // Increased mobile spacing
+                      // Action buttons
+                      _buildActionButtons(isMobile),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Coming Soon overlay badge (centered)
+          if (widget.comingSoon)
+            Positioned.fill(
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 24.0 : 32.0,
+                    vertical: isMobile ? 16.0 : 20.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF072A47),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.4),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        color: const Color(0xFFFFDC00),
+                        size: isMobile ? 32.0 : 48.0,
+                      ),
+                      SizedBox(height: isMobile ? 8.0 : 12.0),
+                      Text(
+                        'PRÓXIMAMENTE',
+                        style: TextStyle(
+                          color: const Color(0xFFFFDC00),
+                          fontWeight: FontWeight.bold,
+                          fontSize: isMobile ? 18.0 : 24.0,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      SizedBox(height: isMobile ? 4.0 : 8.0),
+                      Text(
+                        'Disponible pronto',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isMobile ? 12.0 : 14.0,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
         ],
       ),
     );

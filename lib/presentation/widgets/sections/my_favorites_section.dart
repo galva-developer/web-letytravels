@@ -273,6 +273,12 @@ class MyFavoritesSection extends StatelessWidget {
             final isMaxReached = favoritesProvider.isMaxComparisonReached;
             final canSelect = !isMaxReached || isSelected;
 
+            // Format original price with dollar sign
+            String? originalPrice;
+            if (package.hasDiscount && package.originalPrice != null) {
+              originalPrice = '\$${package.originalPrice!.toStringAsFixed(0)}';
+            }
+
             return ConstrainedBox(
               constraints: BoxConstraints(
                 minWidth: minCardWidth,
@@ -291,13 +297,14 @@ class MyFavoritesSection extends StatelessWidget {
                     guidedTours: package.guidedTours,
                     imageUrl: package.imageUrl,
                     hasDiscount: package.hasDiscount,
-                    originalPrice: package.originalPrice,
+                    originalPrice: originalPrice,
                     discountPercentage: package.discountPercentage,
                     isNew: package.isNew,
                     isPopular: package.isPopular,
                     hasLimitedSeats: package.hasLimitedSeats,
                     availableSeats: package.availableSeats,
                     services: package.services,
+                    comingSoon: package.comingSoon,
                     onViewDetailsPressed: () {
                       // Modal will be opened by the card itself
                     },

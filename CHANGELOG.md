@@ -4,6 +4,244 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.33] - 2025-01-25
+
+### 🔜 Coming Soon Package Feature
+
+#### ✨ Feature: Sistema de Paquetes "Próximamente"
+
+**Objective**: Implementar la funcionalidad para marcar paquetes como "próximamente disponibles", mostrándolos en la interfaz con estilo visual especial y sin permitir interacción.
+
+**Implementation**:
+
+**1. Modelo de Datos**:
+- Agregado campo `comingSoon` (bool) al modelo `PackageTravel` en `lib/data/models/package_travel.dart`
+- Valor por defecto: `false`
+- Documentación: "Package coming soon (not bookable yet)"
+
+**2. Datos de Muestra**:
+- Actualizado `lib/data/repositories/sample_packages.dart`
+- Marcados con `comingSoon: true`:
+  - "París Encantador"
+  - "Aventura en la Antigua Roma"
+
+**3. Widget de Tarjeta**:
+- Actualizado `TravelPackageCard` en `lib/presentation/widgets/travel_package_card.dart`
+- Agregado parámetro `comingSoon` (bool, default: false)
+
+**Cambios visuales cuando `comingSoon: true`**:
+- Fondo de tarjeta: `Colors.grey[300]` (en lugar de gris claro normal)
+- Contenido con opacidad reducida: `0.6`
+- Overlay centrado con:
+  - Ícono de reloj (`Icons.access_time`)
+  - Badge "PRÓXIMAMENTE" en color amarillo (`Color(0xFFFFDC00)`)
+  - Texto "Disponible pronto"
+  - Fondo azul oscuro (`Color(0xFF072A47)`)
+  - Sombras para destacar
+
+**Deshabilitación de interacción**:
+- Widget envuelto en `IgnorePointer` cuando `comingSoon: true`
+- No se permite hover
+- No se permite flip de tarjeta
+- Botones de acción deshabilitados visualmente
+
+**4. Integración en Secciones**:
+Actualizado el parámetro `comingSoon` en:
+- `lib/presentation/widgets/sections/filterable_packages_section.dart`
+- `lib/presentation/widgets/sections/popular_destinations_section.dart`
+- `lib/presentation/widgets/sections/my_favorites_section.dart`
+- `lib/presentation/pages/search_results_page.dart`
+
+**Visual Design**:
+- Responsive: adaptado para mobile y desktop
+- Tamaños de fuente e íconos ajustados según dispositivo
+- Badge prominente y visible
+- Contraste alto para accesibilidad
+
+**Files Modified**:
+- `lib/data/models/package_travel.dart`
+- `lib/data/repositories/sample_packages.dart`
+- `lib/presentation/widgets/travel_package_card.dart`
+- `lib/presentation/widgets/sections/filterable_packages_section.dart`
+- `lib/presentation/widgets/sections/popular_destinations_section.dart`
+- `lib/presentation/widgets/sections/my_favorites_section.dart`
+- `lib/presentation/pages/search_results_page.dart`
+
+---
+
+## [v0.18.32] - 2025-01-25
+
+### 💵 Fixed Dollar Sign Display for Original Prices
+
+#### ✨ Enhancement: Ensured All Prices Display in USD Format
+
+**Objective**: Garantizar que todos los precios de los paquetes, incluyendo los precios originales con descuento, se muestren consistentemente con el símbolo de dólar ($) en formato USD.
+
+**Problem**: 
+- En `my_favorites_section.dart`, el `originalPrice` se pasaba directamente como `double?` al widget `TravelPackageCard`
+- El widget esperaba recibir un `String?` con formato de moneda
+- Esto causaba inconsistencia en la visualización de precios con descuento
+
+**Solution Applied**:
+
+Actualicé `my_favorites_section.dart` para formatear el `originalPrice` con el símbolo de dólar antes de pasarlo al widget:
+
+**Changes in my_favorites_section.dart**:
+
+```dart
+// ❌ BEFORE - Original price passed as double without formatting
+TravelPackageCard(
+  title: package.title,
+  price: package.price,
+  originalPrice: package.originalPrice,  // ← double? passed directly
+  hasDiscount: package.hasDiscount,
+  // ...
+)
+
+// ✅ AFTER - Original price formatted with dollar sign
+// Format original price with dollar sign
+String? originalPrice;
+if (package.hasDiscount && package.originalPrice != null) {
+  originalPrice = '\$${package.originalPrice!.toStringAsFixed(0)}';
+}
+
+TravelPackageCard(
+  title: package.title,
+  price: package.price,
+  originalPrice: originalPrice,  // ← String with $ symbol
+  hasDiscount: package.hasDiscount,
+  // ...
+)
+```
+
+**Files Modified**:
+- ✅ `lib/presentation/widgets/sections/my_favorites_section.dart` - Added price formatting logic
+
+**Status**: ✅ Completed
+
+**Notes**:
+- All prices in `sample_packages.dart` already use USD format (`'\$1200'`, `'\$1350'`, etc.)
+- `filterable_packages_section.dart` already had correct formatting implementation
+- This change ensures consistency across all sections of the application
+
+---
+
+## [v0.18.31] - 2025-01-25
+
+### 🎨 Improved "Reservar" Button Style in Package Details Modal
+
+#### ✨ UI Enhancement: Rounded Button Design with Better Spacing
+
+**Objective**: Mejorar la estética del botón "RESERVAR" amarillo en el modal de detalles del paquete para que tenga bordes redondeados similares a los botones de WhatsApp y Email, con mejor espaciado.
+
+**Problem**: 
+- El botón "RESERVAR" tenía bordes muy ajustados y cuadrados
+- Aspecto menos profesional comparado con los otros botones
+- Mala experiencia visual especialmente en móviles
+
+**Solution Applied**:
+
+Actualicé el botón "Reservar" manteniendo `ElevatedButton` pero agregando:
+1. **Bordes redondeados** (`BorderRadius.circular(30)`) - igual que WhatsApp y Email
+2. **Padding horizontal adicional** para mejor espaciado
+3. **Elevación eliminada** (`elevation: 0`) para apariencia más plana y moderna
+4. **Mismo radio de borde** que los otros botones
+
+**Changes in package_details_modal.dart**:
+
+```dart
+// ❌ BEFORE - Botón con bordes cuadrados y ajustados
+Widget _buildBookNowButton() {
+  return ElevatedButton.icon(
+    onPressed: () { ... },
+    icon: const Icon(Icons.flight_takeoff, size: 20),
+    label: const Text('Reservar'),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFFFFDC00),
+      foregroundColor: const Color(0xFF072A47),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      // ← Sin shape, bordes cuadrados por defecto
+      // ← Sin padding horizontal adicional
+    ),
+  );
+}
+
+// ✅ AFTER - Botón con bordes redondeados y mejor espaciado
+Widget _buildBookNowButton() {
+  return ElevatedButton.icon(
+    onPressed: () { ... },
+    icon: const Icon(Icons.flight_takeoff, size: 20),
+    label: const Text('Reservar'),
+    style: ElevatedButton.styleFrom(
+      foregroundColor: const Color(0xFF072A47),
+      backgroundColor: const Color(0xFFFFDC00),
+      elevation: 0,                                    // ← Sin sombra
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 24,                                // ← Padding horizontal adicional
+      ),
+      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),      // ← Bordes redondeados
+      ),
+    ),
+  );
+}
+```
+
+**Visual Comparison**:
+
+**❌ Before:**
+```
+┌──────────────┐
+│ ✈️ Reservar  │  ← Bordes cuadrados, ajustado
+└──────────────┘
+```
+
+**✅ After:**
+```
+╭────────────────╮
+│  ✈️ Reservar   │  ← Bordes redondeados, espacioso
+╰────────────────╯
+```
+
+**Button Styles**:
+
+| Botón | Tipo | Padding | Border Radius | Elevation |
+|-------|------|---------|---------------|-----------|
+| **WhatsApp** | OutlinedButton | vertical: 16px | 30px | N/A |
+| **Email** | OutlinedButton | vertical: 16px | 30px | N/A |
+| **Reservar** | ElevatedButton | vertical: 16px, horizontal: 24px | 30px | 0 |
+
+**Benefits**:
+- ✅ **Bordes redondeados** - Aspecto moderno similar a WhatsApp y Email
+- ✅ **Mejor espaciado** - Padding horizontal adicional (24px)
+- ✅ **Sin elevación** - Apariencia más plana y consistente
+- ✅ **Diseño coherente** - Mismo radio de borde (30px) en todos los botones
+- ✅ **Mejor UX móvil** - Botón más táctil y fácil de presionar
+- ✅ **Estética mejorada** - Aspecto más pulido y profesional
+
+**Mobile Layout**:
+```
+┌─────────────────────────────┐
+│                             │
+│  ╭───────────────────────╮  │
+│  │   ✈️  Reservar       │  │ ← Amarillo, redondeado, espacioso
+│  ╰───────────────────────╯  │
+│                             │
+│  ╭─────────────╮ ╭────────╮│
+│  │💬 WhatsApp │ │📧 Email││ ← Redondeados
+│  ╰─────────────╯ ╰────────╯│
+└─────────────────────────────┘
+```
+
+**Important**: Después de guardar, haz un **Hot Restart** (no solo Hot Reload) para ver los cambios de estilo aplicados correctamente.
+
+**File Modified**:
+- `lib/presentation/widgets/package_details_modal.dart`
+
+---
+
 ## [v0.18.30] - 2025-01-25
 
 ### 🐛 Fixed BoxConstraints Error in Travel Package Cards

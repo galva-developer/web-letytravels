@@ -741,6 +741,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
         foregroundColor: const Color(0xFF25D366),
         side: const BorderSide(color: Color(0xFF25D366), width: 2),
         padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
     );
   }
@@ -755,6 +756,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
         foregroundColor: const Color(0xFF072A47),
         side: const BorderSide(color: Color(0xFF072A47), width: 2),
         padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
     );
   }
@@ -776,10 +778,12 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
       icon: const Icon(Icons.flight_takeoff, size: 20),
       label: const Text('Reservar'),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFFDC00),
         foregroundColor: const Color(0xFF072A47),
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        backgroundColor: const Color(0xFFFFDC00),
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
     );
   }

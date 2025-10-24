@@ -67,6 +67,7 @@ class PopularDestinationsSection extends StatelessWidget {
                       hotelRating: package.hotelRating,
                       guidedTours: package.guidedTours,
                       imageUrl: package.imageUrl,
+                      comingSoon: package.comingSoon,
                       onBookNowPressed: () {
                         // Navigate to booking form page
                         Navigator.of(context).push(

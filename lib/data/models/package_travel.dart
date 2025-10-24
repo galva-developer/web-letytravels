@@ -47,6 +47,7 @@ class PackageTravel {
   final bool isPopular; // Is a popular package (badge)
   final bool hasLimitedSeats; // Has limited availability
   final int? availableSeats; // Number of seats available
+  final bool comingSoon; // Package coming soon (not bookable yet)
 
   // Additional fields for package details modal
   final List<String> galleryImages; // URLs of gallery images (5-10 photos)
@@ -85,6 +86,7 @@ class PackageTravel {
     this.isPopular = false,
     this.hasLimitedSeats = false,
     this.availableSeats,
+    this.comingSoon = false,
     this.galleryImages = const [],
     this.itinerary = const [],
     this.inclusions = const [],

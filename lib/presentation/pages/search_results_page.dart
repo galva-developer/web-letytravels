@@ -140,6 +140,7 @@ class SearchResultsPage extends StatelessWidget {
                       hasLimitedSeats: package.hasLimitedSeats,
                       availableSeats: package.availableSeats,
                       services: package.services,
+                      comingSoon: package.comingSoon,
                     ),
                   );
                 },
