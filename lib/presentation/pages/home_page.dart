@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
       GlobalKey(); // Renamed from _packagesSectionKey
   final GlobalKey _favoritesSectionKey =
       GlobalKey(); // Key for MyFavoritesSection
+  final GlobalKey _instagramSectionKey = GlobalKey(); // Key for Instagram Feed
   final GlobalKey _contactSectionKey = GlobalKey();
 
   // Scaffold key for drawer control
@@ -439,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 onAboutPressed: () {
                   Navigator.pop(context);
-                  // TODO: Navigate to about page
+                  _scrollToSection(_instagramSectionKey);
                 },
                 onContactPressed: () {
                   Navigator.pop(context);
@@ -514,7 +515,7 @@ class _HomePageState extends State<HomePage> {
                 MyFavoritesSection(sectionKey: _favoritesSectionKey),
 
                 // Instagram Feed Section
-                const InstagramFeed(),
+                InstagramFeed(sectionKey: _instagramSectionKey),
 
                 ContactFooterSection(sectionKey: _contactSectionKey),
               ],

@@ -10,6 +10,8 @@ class RefundPolicyPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Política de Reembolsos'),
         backgroundColor: const Color(0xFF072A47),
+        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),

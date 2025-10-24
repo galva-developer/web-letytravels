@@ -47,7 +47,7 @@ class MobileMenuDrawer extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         const Text(
-                          'By Lety Travels',
+                          'BIENVENIDO',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -74,12 +74,14 @@ class MobileMenuDrawer extends StatelessWidget {
                 ),
               ),
               const Divider(color: Colors.white24, thickness: 1),
-              const SizedBox(height: 8),
 
-              // Menu Items
+              // Menu Items with scrollable content
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
                   children: [
                     _buildMenuItem(
                       context,
@@ -160,39 +162,48 @@ class MobileMenuDrawer extends StatelessWidget {
                         Navigator.of(context).pushNamed('/cookie-policy');
                       },
                     ),
-                  ],
-                ),
-              ),
 
-              // Footer
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.white.withOpacity(0.1)),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '📧 byletytravels.oficial@gmail.com',
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      '📞 +54 9 3884102859',
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        _buildSocialIcon(Icons.facebook, () {}),
-                        const SizedBox(width: 12),
-                        _buildSocialIcon(Icons.camera_alt, () {}),
-                        const SizedBox(width: 12),
-                        _buildSocialIcon(Icons.chat, () {}),
-                      ],
+                    const SizedBox(height: 16),
+
+                    // Footer dentro del ListView para evitar overflow
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '📧 byletytravels.oficial@gmail.com',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            '📞 +54 9 3884102859',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              _buildSocialIcon(Icons.facebook, () {}),
+                              const SizedBox(width: 12),
+                              _buildSocialIcon(Icons.camera_alt, () {}),
+                              const SizedBox(width: 12),
+                              _buildSocialIcon(Icons.chat, () {}),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

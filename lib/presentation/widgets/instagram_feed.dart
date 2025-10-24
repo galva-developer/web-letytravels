@@ -7,12 +7,14 @@ import 'package:url_launcher/url_launcher.dart';
 /// para obtener las publicaciones reales. Esta implementación muestra
 /// publicaciones de ejemplo con imágenes placeholder.
 class InstagramFeed extends StatelessWidget {
+  final GlobalKey? sectionKey;
   final String instagramUsername;
   final String instagramUrl;
   final int numberOfPosts;
 
   const InstagramFeed({
     super.key,
+    this.sectionKey,
     this.instagramUsername = 'byletytravels.ok',
     this.instagramUrl = 'https://www.instagram.com/byletytravels.ok/',
     this.numberOfPosts = 6,
@@ -21,6 +23,7 @@ class InstagramFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: sectionKey,
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 24),
       color: Colors.white,
       child: Column(

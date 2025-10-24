@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:by_lety_travels/presentation/pages/home_page.dart';
+import 'package:by_lety_travels/presentation/pages/privacy_policy_page.dart';
+import 'package:by_lety_travels/presentation/pages/terms_conditions_page.dart';
+import 'package:by_lety_travels/presentation/pages/refund_policy_page.dart';
+import 'package:by_lety_travels/presentation/pages/cookie_policy_page.dart';
 import 'package:by_lety_travels/presentation/providers/favorites_provider.dart';
 import 'package:by_lety_travels/presentation/providers/search_provider.dart';
 
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'By Lety Travels',
+        debugShowCheckedModeBanner: false, // Oculta el banner de DEBUG
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -70,6 +75,12 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: HomePage(),
+        routes: {
+          '/privacy-policy': (context) => const PrivacyPolicyPage(),
+          '/terms-conditions': (context) => const TermsConditionsPage(),
+          '/refund-policy': (context) => const RefundPolicyPage(),
+          '/cookie-policy': (context) => const CookiePolicyPage(),
+        },
       ),
     );
   }

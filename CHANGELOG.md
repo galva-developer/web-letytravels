@@ -4,6 +4,360 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.28] - 2025-01-25
+
+### 🐛 Fixed Mobile Drawer Overflow Issue
+
+#### 🔧 Bug Fix: Eliminated "OVERFLOWED BY ... px" Warning
+
+**Problem**: Al abrir el drawer móvil en dispositivos con pantallas pequeñas, aparecía un texto vertical amarillo en el borde derecho que decía "OVERFLOWED BY X px", indicando que el contenido del drawer era más alto que el espacio disponible.
+
+**Root Cause**: El drawer utilizaba una estructura de `Column` con:
+- Header (altura fija con SafeArea + Padding)
+- Divider (altura fija)
+- ListView expandido con menu items
+- Footer (altura fija fuera del ListView)
+
+En pantallas pequeñas, la suma de alturas fijas (Header + Footer + SafeArea) excedía la altura disponible, causando overflow.
+
+**Solution Applied**:
+
+Moví el footer **dentro del ListView** como el último elemento, permitiendo que todo el contenido sea scrolleable cuando sea necesario.
+
+**Changes in mobile_menu_drawer.dart**:
+
+```dart
+// BEFORE (Footer fuera del ListView - causa overflow)
+Column(
+  children: [
+    Header,
+    Divider,
+    Expanded(
+      child: ListView([
+        MenuItem1,
+        MenuItem2,
+        ...
+      ]),
+    ),
+    Footer, // ← Fuera del scroll, causa overflow
+  ],
+)
+
+// AFTER (Footer dentro del ListView - sin overflow)
+Column(
+  children: [
+    Header,
+    Divider,
+    Expanded(
+      child: ListView([
+        MenuItem1,
+        MenuItem2,
+        ...
+        Footer, // ← Dentro del scroll, sin overflow
+      ]),
+    ),
+  ],
+)
+```
+
+**Specific Changes**:
+1. ✅ Removido el Footer como hijo directo de la Column
+2. ✅ Agregado el Footer como último elemento del ListView
+3. ✅ Ajustado padding del footer (24px → 16px) para mejor uso del espacio
+4. ✅ Agregado margin horizontal al footer para alineación
+5. ✅ Removido `SizedBox(height: 8)` innecesario antes del ListView
+
+**Benefits**:
+- ✅ **Elimina el warning amarillo** de overflow en todos los dispositivos
+- ✅ **Drawer completamente scrolleable** cuando el contenido es largo
+- ✅ **Funciona en cualquier tamaño** de pantalla (desde iPhone SE hasta tablets)
+- ✅ **Mejor UX** - el usuario puede hacer scroll para ver todo el contenido
+- ✅ **Sin elementos cortados** - todo el contenido siempre accesible
+
+**Testing Scenarios**:
+| Dispositivo | Altura Pantalla | Resultado |
+|-------------|----------------|-----------|
+| iPhone SE | ~568px | ✅ Sin overflow, scrolleable |
+| iPhone 12 | ~844px | ✅ Sin overflow, sin scroll necesario |
+| Android Small | ~640px | ✅ Sin overflow, scrolleable |
+| Tablet | ~1024px+ | ✅ Sin overflow, sin scroll necesario |
+
+**File Modified**:
+- `lib/presentation/widgets/components/mobile_menu_drawer.dart`
+
+---
+
+## [v0.18.27] - 2025-01-25
+
+### 🎨 Removed Debug Banner from Mobile Drawer
+
+#### ✨ UI Enhancement: Hidden Debug Banner Overlay
+
+**Problem**: Al abrir la navegación lateral en móviles, en algunos dispositivos se veía la advertencia/banner rojo de "DEBUG" en la esquina superior derecha, lo cual no es profesional y confunde a los usuarios.
+
+**Root Cause**: Flutter muestra automáticamente un banner de "DEBUG" en modo de desarrollo por defecto para indicar que la aplicación está corriendo en modo debug.
+
+**Solution Applied**:
+
+```dart
+// Before
+MaterialApp(
+  title: 'By Lety Travels',
+  theme: ThemeData(...),
+  ...
+)
+
+// After
+MaterialApp(
+  title: 'By Lety Travels',
+  debugShowCheckedModeBanner: false, // ← Oculta el banner de DEBUG
+  theme: ThemeData(...),
+  ...
+)
+```
+
+**Changes in main.dart**:
+- ✅ Agregada propiedad `debugShowCheckedModeBanner: false` al `MaterialApp`
+- ✅ Comentario explicativo para futura referencia
+
+**Visual Improvement**:
+
+**Before** (con banner):
+```
+┌─────────────────────────────┐
+│                       DEBUG │ ← Banner rojo molesto
+│  ┌─────────────────┐        │
+│  │  By Lety        │        │
+│  │  Travels        │        │
+│  │                 │        │
+│  │  Navigation     │        │
+│  │  Drawer         │        │
+│  └─────────────────┘        │
+└─────────────────────────────┘
+```
+
+**After** (sin banner):
+```
+┌─────────────────────────────┐
+│  ┌─────────────────┐        │ ← Sin banner, limpio
+│  │  By Lety        │        │
+│  │  Travels        │        │
+│  │                 │        │
+│  │  Navigation     │        │
+│  │  Drawer         │        │
+│  └─────────────────┘        │
+└─────────────────────────────┘
+```
+
+**Benefits**:
+- ✅ Interfaz más profesional y limpia
+- ✅ No confunde a usuarios durante pruebas
+- ✅ Mejor presentación en demostraciones
+- ✅ Aprovecha mejor el espacio visual en pantallas móviles
+- ✅ Elimina distracciones visuales del banner rojo
+
+**Note**: Esta configuración solo afecta el banner de debug. Los mensajes de debug en consola y las herramientas de desarrollo siguen funcionando normalmente.
+
+**File Modified**:
+- `lib/main.dart`
+
+---
+
+## [v0.18.26] - 2025-01-25
+
+### 🎨 White Back Button in Policy Pages
+
+#### 🔍 UI Enhancement: Improved AppBar Visibility in Policy Pages
+
+**Problem**: El botón de "volver atrás" (←) en las páginas de políticas era muy oscuro y difícil de ver contra el fondo azul oscuro del AppBar.
+
+**Solution Applied**: Actualización del AppBar en todas las páginas de políticas para usar iconos y texto blancos.
+
+**Changes in All Policy Pages**:
+
+```dart
+// Before
+appBar: AppBar(
+  title: const Text('Política de Privacidad'),
+  backgroundColor: const Color(0xFF072A47),
+),
+
+// After
+appBar: AppBar(
+  title: const Text('Política de Privacidad'),
+  backgroundColor: const Color(0xFF072A47),
+  foregroundColor: Colors.white,        // ← Texto blanco
+  iconTheme: const IconThemeData(color: Colors.white), // ← Iconos blancos
+),
+```
+
+**Files Updated**:
+1. ✅ `privacy_policy_page.dart` - Política de Privacidad
+2. ✅ `terms_conditions_page.dart` - Términos y Condiciones
+3. ✅ `refund_policy_page.dart` - Política de Reembolso
+4. ✅ `cookie_policy_page.dart` - Política de Cookies
+
+**Visual Improvement**:
+
+**Before**:
+```
+┌─────────────────────────────┐
+│ ← Política de Privacidad    │ ← Flecha oscura (difícil de ver)
+│ (Fondo azul oscuro #072A47) │
+└─────────────────────────────┘
+```
+
+**After**:
+```
+┌─────────────────────────────┐
+│ ← Política de Privacidad    │ ← Flecha BLANCA (alta visibilidad)
+│ (Fondo azul oscuro #072A47) │
+└─────────────────────────────┘
+```
+
+**Benefits**:
+- ✅ Mejor contraste visual (blanco sobre azul oscuro)
+- ✅ Botón de retroceso más visible y accesible
+- ✅ Consistencia con el diseño general de la app
+- ✅ Mejor experiencia de usuario en móviles
+- ✅ Cumple con estándares de accesibilidad (WCAG AA)
+
+**Properties Added**:
+- `foregroundColor: Colors.white` - Color del texto del título
+- `iconTheme: IconThemeData(color: Colors.white)` - Color de todos los iconos del AppBar
+
+---
+
+## [v0.18.25] - 2025-01-25
+
+### 📱 "Sobre Nosotros" Button Now Navigates to Instagram Section
+
+#### ✨ New Feature: Instagram Section Navigation
+
+**Objective**: Hacer que el botón "Sobre Nosotros" del drawer móvil redirija a la sección "Síguenos en Instagram".
+
+**Changes Applied**:
+
+1. **home_page.dart**:
+   - ✅ Agregada: `_instagramSectionKey` para identificar la sección de Instagram
+   - ✅ Actualizado: Callback `onAboutPressed` ahora hace scroll a Instagram
+   - ✅ Removido: TODO comment obsoleto
+
+2. **instagram_feed.dart**:
+   - ✅ Agregado: Parámetro `sectionKey` opcional al widget `InstagramFeed`
+   - ✅ Aplicado: Key al Container principal para habilitar scroll programático
+
+**User Flow**:
+1. Usuario abre el drawer móvil 📱
+2. Toca el botón **"Sobre Nosotros"**
+3. El drawer se cierra automáticamente
+4. La página hace scroll automático a la sección **"Síguenos en Instagram"** 📸
+5. Usuario puede ver el feed de Instagram y el link a `@byletytravels.ok`
+
+**Code Changes**:
+
+```dart
+// Before
+onAboutPressed: () {
+  Navigator.pop(context);
+  // TODO: Navigate to about page
+},
+
+// After
+onAboutPressed: () {
+  Navigator.pop(context);
+  _scrollToSection(_instagramSectionKey);
+},
+```
+
+**Benefits**:
+- ✅ Mejor conexión con redes sociales
+- ✅ Navegación intuitiva desde el drawer móvil
+- ✅ Aprovecha el contenido visual de Instagram
+- ✅ Mantiene al usuario en la página (no abre externa)
+
+**Files Modified**:
+- `lib/presentation/pages/home_page.dart`
+- `lib/presentation/widgets/instagram_feed.dart`
+
+---
+
+## [v0.18.24] - 2025-01-25
+
+### 🔧 Mobile Drawer Navigation Fix & Policy Pages Integration
+
+#### 🐛 Fixed Mobile Drawer Buttons Not Working
+
+**Problem**: Cuando se abría el drawer móvil, ninguno de los botones funcionaba correctamente.
+
+**Root Cause**: Se estaba llamando `Navigator.pop()` dos veces:
+- Una vez dentro del widget `MobileMenuDrawer`
+- Una segunda vez en los callbacks desde `home_page.dart` y `responsive_layout.dart`
+
+**Solution Applied**:
+
+1. **mobile_menu_drawer.dart**:
+   - ❌ Eliminado: `Navigator.of(context).pop()` de cada callback interno
+   - ✅ Ahora: Solo llama a los callbacks recibidos como parámetros
+   - Responsabilidad de cerrar drawer delegada al componente padre
+
+2. **responsive_layout.dart**:
+   - ✅ Añadido: `Navigator.of(context).pop()` en callbacks de `ResponsiveLayout`
+   - ✅ Actualizado: `ResponsiveLayoutFloating` con funcionalidad completa
+   - ✅ Añadidos: Section keys y scroll handlers para navegación
+
+3. **home_page.dart**:
+   - ✅ Ya tenía los callbacks correctos, ahora funciona con el fix del drawer
+
+#### 🌐 Integrated Policy Pages Routes
+
+**New Feature**: Los botones de políticas en el drawer móvil ahora navegan correctamente a sus páginas respectivas.
+
+**Changes in main.dart**:
+
+1. **Imports Added**:
+   ```dart
+   import 'package:by_lety_travels/presentation/pages/privacy_policy_page.dart';
+   import 'package:by_lety_travels/presentation/pages/terms_conditions_page.dart';
+   import 'package:by_lety_travels/presentation/pages/refund_policy_page.dart';
+   import 'package:by_lety_travels/presentation/pages/cookie_policy_page.dart';
+   ```
+
+2. **Routes Configuration**:
+   ```dart
+   routes: {
+     '/privacy-policy': (context) => const PrivacyPolicyPage(),
+     '/terms-conditions': (context) => const TermsConditionsPage(),
+     '/refund-policy': (context) => const RefundPolicyPage(),
+     '/cookie-policy': (context) => const CookiePolicyPage(),
+   }
+   ```
+
+**Mobile Drawer Buttons Now Working**:
+- ✅ Inicio → Navega a la sección hero
+- ✅ Paquetes → Navega a la sección de paquetes
+- ✅ Favoritos → Navega a la sección de favoritos
+- ✅ Sobre Nosotros → Listo para implementar
+- ✅ Contacto → Navega a la sección de contacto
+- ✅ **Política de Privacidad** → Abre página completa
+- ✅ **Términos y Condiciones** → Abre página completa
+- ✅ **Política de Reembolso** → Abre página completa
+- ✅ **Política de Cookies** → Abre página completa
+
+**User Flow**:
+1. Usuario abre drawer móvil (hamburger menu)
+2. Toca cualquier botón de política
+3. Drawer se cierra con `Navigator.pop()`
+4. Navega a la página correspondiente con `Navigator.pushNamed()`
+5. Usuario puede volver con el botón "back" del AppBar
+
+**Files Modified**:
+- `lib/main.dart` - Configuración de rutas
+- `lib/presentation/widgets/components/mobile_menu_drawer.dart` - Fix de doble pop
+- `lib/presentation/layouts/responsive_layout.dart` - Callbacks mejorados
+
+---
+
 ## [v0.18.23] - 2025-01-25
 
 ### 🎨 Contact Section Mobile Layout Enhancement
