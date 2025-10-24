@@ -116,11 +116,22 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
       drawer:
           isMobile
               ? MobileMenuDrawer(
-                onHomePressed: () => _scrollToSection(_heroSectionKey),
-                onPackagesPressed: () => _scrollToSection(_packagesSectionKey),
-                onFavoritesPressed:
-                    () => _scrollToSection(_favoritesSectionKey),
-                onContactPressed: () => _scrollToSection(_contactSectionKey),
+                onHomePressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_heroSectionKey);
+                },
+                onPackagesPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_packagesSectionKey);
+                },
+                onFavoritesPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_favoritesSectionKey);
+                },
+                onContactPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_contactSectionKey);
+                },
               )
               : null,
 
@@ -161,6 +172,22 @@ class _ResponsiveLayoutFloatingState extends State<ResponsiveLayoutFloating> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentBottomNavIndex = 0;
 
+  // Section keys for navigation (if needed in the future)
+  final GlobalKey _heroSectionKey = GlobalKey();
+  final GlobalKey _packagesSectionKey = GlobalKey();
+  final GlobalKey _favoritesSectionKey = GlobalKey();
+  final GlobalKey _contactSectionKey = GlobalKey();
+
+  void _scrollToSection(GlobalKey key) {
+    if (key.currentContext != null) {
+      Scrollable.ensureVisible(
+        key.currentContext!,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   void _handleBottomNavTap(int index) {
     setState(() {
       _currentBottomNavIndex = index;
@@ -184,11 +211,36 @@ class _ResponsiveLayoutFloatingState extends State<ResponsiveLayoutFloating> {
                     isMobile
                         ? () => _scaffoldKey.currentState?.openDrawer()
                         : null,
+                onHomePressed: () => _scrollToSection(_heroSectionKey),
+                onPackagesPressed: () => _scrollToSection(_packagesSectionKey),
+                onFavoritesPressed:
+                    () => _scrollToSection(_favoritesSectionKey),
+                onContactPressed: () => _scrollToSection(_contactSectionKey),
                 favoritesCount: favoritesProvider.favoritesCount,
               )
               : null,
 
-      drawer: isMobile ? const MobileMenuDrawer() : null,
+      drawer:
+          isMobile
+              ? MobileMenuDrawer(
+                onHomePressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_heroSectionKey);
+                },
+                onPackagesPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_packagesSectionKey);
+                },
+                onFavoritesPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_favoritesSectionKey);
+                },
+                onContactPressed: () {
+                  Navigator.of(context).pop();
+                  _scrollToSection(_contactSectionKey);
+                },
+              )
+              : null,
 
       body: widget.child,
 

@@ -86,7 +86,6 @@ class MobileMenuDrawer extends StatelessWidget {
                       icon: Icons.home_outlined,
                       title: 'Inicio',
                       onTap: () {
-                        Navigator.of(context).pop();
                         onHomePressed?.call();
                       },
                     ),
@@ -95,7 +94,6 @@ class MobileMenuDrawer extends StatelessWidget {
                       icon: Icons.card_travel_outlined,
                       title: 'Paquetes',
                       onTap: () {
-                        Navigator.of(context).pop();
                         onPackagesPressed?.call();
                       },
                     ),
@@ -104,7 +102,6 @@ class MobileMenuDrawer extends StatelessWidget {
                       icon: Icons.favorite_border,
                       title: 'Favoritos',
                       onTap: () {
-                        Navigator.of(context).pop();
                         onFavoritesPressed?.call();
                       },
                     ),
@@ -113,7 +110,6 @@ class MobileMenuDrawer extends StatelessWidget {
                       icon: Icons.info_outline,
                       title: 'Sobre Nosotros',
                       onTap: () {
-                        Navigator.of(context).pop();
                         onAboutPressed?.call();
                       },
                     ),
@@ -122,7 +118,6 @@ class MobileMenuDrawer extends StatelessWidget {
                       icon: Icons.contact_mail_outlined,
                       title: 'Contacto',
                       onTap: () {
-                        Navigator.of(context).pop();
                         onContactPressed?.call();
                       },
                     ),
