@@ -747,7 +747,7 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
   // Contact via WhatsApp
   void _contactViaWhatsApp() async {
     final message =
-        'Hi! I\'m interested in the ${widget.package.title} package';
+        '¡Hola! Me interesa el paquete ${widget.package.title}';
     final whatsappUrl =
         'https://wa.me/5493884102859?text=${Uri.encodeComponent(message)}';
 
