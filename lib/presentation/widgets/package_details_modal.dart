@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
-import 'package:by_lety_travels/presentation/pages/booking_form_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 // Modal dialog to display detailed package information with tabs
 class PackageDetailsModal extends StatefulWidget {
@@ -704,30 +704,13 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
           ),
         ],
       ),
-      child:
-          isMobile
-              ? Column(
-                children: [
-                  _buildBookNowButton(),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(child: _buildWhatsAppButton()),
-                      const SizedBox(width: 8),
-                      Expanded(child: _buildEmailButton()),
-                    ],
-                  ),
-                ],
-              )
-              : Row(
-                children: [
-                  Expanded(child: _buildWhatsAppButton()),
-                  const SizedBox(width: 12),
-                  Expanded(child: _buildEmailButton()),
-                  const SizedBox(width: 12),
-                  Expanded(flex: 2, child: _buildBookNowButton()),
-                ],
-              ),
+      child: Row(
+        children: [
+          Expanded(child: _buildWhatsAppButton()),
+          const SizedBox(width: 12),
+          Expanded(child: _buildEmailButton()),
+        ],
+      ),
     );
   }
 
@@ -761,33 +744,6 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
     );
   }
 
-  // Book Now button
-  Widget _buildBookNowButton() {
-    return ElevatedButton.icon(
-      onPressed: () {
-        // Close the modal
-        Navigator.of(context).pop();
-
-        // Navigate to booking form page
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => BookingFormPage(package: widget.package),
-          ),
-        );
-      },
-      icon: const Icon(Icons.flight_takeoff, size: 20),
-      label: const Text('Reservar'),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: const Color(0xFF072A47),
-        backgroundColor: const Color(0xFFFFDC00),
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      ),
-    );
-  }
-
   // Contact via WhatsApp
   void _contactViaWhatsApp() async {
     final message =
@@ -814,11 +770,35 @@ class _PackageDetailsModalState extends State<PackageDetailsModal>
   }
 
   // Share package
-  void _sharePackage() {
-    // TODO: Implement share functionality with share_plus package
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Función de compartir próximamente!')),
-    );
+  void _sharePackage() async {
+    final String shareText = '''
+🌍 ${widget.package.title}
+
+📍 ${widget.package.location}
+⏰ ${widget.package.duration}
+💰 ${widget.package.price}
+🏨 ${widget.package.hotelRating}
+
+${widget.package.description}
+
+¡Conoce más sobre este increíble destino con By Lety Travels! 🎉
+
+🌐 https://www.instagram.com/byletytravels.ok/
+📱 WhatsApp: +54 9 388 410-2859
+✉️ byletytravels.oficial@gmail.com
+''';
+
+    try {
+      await Share.share(shareText, subject: widget.package.title);
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al compartir. Por favor, intenta de nuevo.'),
+          ),
+        );
+      }
+    }
   }
 
   // Open Google Maps

@@ -48,11 +48,14 @@ class _HeroSectionState extends State<HeroSection>
 
   // Rotating destinations for animated text
   final List<String> _destinations = [
-    'Descubre París',
-    'Explora Roma',
-    'Experimenta Kioto',
-    'Visita Nueva York',
-    'Disfruta Bali',
+    'Descubre Machu Pichu',
+    'Impresionante Perú',
+    'Contempla Tarija',
+    'Explora Bolivia',
+    'Experimenta Buzios',
+    'Visita Brasil',
+    'Diviértete Jujuy',
+    'Disfruta Argentina',
   ];
 
   @override

@@ -175,12 +175,12 @@ class InstagramFeed extends StatelessWidget {
   // En producción, esto vendría de la API de Instagram
   String _getPlaceholderImage(int index) {
     final List<String> placeholderImages = [
-      'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&h=400&fit=crop', // París
-      'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=400&h=400&fit=crop', // Maldivas
-      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400&h=400&fit=crop', // Santorini
-      'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=400&h=400&fit=crop', // Viajar
-      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=400&fit=crop', // Lago
-      'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=400&fit=crop', // Aventura
+      'https://scontent-mad2-1.xx.fbcdn.net/v/t39.30808-6/519682400_122131471310855081_1039629237109151148_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_ohc=Lk1xFzw-lKQQ7kNvwGcA60Y&_nc_oc=AdlsE8XuangdTuhOTA8q6XwrjGvLbapSF6rvE2HYR8dpeOPqNy97wYF87hYYhC81c9K-iiqMUrz1awX0qy0Ssst4&_nc_zt=23&_nc_ht=scontent-mad2-1.xx&_nc_gid=_xC09Qjz5ehBbhEPs4sjdw&oh=00_AfeDmTjPf0VX6AWx2Sd9t1ohAzKc4AdtvBc_bGVsy4oPcA&oe=6903116C',
+      'https://scontent-mad2-1.xx.fbcdn.net/v/t39.30808-6/519415425_122131471208855081_997845402250862449_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=yHnFzp88p5MQ7kNvwFaysHr&_nc_oc=AdkLJlDoMUK_HlFvawXNWNulOja17D6xJK-PEUM595cb15jXi7YPZj4-iyBHFXhZGKvm9nXMcY4J3EUB7OMOx7kh&_nc_zt=23&_nc_ht=scontent-mad2-1.xx&_nc_gid=__vqOx_0IzcDxsy_lnvh7A&oh=00_AfdRhugTq5RE0O_qVHqcNVGK65pBEyNoC88HxfAwBTJj3A&oe=69032851',
+      'https://scontent-mad2-1.xx.fbcdn.net/v/t39.30808-6/509331041_122123007164855081_6102273974423257564_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=N-uyJvIcu74Q7kNvwG_HMSN&_nc_oc=AdnMd7sFQ-qqiTT3rQ_8lN0WUrnl9d9nUfUNkgsfUJ6oUyQbk7jRvqAHXRyHgnQ9UIEnuDnTwRUYlvGu5KJ-3_0T&_nc_zt=23&_nc_ht=scontent-mad2-1.xx&_nc_gid=jsk3TV_D2ocrbh53tmuyeA&oh=00_AfdJUNPsEILRvub8ibFTAcmi0Uh_7Ut2dYtl6BHNhk1-Dw&oe=690301C9',
+      'https://scontent-mad2-1.xx.fbcdn.net/v/t39.30808-6/520306246_122131466918855081_5025052199899484492_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=D0ZKRU6xG_EQ7kNvwH3Iv7i&_nc_oc=AdnXlV1ZEgKoSljEQgD7AzgZSYVFvhui5UWRIlLrmqd4orSTneLGxF08G77nq5rS45q5Ie03Zo3f3-FyTOlMlM4g&_nc_zt=23&_nc_ht=scontent-mad2-1.xx&_nc_gid=qRPpaSobDHC4V28C7C_E2g&oh=00_Afd_42dVvixzmPV2lJnVV0OV2OCkAs4Z7mfQ-GpY5ncnhg&oe=69030CB5',
+      'https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/509367279_122123003828855081_7307789903672535_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=VMqHC0KDFQcQ7kNvwGFZiWs&_nc_oc=Adl98A4afE9lhqmKDOiy0wfnRNHcSKsEbMDZjp1Ql7IGxpnfu2SJF6QhO_0kdnQ-q_Glg-iaRtvFEBlaZHJqLJjU&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=4Wmo7d2DwKiRc-ddQDErIQ&oh=00_AfdtTVNweZ9cZmlUIiVN5lMgDgW19jqUnTlIrn_-hsnHlw&oe=6903103F',
+      'https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/509423995_122123004950855081_7710483682074799878_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=1xm7kaVEiKgQ7kNvwFx2z1T&_nc_oc=Admg0dIOp1Abxs62QALDh_rNnHTfpnqHFVUzlbbq61F-IPhSurU1gVm4q2AyiVAV9GLfEC6N8bw-2cqrzO4MTZFZ&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=qvTPwPZz8tk2hS-gJszvog&oh=00_AffTFhuw1ilSytmuVJxverCxuPjSdNgHfDmXsqnzwcrPjA&oe=69030C99',
     ];
 
     return placeholderImages[index % placeholderImages.length];

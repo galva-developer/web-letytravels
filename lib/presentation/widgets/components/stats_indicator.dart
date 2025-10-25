@@ -17,8 +17,8 @@ class _StatsIndicatorState extends State<StatsIndicator> {
 
   // Target values
   final int _targetTravelers = 500;
-  final int _targetDestinations = 50;
-  final int _targetYears = 10;
+  final int _targetDestinations = 10;
+  final int _targetYears = 3;
 
   @override
   void initState() {

@@ -29,9 +29,9 @@ class SamplePackages {
       galleryImages: [
         'https://i0.wp.com/www.centralbuzios.com/blog/wp-content/uploads/2016/01/Buzios-Brasil-Viajes_CLAIMA20150604_0113_29.jpg?ssl=1',
         'https://i0.wp.com/www.centralbuzios.com/blog/wp-content/uploads/2016/01/Buzios-Brasil-Viajes_CLAIMA20150604_0112_29.jpg?resize=850%2C567&ssl=1',
-        'https://buzios.com/wp-content/uploads/arraial-do-cabo-rj.jpg',
-        'https://buzios.com/wp-content/uploads/cabo-frio.jpg',
-        'https://a.travel-assets.com/findyours-php/viewfinder/images/res70/264000/264671-Arraial-Do-Cabo.jpg?impolicy=fcrop&w=1920&h=480&q=medium',
+        'https://images3.bovpg.net/r/media/1/6/0/6/7/60672.jpg',
+        'https://www.civitatis.com/f/brasil/cabo-frio/excursion-buzios-589x392.jpg',
+        'https://static.hosteltur.com/app/public/uploads/img/articles/2020/12/18/L_093208_buzios.jpg',
       ],
       itinerary: [
         DayItinerary(

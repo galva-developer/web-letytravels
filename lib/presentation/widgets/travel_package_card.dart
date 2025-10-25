@@ -488,35 +488,6 @@ class _TravelPackageCardState extends State<TravelPackageCard>
                     _buildFeatureItem('🍽️ Comidas incluidas', isMobile),
 
                   const Spacer(),
-
-                  // Call to Action
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: widget.onBookNowPressed,
-                          icon: Icon(
-                            Icons.check_circle,
-                            size: isMobile ? 18.0 : 20.0,
-                          ),
-                          label: const Text('Reservar Ahora'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFFDC00),
-                            foregroundColor: const Color(0xFF072A47),
-                            padding: EdgeInsets.symmetric(
-                              vertical: isMobile ? 12.0 : 14.0,
-                            ),
-                            textStyle: TextStyle(
-                              fontSize: isMobile ? 13.0 : 14.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -950,116 +921,29 @@ class _TravelPackageCardState extends State<TravelPackageCard>
     final buttonFontSize = isMobile ? 12.0 : 14.0;
     final buttonPadding = isMobile ? 10.0 : 14.0;
     final iconSize = isMobile ? 14.0 : 18.0;
-    final spacing = isMobile ? 6.0 : 12.0;
-    final borderWidth = isMobile ? 1.5 : 2.0;
 
-    return isMobile
-        ? Column(
-          children: [
-            // View Details button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed:
-                    widget.onViewDetailsPressed ??
-                    () {
-                      print('View Details pressed for: ${widget.title}');
-                    },
-                icon: Icon(Icons.info_outline, size: iconSize),
-                label: const Text('Ver Detalles'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF072A47),
-                  side: BorderSide(
-                    color: const Color(0xFF072A47),
-                    width: borderWidth,
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                  textStyle: TextStyle(
-                    fontSize: buttonFontSize,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: spacing),
-            // Book Now button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed:
-                    widget.onBookNowPressed ??
-                    () {
-                      print('Book Now pressed for: ${widget.title}');
-                    },
-                icon: Icon(Icons.check_circle_outline, size: iconSize),
-                label: const Text('Reservar'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFDC00),
-                  foregroundColor: const Color(0xFF072A47),
-                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                  elevation: _isHovered ? 8 : 2,
-                  textStyle: TextStyle(
-                    fontSize: buttonFontSize,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        )
-        : Row(
-          children: [
-            // View Details button
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed:
-                    widget.onViewDetailsPressed ??
-                    () {
-                      print('View Details pressed for: ${widget.title}');
-                    },
-                icon: Icon(Icons.info_outline, size: iconSize),
-                label: const Text('Ver Detalles'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF072A47),
-                  side: const BorderSide(color: Color(0xFF072A47), width: 2),
-                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                  textStyle: TextStyle(fontSize: buttonFontSize),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: spacing),
-            // Book Now button
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed:
-                    widget.onBookNowPressed ??
-                    () {
-                      print('Book Now pressed for: ${widget.title}');
-                    },
-                icon: Icon(Icons.check_circle_outline, size: iconSize),
-                label: const Text('Reservar'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFDC00),
-                  foregroundColor: const Color(0xFF072A47),
-                  padding: EdgeInsets.symmetric(vertical: buttonPadding),
-                  elevation: _isHovered ? 8 : 2,
-                  textStyle: TextStyle(fontSize: buttonFontSize),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed:
+            widget.onViewDetailsPressed ??
+            () {
+              print('View Details pressed for: ${widget.title}');
+            },
+        icon: Icon(Icons.check_circle, size: iconSize),
+        label: const Text('Ver Detalles'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFFFDC00),
+          foregroundColor: const Color(0xFF072A47),
+          padding: EdgeInsets.symmetric(vertical: buttonPadding),
+          elevation: _isHovered ? 8 : 2,
+          textStyle: TextStyle(
+            fontSize: buttonFontSize,
+            fontWeight: FontWeight.w600,
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      ),
+    );
   }
 }

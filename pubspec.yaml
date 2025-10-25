@@ -64,6 +64,9 @@ dependencies:
   
   # Font Awesome icons for WhatsApp logo
   font_awesome_flutter: ^10.7.0
+  
+  # Share functionality
+  share_plus: ^10.1.3
 
 dev_dependencies:
   flutter_test:
