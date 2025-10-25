@@ -4,6 +4,89 @@ Registro de cambios y mejoras implementadas en el proyecto.
 
 ---
 
+## [v0.18.34] - 2025-01-25
+
+### 📧 Appointment Email Notifications Feature
+
+#### ✨ Feature: Sistema de Notificaciones por Email para Citas de Asesoría
+
+**Objective**: Implementar el envío automático de correos electrónicos de confirmación cuando los usuarios agendan citas de asesoría personalizada.
+
+**Implementation**:
+
+**1. Expansión del EmailService**:
+- **Archivo**: `lib/data/services/email_service.dart`
+- **Cambios**:
+  - Agregado import del modelo `Appointment`
+  - Implementados 3 nuevos métodos:
+    - `sendAppointmentClientEmail()`: Envía email de confirmación al cliente
+    - `sendAppointmentBusinessEmail()`: Envía notificación al negocio (byletytravels.oficial@gmail.com)
+    - `sendAppointmentEmails()`: Envía ambos emails en paralelo
+
+**Parámetros enviados en los templates de EmailJS**:
+- `appointment_id`: ID único de la cita
+- `appointment_date`: Fecha formateada (ej: "25 de Enero de 2025")
+- `appointment_time`: Hora del slot (ej: "09:00 AM")
+- `appointment_type`: Tipo de asesoría (Presencial/Video Llamada/Teléfono)
+- `client_name`: Nombre completo del cliente
+- `client_email`: Email del cliente
+- `client_phone`: Teléfono del cliente (o "No proporcionado")
+- `notes`: Notas especiales (o "Ninguna")
+- `status`: Estado de la cita (solo en email al negocio)
+
+**2. Integración con AppointmentService**:
+- **Archivo**: `lib/data/services/appointment_service.dart`
+- **Cambios**:
+  - Agregado import de `EmailService`
+  - Modificado método `bookAppointment()`:
+    - Después de crear la cita exitosamente, llama a `EmailService.sendAppointmentEmails()`
+    - Registra en consola el resultado del envío de cada email
+    - Manejo de errores individual para emails de cliente y negocio
+
+**Flujo de Ejecución**:
+1. Usuario completa el formulario de cita en `AppointmentBookingDialog`
+2. Se valida la información
+3. Se verifica disponibilidad del slot
+4. Se crea la cita en memoria
+5. **NUEVO**: Se envían automáticamente 2 emails:
+   - Email de confirmación al cliente
+   - Email de notificación al negocio
+6. Se muestra mensaje de éxito al usuario
+
+**Logging en Consola**:
+```
+📅 Cita creada exitosamente:
+{id: ..., date: ..., ...}
+📧 Enviando correos de confirmación...
+✅ Email de confirmación enviado al cliente: usuario@ejemplo.com
+✅ Email de notificación enviado al negocio
+```
+
+**Manejo de Errores**:
+- Si falla el envío de email, se registra en consola pero NO se interrumpe el flujo
+- La cita se crea exitosamente incluso si los emails fallan
+- Mensajes de warning si algún email no se pudo enviar
+
+**Prerequisites**:
+- Los templates de EmailJS deben estar configurados con los campos correspondientes
+- Las credenciales en `lib/config/email_config.dart` deben ser válidas
+- Se recomienda crear templates específicos para citas (diferentes a los de reservas de paquetes)
+
+**Testing Checklist**:
+- [ ] Verificar que el email llegue al cliente con la información correcta
+- [ ] Verificar que el email llegue a byletytravels.oficial@gmail.com
+- [ ] Probar con diferentes tipos de asesoría (Presencial, Video, Teléfono)
+- [ ] Probar con y sin teléfono/notas opcionales
+- [ ] Verificar formato de fecha en español
+
+**Related Files**:
+- `lib/data/services/email_service.dart`
+- `lib/data/services/appointment_service.dart`
+- `lib/data/models/appointment.dart`
+- `lib/config/email_config.dart`
+
+---
+
 ## [v0.18.33] - 2025-01-25
 
 ### 🔜 Coming Soon Package Feature

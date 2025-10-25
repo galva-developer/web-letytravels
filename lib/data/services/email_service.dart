@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:by_lety_travels/data/models/booking_data.dart';
 import 'package:by_lety_travels/data/models/package_travel.dart';
+import 'package:by_lety_travels/data/models/appointment.dart';
 import 'package:by_lety_travels/config/email_config.dart';
 
 /// Service to send booking confirmation emails using EmailJS
@@ -131,6 +132,151 @@ class EmailService {
       bookingNumber: bookingNumber,
       bookingData: bookingData,
       package: package,
+    );
+
+    return {'client': clientEmailSent, 'business': businessEmailSent};
+  }
+
+  // ==================== APPOINTMENT EMAILS ====================
+
+  /// Send appointment confirmation email to client
+  static Future<bool> sendAppointmentClientEmail({
+    required Appointment appointment,
+  }) async {
+    try {
+      // Formatear la fecha
+      final months = [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ];
+      final formattedDate =
+          '${appointment.date.day} de ${months[appointment.date.month - 1]} de ${appointment.date.year}';
+
+      final response = await http.post(
+        Uri.parse(_emailJsUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'service_id': _serviceId,
+          'template_id':
+              EmailConfig
+                  .templateIdAppointmentClient, // Usar template específico
+          'user_id': _publicKey,
+          'template_params': {
+            'to_email': appointment.clientEmail,
+            'to_name': appointment.clientName,
+            'appointment_id': appointment.id,
+            'appointment_date': formattedDate,
+            'appointment_time': appointment.timeSlot,
+            'appointment_type': appointment.type.displayName,
+            'client_name': appointment.clientName,
+            'client_email': appointment.clientEmail,
+            'client_phone': appointment.clientPhone ?? 'No proporcionado',
+            'notes': appointment.notes ?? 'Ninguna',
+          },
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print(
+          '✅ Email de confirmación enviado al cliente: ${appointment.clientEmail}',
+        );
+        return true;
+      } else {
+        print(
+          '❌ Error al enviar email al cliente. Status: ${response.statusCode}',
+        );
+        print('Response: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error enviando email de cita al cliente: $e');
+      return false;
+    }
+  }
+
+  /// Send appointment notification email to business
+  static Future<bool> sendAppointmentBusinessEmail({
+    required Appointment appointment,
+  }) async {
+    try {
+      // Formatear la fecha
+      final months = [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ];
+      final formattedDate =
+          '${appointment.date.day} de ${months[appointment.date.month - 1]} de ${appointment.date.year}';
+
+      final response = await http.post(
+        Uri.parse(_emailJsUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'service_id': _serviceId,
+          'template_id':
+              EmailConfig
+                  .templateIdAppointmentBusiness, // Usar template específico
+          'user_id': _publicKey,
+          'template_params': {
+            'to_email': 'byletytravels.oficial@gmail.com',
+            'appointment_id': appointment.id,
+            'appointment_date': formattedDate,
+            'appointment_time': appointment.timeSlot,
+            'appointment_type': appointment.type.displayName,
+            'client_name': appointment.clientName,
+            'client_email': appointment.clientEmail,
+            'client_phone': appointment.clientPhone ?? 'No proporcionado',
+            'notes': appointment.notes ?? 'Ninguna',
+            'status': appointment.status.displayName,
+          },
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('✅ Email de notificación enviado al negocio');
+        return true;
+      } else {
+        print(
+          '❌ Error al enviar email al negocio. Status: ${response.statusCode}',
+        );
+        print('Response: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Error enviando email de cita al negocio: $e');
+      return false;
+    }
+  }
+
+  /// Send both appointment emails (client and business)
+  static Future<Map<String, bool>> sendAppointmentEmails({
+    required Appointment appointment,
+  }) async {
+    final clientEmailSent = await sendAppointmentClientEmail(
+      appointment: appointment,
+    );
+
+    final businessEmailSent = await sendAppointmentBusinessEmail(
+      appointment: appointment,
     );
 
     return {'client': clientEmailSent, 'business': businessEmailSent};

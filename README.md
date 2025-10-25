@@ -22,7 +22,7 @@
 
 ### 🎯 Objetivo
 
-Proporcionar una experiencia de usuario excepcional para que los viajeros puedan:
+Proporcionar una experiencia de usuario excepcional para que los viajeros puedan: 
 - ✅ Explorar destinos populares y paquetes turísticos
 - ✅ Conocer todos los detalles de cada paquete (vuelos, hoteles, tours guiados)
 - ✅ Contactar fácilmente con asesores de viaje
@@ -498,9 +498,60 @@ flutter build windows
 
 Nuestros asesores de viaje están disponibles para ayudarte:
 
-- 📧 **Email**: contact@letytravels.com
-- 💬 **WhatsApp**: [Contactar ahora](#) *(Configura tu número)*
-- 🌐 **Website**: [byletytravels.com](#)
+- 📧 **Email**: byletytravels.oficial@gmail.com
+- 💬 **WhatsApp**: [Contactar ahora](#)
+- 🌐 **Website**: [byletytravels.com](https://web-letytravels.web.app/)
+
+---
+
+## 📧 Configuración de EmailJS
+
+Este proyecto utiliza **EmailJS** para el envío de correos electrónicos de confirmación. Consulta el archivo [`README_EMAIL_SETUP.md`](README_EMAIL_SETUP.md) para instrucciones detalladas.
+
+### Templates Configurados
+
+El sistema envía correos para dos tipos de notificaciones:
+
+#### 1. **Reservas de Paquetes Turísticos**
+- **Template Cliente**: Confirmación de reserva al cliente
+- **Template Negocio**: Notificación interna de nueva reserva
+
+#### 2. **Citas de Asesoría Personalizada**
+- **Template Cliente**: Confirmación de cita agendada
+- **Template Negocio**: Notificación de nueva cita
+
+### Variables de EmailJS para Citas
+
+**Para el template del cliente (`templateIdAppointmentClient`):**
+```
+{{to_email}}          - Email del cliente
+{{to_name}}           - Nombre del cliente
+{{appointment_id}}    - ID único de la cita
+{{appointment_date}}  - Fecha formateada (ej: "26 de Enero de 2025")
+{{appointment_time}}  - Hora (ej: "09:00 AM")
+{{appointment_type}}  - Tipo (Presencial/Video Llamada/Teléfono)
+{{client_name}}       - Nombre completo
+{{client_email}}      - Email
+{{client_phone}}      - Teléfono
+{{notes}}             - Notas especiales
+```
+
+**Para el template del negocio (`templateIdAppointmentBusiness`):**
+```
+Las mismas variables anteriores + {{status}} (Estado de la cita)
+```
+
+### Configuración Rápida
+
+1. **Crea los templates en EmailJS** con el HTML proporcionado
+2. **Copia los Template IDs** generados
+3. **Actualiza `lib/config/email_config.dart`**:
+```dart
+static const String templateIdAppointmentClient = 'template_TU_ID_AQUI';
+static const String templateIdAppointmentBusiness = 'template_TU_ID_AQUI';
+```
+
+Ver documentación completa en [`README_EMAIL_SETUP.md`](README_EMAIL_SETUP.md)
 
 ---
 

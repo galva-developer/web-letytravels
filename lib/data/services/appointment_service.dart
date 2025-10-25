@@ -1,5 +1,6 @@
 import 'package:by_lety_travels/data/models/appointment.dart';
 import 'package:by_lety_travels/data/models/time_slot.dart';
+import 'package:by_lety_travels/data/services/email_service.dart';
 
 /// Servicio para gestión de citas de asesoría
 class AppointmentService {
@@ -82,14 +83,26 @@ class AppointmentService {
       // Agregar la cita
       _appointments.add(appointment);
 
-      // En producción:
-      // - Guardar en Firebase Firestore
-      // - Enviar email de confirmación
-      // - Crear evento en Google Calendar
-      // - Enviar notificación por WhatsApp
-
       print('📅 Cita creada exitosamente:');
       print(appointment.toMap());
+
+      // Enviar emails de confirmación
+      print('📧 Enviando correos de confirmación...');
+      final emailResults = await EmailService.sendAppointmentEmails(
+        appointment: appointment,
+      );
+
+      if (emailResults['client'] == true) {
+        print('✅ Email de confirmación enviado al cliente');
+      } else {
+        print('⚠️ No se pudo enviar el email al cliente');
+      }
+
+      if (emailResults['business'] == true) {
+        print('✅ Email de notificación enviado al negocio');
+      } else {
+        print('⚠️ No se pudo enviar el email al negocio');
+      }
 
       return true;
     } catch (e) {
