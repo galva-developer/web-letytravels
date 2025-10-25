@@ -27,11 +27,11 @@ class SamplePackages {
       imageUrl:
           'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=2070&auto=format&fit=crop',
       galleryImages: [
-        'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1548963670-aaaa8f73a5e3?q=80&w=2070&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?q=80&w=2071&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070&auto=format&fit=crop',
+        'https://i0.wp.com/www.centralbuzios.com/blog/wp-content/uploads/2016/01/Buzios-Brasil-Viajes_CLAIMA20150604_0113_29.jpg?ssl=1',
+        'https://i0.wp.com/www.centralbuzios.com/blog/wp-content/uploads/2016/01/Buzios-Brasil-Viajes_CLAIMA20150604_0112_29.jpg?resize=850%2C567&ssl=1',
+        'https://buzios.com/wp-content/uploads/arraial-do-cabo-rj.jpg',
+        'https://buzios.com/wp-content/uploads/cabo-frio.jpg',
+        'https://a.travel-assets.com/findyours-php/viewfinder/images/res70/264000/264671-Arraial-Do-Cabo.jpg?impolicy=fcrop&w=1920&h=480&q=medium',
       ],
       itinerary: [
         DayItinerary(
