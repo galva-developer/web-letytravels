@@ -162,7 +162,75 @@ class ContactFooterSection extends StatelessWidget {
                                       ),
                                     ),
                                     const Spacer(),
-                                    const QuickInquiryButton(),
+                                    // Botones de Email y WhatsApp
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (context) =>
+                                                        const QuickInquiryDialog(),
+                                              );
+                                            },
+                                            icon: const Icon(
+                                              Icons.mail_outline,
+                                              size: 20,
+                                            ),
+                                            label: const Text('Email'),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.blue[700],
+                                              foregroundColor: Colors.white,
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                horizontal: 16,
+                                                vertical: 14,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: ElevatedButton.icon(
+                                            onPressed: () async {
+                                              final whatsappUrl = Uri.parse(
+                                                'https://wa.me/5214525235290?text=Hola, tengo una consulta sobre sus servicios de viaje',
+                                              );
+                                              if (await canLaunchUrl(
+                                                whatsappUrl,
+                                              )) {
+                                                await launchUrl(whatsappUrl);
+                                              }
+                                            },
+                                            icon: const Icon(
+                                              Icons.chat,
+                                              size: 20,
+                                            ),
+                                            label: const Text('WhatsApp'),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFF25D366),
+                                              foregroundColor: Colors.white,
+                                              padding: const EdgeInsets
+                                                  .symmetric(
+                                                horizontal: 16,
+                                                vertical: 14,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -235,8 +303,78 @@ class ContactFooterSection extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Envíanos un mensaje y te responderemos pronto',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black54,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                                 const SizedBox(height: 16),
-                                const QuickInquiryButton(),
+                                // Botones de Email y WhatsApp
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder:
+                                                (context) =>
+                                                    const QuickInquiryDialog(),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.mail_outline,
+                                          size: 20,
+                                        ),
+                                        label: const Text('Email'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue[700],
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 14,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: ElevatedButton.icon(
+                                        onPressed: () async {
+                                          final whatsappUrl = Uri.parse(
+                                            'https://wa.me/5214525235290?text=Hola, tengo una consulta sobre sus servicios de viaje',
+                                          );
+                                          if (await canLaunchUrl(whatsappUrl)) {
+                                            await launchUrl(whatsappUrl);
+                                          }
+                                        },
+                                        icon: const Icon(Icons.chat, size: 20),
+                                        label: const Text('WhatsApp'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFF25D366),
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 14,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -308,8 +446,78 @@ class ContactFooterSection extends StatelessWidget {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Envíanos un mensaje y te responderemos pronto',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black54,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                                 const SizedBox(height: 16),
-                                const QuickInquiryButton(),
+                                // Botones de Email y WhatsApp
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton.icon(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder:
+                                                (context) =>
+                                                    const QuickInquiryDialog(),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.mail_outline,
+                                          size: 20,
+                                        ),
+                                        label: const Text('Email'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue[700],
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 14,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: ElevatedButton.icon(
+                                        onPressed: () async {
+                                          final whatsappUrl = Uri.parse(
+                                            'https://wa.me/5214525235290?text=Hola, tengo una consulta sobre sus servicios de viaje',
+                                          );
+                                          if (await canLaunchUrl(whatsappUrl)) {
+                                            await launchUrl(whatsappUrl);
+                                          }
+                                        },
+                                        icon: const Icon(Icons.chat, size: 20),
+                                        label: const Text('WhatsApp'),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFF25D366),
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 14,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
