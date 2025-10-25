@@ -185,7 +185,7 @@ class CallNowButton extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () => _makePhoneCall(context),
-              icon: const Icon(Icons.phone, size: 20),
+              icon: const Icon(Icons.phone, size: 22),
               label: const Text(
                 'Llamar Ahora',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -193,7 +193,10 @@ class CallNowButton extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[700],
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

@@ -734,19 +734,22 @@ class AppointmentBookingButton extends StatelessWidget {
       );
     }
 
-    return ElevatedButton.icon(
-      onPressed: () => _showDialog(context),
-      icon: const Icon(Icons.calendar_today, size: 22),
-      label: const Text(
-        'Agendar Asesoría Gratuita',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[700],
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        elevation: 2,
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () => _showDialog(context),
+        icon: const Icon(Icons.calendar_today, size: 22),
+        label: const Text(
+          'Agendar Asesoría Gratuita',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green[700],
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          elevation: 2,
+        ),
       ),
     );
   }
