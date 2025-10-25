@@ -183,11 +183,11 @@ class ContactFooterSection extends StatelessWidget {
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.blue[700],
                                               foregroundColor: Colors.white,
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                horizontal: 16,
-                                                vertical: 14,
-                                              ),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                    vertical: 14,
+                                                  ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
@@ -214,14 +214,15 @@ class ContactFooterSection extends StatelessWidget {
                                             ),
                                             label: const Text('WhatsApp'),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  const Color(0xFF25D366),
-                                              foregroundColor: Colors.white,
-                                              padding: const EdgeInsets
-                                                  .symmetric(
-                                                horizontal: 16,
-                                                vertical: 14,
+                                              backgroundColor: const Color(
+                                                0xFF25D366,
                                               ),
+                                              foregroundColor: Colors.white,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 16,
+                                                    vertical: 14,
+                                                  ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
@@ -339,8 +340,9 @@ class ContactFooterSection extends StatelessWidget {
                                             vertical: 14,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -359,16 +361,18 @@ class ContactFooterSection extends StatelessWidget {
                                         icon: const Icon(Icons.chat, size: 20),
                                         label: const Text('WhatsApp'),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFF25D366),
+                                          backgroundColor: const Color(
+                                            0xFF25D366,
+                                          ),
                                           foregroundColor: Colors.white,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 16,
                                             vertical: 14,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -482,8 +486,9 @@ class ContactFooterSection extends StatelessWidget {
                                             vertical: 14,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -502,16 +507,18 @@ class ContactFooterSection extends StatelessWidget {
                                         icon: const Icon(Icons.chat, size: 20),
                                         label: const Text('WhatsApp'),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFF25D366),
+                                          backgroundColor: const Color(
+                                            0xFF25D366,
+                                          ),
                                           foregroundColor: Colors.white,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 16,
                                             vertical: 14,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
                                           ),
                                         ),
                                       ),
